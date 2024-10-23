@@ -1,2 +1,14 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+	import {ActionData} from "./action"
+	import Timeline from './Timeline.svelte';
+
+	let latestActions:ActionData[] = $state([]);
+</script>
+
+<Timeline actions={latestActions} />
+
+<style>
+	:global(body) {
+		background-color: rgb(40, 40, 50);
+	}
+</style>
