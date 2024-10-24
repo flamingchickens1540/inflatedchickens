@@ -2,7 +2,7 @@
 	import type { ActionData } from './action';
 	import Action from './Action.svelte';
 
-	let {actions}: {actions: ActionData[]} = $props();
+	let { actions }: { actions: ActionData[] } = $props();
 </script>
 
 <div id="timeline">

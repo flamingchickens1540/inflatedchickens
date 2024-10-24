@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { ActionData } from './action';
+	import type { ActionData } from './action';
 
 	let { action }: { action: ActionData } = $props();
 
-	let actionBackgroundColor = action.result == "success" ? '#22ff22' : '#ff2222';
+	let actionBackgroundColor = action.result == 'success' ? '#22ff22' : '#ff2222';
 </script>
 
 <p class="action" style="--background-color:{actionBackgroundColor}">
