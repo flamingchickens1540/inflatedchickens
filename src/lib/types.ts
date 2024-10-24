@@ -31,3 +31,23 @@ export enum ActionType {
 	ScoreExternalTote,
 	ScoreLowBalloon
 }
+
+// To be used as an intermediate form by the frontend
+export enum FirstSubAction {
+	Intake,
+	Score,
+	None
+}
+
+export enum IntakeSubAction {
+	Tote,
+	Balloon,
+	FromCoral
+}
+
+export enum ScoreSubAction {
+	YourHeldTote,
+	OtherHeldTote,
+	ExternalTote,
+	Low
+}
