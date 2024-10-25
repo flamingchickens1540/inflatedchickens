@@ -1,11 +1,14 @@
 <script lang="ts">
-	import type { ActionData } from './action';
+	import { actionResult, actionType, type ActionData } from './action';
 	import Timeline from './Timeline.svelte';
+	function thingy() {latestActions.push({type: actionType.EjectTote, result: actionResult.success})}
 
-	let latestActions: ActionData[] = $state([]);
+	let latestActions: ActionData[] = $state([{type: actionType.EjectTote, result: actionResult.fail}]);
+	latestActions.push({type: actionType.IntakeTote, result: actionResult.success})
 </script>
 
 <Timeline actions={latestActions} />
+<button on:click={thingy}>UwU</button>
 
 <style>
 	:global(body) {

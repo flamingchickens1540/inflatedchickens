@@ -13,6 +13,7 @@
 <style>
 	p {
 		background-color: var(--background-color);
+		padding: 2px;
 		border-radius: 3px;
 	}
 </style>
