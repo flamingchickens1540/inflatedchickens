@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { actionResult, actionType, type ActionData } from './action';
-	import Timeline from './Timeline.svelte';
+	import Timeline from '$lib/components/Timeline.svelte';
 
 	function addAction() {
 		//everything here is for testing, as there is no system for this yet
@@ -10,10 +10,6 @@
 	}
 
 	let latestActions: ActionData[] = $state([]);
-
-	$effect(() => {
-		console.log(latestActions);
-	});
 </script>
 
 <Timeline bind:actions={latestActions} />
