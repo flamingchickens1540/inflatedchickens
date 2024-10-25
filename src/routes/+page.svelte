@@ -4,7 +4,7 @@
 
 	//testing
 	function addAction() {
-		latestActions.push({ type: actionType.ScoreBalloonAnotherRobotsTote, result: actionResult.success });
+		latestActions.push({ type: actionType.ScoreAnotherRobotsTote, result: actionResult.success });
 	}
 
 	let latestActions: ActionData[] = $state([
