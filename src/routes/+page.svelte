@@ -3,8 +3,8 @@
 	import Timeline from './Timeline.svelte';
 
 	//testing
-	function thingy() {
-		latestActions.push({ type: actionType.EjectTote, result: actionResult.success });
+	function addAction() {
+		latestActions.push({ type: actionType.ScoreBalloonAnotherRobotsTote, result: actionResult.success });
 	}
 
 	let latestActions: ActionData[] = $state([
@@ -16,7 +16,7 @@
 <Timeline actions={latestActions} />
 
 <!--testing-->
-<button onclick={thingy}>UwU</button>
+<button onclick={addAction}>UwU</button>
 
 <style>
 	:global(body) {

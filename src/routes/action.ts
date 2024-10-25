@@ -2,10 +2,10 @@ export enum actionType {
     IntakeTote = 'Intake Tote',
     EjectTote = 'Eject Tote',
     IntakeBalloon = 'Intake Balloon',
-    ScoreBalloonLow = 'Score Balloon Low',
-    ScoreBalloonExternalTote = 'Score Balloon External Tote',
-    ScoreBalloonInternalTote = 'Score Balloon Internal Tote',
-    ScoreBalloonAnotherRobotsTote = 'Score Balloon Another Robots Tote'
+    ScoreLow = 'Score Low',
+    ScoreExternalTote = 'Score External Tote',
+    ScoreInternalTote = 'Score Internal Tote',
+    ScoreAnotherRobotsTote = 'Score Another Robots Tote'
 }
 
 export enum actionResult {
