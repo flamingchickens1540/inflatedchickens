@@ -2,21 +2,24 @@
 	import { actionResult, actionType, type ActionData } from './action';
 	import Timeline from './Timeline.svelte';
 
-	//testing
 	function addAction() {
+		//everything here is for testing, as there is no system for this yet
 		latestActions.push({ type: actionType.ScoreAnotherRobotsTote, result: actionResult.success });
+		latestActions.push({ type: actionType.EjectTote, result: actionResult.fail });
+		latestActions.push({ type: actionType.IntakeTote, result: actionResult.success });
 	}
 
-	let latestActions: ActionData[] = $state([
-		{ type: actionType.EjectTote, result: actionResult.fail }
-	]);
-	latestActions.push({ type: actionType.IntakeTote, result: actionResult.success });
+	let latestActions: ActionData[] = $state([]);
+
+	$effect(() => {
+		console.log(latestActions);
+	});
 </script>
 
-<Timeline actions={latestActions} />
+<Timeline bind:actions={latestActions} />
 
-<!--testing-->
-<button onclick={addAction}>UwU</button>
+<!--to be changed in the future-->
+<button onclick={addAction}>Add Action</button>
 
 <style>
 	:global(body) {

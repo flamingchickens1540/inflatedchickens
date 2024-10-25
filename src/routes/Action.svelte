@@ -1,19 +1,23 @@
 <script lang="ts">
 	import type { ActionData } from './action';
 
-	let { action }: { action: ActionData } = $props();
+	let { action = $bindable(), deleteself }: { action: ActionData; deleteself: () => void } = $props()
 
-	let actionBackgroundColor = action.result == 'success' ? '#22ff22' : '#ff2222';
+	let actionBackgroundColor = $derived(action.result === 'success' ? '#22ff22' : '#ff2222');
 </script>
 
-<p class="action" style="--background-color:{actionBackgroundColor}">
+<button class="action" style="--background-color:{actionBackgroundColor}" onclick={deleteself}>
 	{action.type}
-</p>
+</button>
 
 <style>
-	p {
+	button {
 		background-color: var(--background-color);
 		padding: 2px;
 		border-radius: 3px;
+		margin-top: 5px;
+		margin-bottom: 5px;
+		border: none;
+		width: 250px;
 	}
 </style>
