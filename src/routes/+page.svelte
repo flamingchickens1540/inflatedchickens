@@ -1,4 +1,28 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+	import { actionResult, actionType, type ActionData } from './action';
+	import Timeline from './Timeline.svelte';
 
-<p>Hi!!!!</p>
+	function addAction() {
+		//everything here is for testing, as there is no system for this yet
+		latestActions.push({ type: actionType.ScoreAnotherRobotsTote, result: actionResult.success });
+		latestActions.push({ type: actionType.EjectTote, result: actionResult.fail });
+		latestActions.push({ type: actionType.IntakeTote, result: actionResult.success });
+	}
+
+	let latestActions: ActionData[] = $state([]);
+
+	$effect(() => {
+		console.log(latestActions);
+	});
+</script>
+
+<Timeline bind:actions={latestActions} />
+
+<!--to be changed in the future-->
+<button onclick={addAction}>Add Action</button>
+
+<style>
+	:global(body) {
+		background-color: rgb(40, 40, 50);
+	}
+</style>
