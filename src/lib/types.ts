@@ -42,12 +42,14 @@ export enum FirstSubAction {
 export enum IntakeSubAction {
 	Tote,
 	Balloon,
-	FromCoral
+	FromCoral,
+	None
 }
 
 export enum ScoreSubAction {
 	YourHeldTote,
 	OtherHeldTote,
 	ExternalTote,
-	Low
+	Low,
+	None
 }
