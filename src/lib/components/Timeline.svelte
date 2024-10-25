@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ActionData } from './action';
+	import type { ActionData } from '$lib/types';
 	import Action from './Action.svelte';
 
 	let { actions = $bindable() }: { actions: ActionData[] } = $props()

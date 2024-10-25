@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ActionData } from './action';
+	import type { ActionData } from '$lib/types';
 
 	let { action = $bindable(), deleteself }: { action: ActionData; deleteself: () => void } = $props()
 

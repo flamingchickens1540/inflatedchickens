@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { actionResult, actionType, type ActionData } from './action';
+	import { actionResult, actionType, type ActionData } from '$lib/types';
 	import Timeline from '$lib/components/Timeline.svelte';
 
 	function addAction() {
