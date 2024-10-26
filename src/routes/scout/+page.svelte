@@ -1,5 +1,10 @@
 <script lang="ts">
-	import { TeamMatch } from '../../lib/types';
+	import { ActionType, TeamMatch } from '../../lib/types';
+    let action: ActionType | null = null
+
+	const intakeScoreActions = {
+		intake: () => 
+	};
 
 	let { match_key, team_key }: { match_key: string; team_key: string } = $props();
 	let match: TeamMatch = $state({
@@ -8,4 +13,12 @@
 		auto_actions: [],
 		tele_actions: []
 	});
+
 </script>
+
+<div>
+	{#if input_state == InputState.IntakeScore}
+		<button />
+	{/if}
+	<button />
+</div>

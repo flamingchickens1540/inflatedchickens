@@ -6,50 +6,24 @@ export type TeamMatch = {
 };
 
 export type AutoActionData = {
-	action: BunnyActionType | ActionType;
+	action: AutoAction;
 	success: boolean;
 };
 
 export type TeleActionData = {
-	action: ActionType;
+	action: TeleAction;
 	success: boolean;
 };
 
-export enum BunnyActionType {
-	IntakeBunny,
-	ScoreBunnyTote,
-	ScoreBunnyLowZone
-}
-
-export enum ActionType {
-	IntakeTote,
-	IntakeBalloon,
-	TakeBalloonFromCoral,
-
-	ScoreYourHeldTote,
-	ScoreOtherHeldTote,
-	ScoreExternalTote,
-	ScoreLowBalloon
-}
-
-// To be used as an intermediate form by the frontend
-export enum FirstSubAction {
-	Intake,
-	Score,
-	None
-}
-
-export enum IntakeSubAction {
-	Tote,
-	Balloon,
-	FromCoral,
-	None
-}
-
-export enum ScoreSubAction {
-	YourHeldTote,
-	OtherHeldTote,
-	ExternalTote,
-	Low,
-	None
-}
+export type AutoAction = TeleAction | BunnyAction;
+export type BunnyAction = 'IntakeBunny' | 'ScoreBunnyTote' | 'ScoreBunnyLowZone';
+export type TeleAction =
+	| 'IntakeTote'
+	| 'IntakeBalloon'
+	| 'TakeBalloonFromCoral'
+	| 'ScoreYourHeldTote'
+	| 'ScoreOtherHeldTote'
+	| 'ScoreExternalTote'
+	| 'ScoreLowBalloon';
+export type TeleInputState = TeleAction | 'Intake' | 'Score' | 'None';
+export type AutoInputState = TeleInputState | BunnyAction;
