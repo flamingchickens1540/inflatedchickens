@@ -16,9 +16,3 @@
 
 <!--to be changed in the future-->
 <button onclick={addAction}>Add Action</button>
-
-<style>
-	:global(body) {
-		background-color: rgb(40, 40, 50);
-	}
-</style>
