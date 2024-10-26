@@ -1,3 +1,3 @@
-<h1>hiiii :3</h1>
+<h1 class="text-center">hiiii :3</h1>
 
-<a href="/scout">scount</a>
+<a class="text-center" href="/scout">scount</a>
