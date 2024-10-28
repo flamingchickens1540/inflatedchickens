@@ -1,20 +1,24 @@
 <script lang="ts">
-	import { actionResult, actionType, type ActionData } from '$lib/types';
-	import Timeline from '$lib/components/Timeline.svelte';
+	import { ActionType, TeamMatch } from '../../lib/types';
+    let action: ActionType | null = null
 
-	function addAction() {
-		//everything here is for testing, as there is no system for this yet
-		latestActions.push({ type: actionType.ScoreAnotherRobotsTote, result: actionResult.success });
-		latestActions.push({ type: actionType.EjectTote, result: actionResult.fail });
-		latestActions.push({ type: actionType.IntakeTote, result: actionResult.success });
-	}
+	const intakeScoreActions = {
+		intake: () => 
+	};
 
-	let latestActions: ActionData[] = $state([]);
+	let { match_key, team_key }: { match_key: string; team_key: string } = $props();
+	let match: TeamMatch = $state({
+		team_key,
+		match_key,
+		auto_actions: [],
+		tele_actions: []
+	});
+
 </script>
 
-<main class="flex flex-col items-center gap-2 p-2 justify-center h-screen">
-    <Timeline bind:actions={latestActions} />
-
-    <!--to be changed in the future-->
-    <button class="bg-btn_grey w-80 p-1 rounded border-2 border-outline_gray" onclick={addAction}>Add Action</button>
-</main>
+<div>
+	{#if input_state == InputState.IntakeScore}
+		<button />
+	{/if}
+	<button />
+</div>
