@@ -16,7 +16,7 @@ export type TeleActionData = {
 };
 
 export type AutoAction = TeleAction | BunnyAction;
-export type BunnyAction = 'IntakeBunny' | 'ScoreBunnyTote' | 'ScoreBunnyLowZone';
+export type BunnyAction = 'IntakeBunny' | 'ScoreBunnyTote' | 'ScoreBunnyLow';
 export type TeleAction =
 	| 'IntakeTote'
 	| 'IntakeBalloon'
@@ -24,6 +24,6 @@ export type TeleAction =
 	| 'ScoreYourHeldTote'
 	| 'ScoreOtherHeldTote'
 	| 'ScoreExternalTote'
-	| 'ScoreLowBalloon';
+	| 'ScoreBalloonLow';
 export type TeleInputState = TeleAction | 'Intake' | 'Score' | 'None';
 export type AutoInputState = TeleInputState | BunnyAction;
