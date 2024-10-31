@@ -2,10 +2,24 @@
 	import type { ActionData } from '$lib/types';
 	import Action from './Action.svelte';
 
-	let { actions = $bindable() }: { actions: ActionData[] } = $props()
+	let { actions = $bindable() }: { actions: ActionData[] } = $props();
+
+	let extended = false;
+
+	export function moveTimeline() {
+		if (extended) {
+			document.getElementById('timeline')!.classList.replace('h-[80vh]', 'h-0');
+		}
+		else {
+			document.getElementById('timeline')!.classList.replace('h-0', 'h-[80vh]');
+		}
+	}
 </script>
 
-<div class="flex flex-col items-center h-[80vh] bg-btn_grey text-text_white p-1 rounded gap-2 w-80">
+<div
+	class="flex flex-col items-center h-[80vh] bg-btn_grey text-text_white p-1 rounded gap-2 w-80 border-2 border-outline_gray"
+	id="timeline"
+>
 	{#each actions as _, i}
 		<Action
 			bind:action={actions[i]}

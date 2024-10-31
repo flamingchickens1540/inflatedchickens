@@ -12,9 +12,10 @@
 	let latestActions: ActionData[] = $state([]);
 </script>
 
-<main class="flex flex-col items-center gap-2 p-2 justify-center h-screen">
+<main class="flex flex-col items-center gap-2 p-2 justify-center h-0">
     <Timeline bind:actions={latestActions} />
 
-    <!--to be changed in the future-->
+    <!--to be changed in the future (deleted)-->
     <button class="bg-btn_grey w-80 p-1 rounded border-2 border-outline_gray" onclick={addAction}>Add Action</button>
+	<button class="bg-btn_grey w-80 p-1 rounded border-2 border-outline_gray" bind:this={} >Timeline</button>
 </main>
