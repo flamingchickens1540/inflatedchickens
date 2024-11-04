@@ -13,8 +13,10 @@
 </script>
 
 <main class="flex flex-col items-center gap-2 p-2 justify-center h-screen">
-    <Timeline bind:actions={latestActions} />
+	<Timeline bind:actions={latestActions} />
 
-    <!--to be changed in the future-->
-    <button class="bg-btn_grey w-80 p-1 rounded border-2 border-outline_gray" onclick={addAction}>Add Action</button>
+	<!--to be changed in the future-->
+	<button class="bg-btn_grey w-80 p-1 rounded border-2 border-outline_gray" onclick={addAction}
+		>Add Action</button
+	>
 </main>
