@@ -16,7 +16,8 @@
 	<Timeline bind:actions />
 
 	<!--to be changed in the future-->
-	<button class="bg-btn_grey w-80 p-1 rounded border-2 border-outline_gray" onclick={addAction}
-		>Add Action</button
+	<button
+		class="bg-btn_grey w-80 p-1 rounded border-2 border-text_red text-text_yellow"
+		onclick={addAction}>Add Action</button
 	>
 </main>

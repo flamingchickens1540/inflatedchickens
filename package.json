@@ -32,6 +32,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@sveltejs/vite-plugin-svelte": "^4.0.0",
 		"svelte-kit": "^1.2.0"
 	}
 }

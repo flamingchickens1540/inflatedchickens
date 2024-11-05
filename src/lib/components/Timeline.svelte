@@ -3,15 +3,18 @@
 	import Action from './Action.svelte';
 
 	let { actions = $bindable() }: { actions: ActionData[] } = $props();
-	let latestActions: ActionData[] = $derived(actions.toReversed().slice(0, 5));
+	// let latestActions: ActionData[] = $derived(actions.toReversed().slice(0, 5));
 </script>
 
-<div class="flex flex-col items-center h-[80vh] bg-btn_grey text-text_white p-1 rounded gap-2 w-80">
-	{#each latestActions as _, i}
+<h1 class="text-text_red">Timeline</h1>
+<div
+	class="flex flex-col items-center h-full bg-btn_grey border-solid border-2 border-text_red p-2 rounded gap-2 w-full overflow-auto"
+>
+	{#each actions as _, i}
 		<Action
-			bind:action={latestActions[i]}
+			bind:action={actions[i]}
 			deleteself={() => {
-				actions.splice(actions.indexOf(latestActions[i]), 1);
+				actions.splice(actions.indexOf(actions[i]), 1);
 			}}
 		/>
 	{/each}
