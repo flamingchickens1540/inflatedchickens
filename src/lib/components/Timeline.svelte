@@ -3,9 +3,6 @@
 	import Action from './Action.svelte';
 
 	let { actions = $bindable(), displaying}: { actions: ActionData[], displaying:boolean} = $props();
-
-	//!displaying ? document.getElementById("timeline")?.classList.add("hidden")
-	//: document.getElementById("timeline")?.classList.remove("hidden")
 </script>
 
 <div
