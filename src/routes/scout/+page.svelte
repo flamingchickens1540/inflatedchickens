@@ -16,7 +16,7 @@
 </script>
 
 <main class="flex flex-col items-center gap-2 p-2 justify-center h-[80vh]">
-		<Timeline bind:actions={latestActions} displaying={timelineExtended}/>
+		<Timeline bind:actions={latestActions} bind:displaying={timelineExtended}/>
 	<div class="flex flex-col grow justify-end">
 		<!--this button to be changed in the future (deleted)-->
 		<button class="bg-btn_grey w-80 p-1 rounded border-2 border-outline_gray static" onclick={addAction}>Add Action</button>
