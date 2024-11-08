@@ -20,6 +20,6 @@
 	<div class="flex flex-col grow justify-end">
 		<!--this button to be changed in the future (deleted)-->
 		<button class="bg-btn_grey w-80 p-1 rounded border-2 border-outline_gray static" onclick={addAction}>Add Action</button>
-		<button class="bg-btn_grey w-80 p-1 rounded border-2 border-outline_gray static" onclick={toggleTimeline}>Timeline</button>
+		<button class="bg-btn_grey w-80 p-1 rounded border-2 border-outline_gray static" onclick={toggleTimeline}>Show Timeline</button>
 	</div>
 </main>
