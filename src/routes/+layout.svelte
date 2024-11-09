@@ -7,6 +7,6 @@
 
 <style lang="postcss">
 	:global(body) {
-        @apply bg-zinc-800;
+		@apply bg-zinc-800;
 	}
 </style>
