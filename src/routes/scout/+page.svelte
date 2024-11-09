@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { AutoInputState, TeamMatch, TeleActionData, TeleAction } from '$lib/types';
 	import SuccessFail from '$lib/components/SuccessFail.svelte';
+    import Timeline from '$lib/components/Timeline.svelte';
 	let actionState: AutoInputState = $state('None');
 
 	const intake_piece = () => (actionState = actionState === 'None' ? 'Intake' : actionState);
@@ -27,7 +28,9 @@
 		tele_actions: []
 	});
 
-	$effect(() => console.log(actionState));
+    let actions: ActionData[] = $state([]);
+	let timelineExtended = $state(false);
+	let latestActions: ActionData[] = $state([]);
 </script>
 
 <main class="text-zinc-50 flex flex-col p-2 h-svh">
@@ -39,5 +42,14 @@
 		<button class="bg-zinc-500 p-2 rounded" onclick={() => score_low('Balloon')}> Score </button>
 		<button class="bg-zinc-500 p-2 rounded" onclick={() => (actionState = 'Intake')}>Intake</button>
 		<button class="bg-zinc-500 p-2 rounded col-span-2"> Timeline </button>
+		<button
+			class="bg-btn_grey w-80 p-1 rounded border-2 border-outline_gray static"
+			onclick={() => console.log("todo")}>Add Action</button
+		>
+		<button
+			class="bg-btn_grey w-80 p-1 rounded border-2 border-outline_gray static"
+			onclick={() => timelineExtended = !timelineExtended}>Show Timeline</button
+		>
 	</div>
+	<Timeline bind:actions={latestActions} bind:displaying={timelineExtended} />
 </main>
