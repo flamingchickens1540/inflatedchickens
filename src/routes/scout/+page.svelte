@@ -9,21 +9,25 @@
 		actions.push({ type: actionType.IntakeTote, result: actionResult.success });
 	}
 
-	let timelineExtended = $state(false)
-	function toggleTimeline() { timelineExtended = !timelineExtended }
+	let timelineExtended = $state(false);
+	function toggleTimeline() {
+		timelineExtended = !timelineExtended;
+	}
 
 	let latestActions: ActionData[] = $state([]);
 </script>
 
 <main class="flex flex-col items-center gap-2 p-2 justify-center h-screen">
-		<Timeline bind:actions={latestActions} bind:displaying={timelineExtended}/>
+	<Timeline bind:actions={latestActions} bind:displaying={timelineExtended} />
 	<div class="flex flex-col grow justify-end">
 		<!--this button to be changed in the future (deleted)-->
-		<button class="bg-btn_grey w-80 p-1 rounded border-2 border-outline_gray static" 
-            onclick={addAction}>Add Action</button
-      >
-		<button class="bg-btn_grey w-80 p-1 rounded border-2 border-outline_gray static"
-            onclick={toggleTimeline}>Show Timeline</button
-      >
+		<button
+			class="bg-btn_grey w-80 p-1 rounded border-2 border-outline_gray static"
+			onclick={addAction}>Add Action</button
+		>
+		<button
+			class="bg-btn_grey w-80 p-1 rounded border-2 border-outline_gray static"
+			onclick={toggleTimeline}>Show Timeline</button
+		>
 	</div>
 </main>
