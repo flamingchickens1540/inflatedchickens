@@ -9,6 +9,18 @@
 		latestActions.push({ type: actionType.IntakeTote, result: actionResult.success });
 	}
 
+	async function submit() {
+		const response = await fetch('/api/submit', {
+			method: 'POST',
+			body: JSON.stringify(latestActions),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+
+		console.log(await response.json());
+	}
+
 	let latestActions: ActionData[] = $state([]);
 
 	$effect(() => {
@@ -20,6 +32,7 @@
 
 <!--to be changed in the future-->
 <button onclick={addAction}>Add Action</button>
+<button onclick={submit}>Submit</button>
 
 <style>
 	:global(body) {
