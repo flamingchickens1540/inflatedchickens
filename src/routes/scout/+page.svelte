@@ -1,6 +1,13 @@
 <script lang="ts">
-	import type { AutoInputState, TeamMatch, TeleActionData, TeleAction } from '$lib/types';
+	import type {
+		AutoInputState,
+		TeamMatch,
+		TeleActionData,
+		TeleAction,
+		ItemInputState
+	} from '$lib/types';
 	import SuccessFail from '$lib/components/SuccessFail.svelte';
+	import { goto } from '$app/navigation';
 	let actionState: AutoInputState = $state('None');
 
 	const intake_piece = () => (actionState = actionState === 'None' ? 'Intake' : actionState);
@@ -28,16 +35,22 @@
 	});
 
 	$effect(() => console.log(actionState));
+	const is_input_state = $derived(actionState instanceof ItemInputState);
 </script>
 
 <main class="text-zinc-50 flex flex-col p-2 h-svh">
 	{#if actionState != 'None'}
 		<SuccessFail {complete} cancel={() => (actionState = 'None')} />
+	{:else if is_input_state}
+		<span class="text-center font-bold pb-2">team {team_key}</span>
+		<div class="grid gap-2 grid-cols-2 flex-grow">
+			<button class="bg-zinc-500 p-2 rounded" onclick={() => score_low('Balloon')}> Score </button>
+			<button class="bg-zinc-500 p-2 rounded" onclick={() => (actionState = 'Intake')}
+				>Intake</button
+			>
+			<button class="bg-zinc-500 p-2 rounded col-span-2" onclick={() => goto('/scout')}>
+				Timeline
+			</button>
+		</div>
 	{/if}
-	<span class="text-center font-bold pb-2">team {team_key}</span>
-	<div class="grid gap-2 grid-cols-2 flex-grow">
-		<button class="bg-zinc-500 p-2 rounded" onclick={() => score_low('Balloon')}> Score </button>
-		<button class="bg-zinc-500 p-2 rounded" onclick={() => (actionState = 'Intake')}>Intake</button>
-		<button class="bg-zinc-500 p-2 rounded col-span-2"> Timeline </button>
-	</div>
 </main>
