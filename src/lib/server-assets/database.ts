@@ -32,8 +32,6 @@ function countTele(val : TeleAction, success : boolean, match : TeamMatch): numb
     return match.tele_actions.filter((data) => data.action === val && data.success == success).length;
 }
 
-type query1 = {action: TeleAction; success: boolean};
-
 
 export async function insertTeamMatch(match : TeamMatch): Promise<boolean> {
     if (!use_db) return true;
