@@ -1,5 +1,6 @@
 <script lang="ts">
-	let { complete, cancel }: { complete: (success: boolean) => void; cancel: () => void } = $props();
+	let { complete, cancel }: { complete: (success: boolean) => void; cancel: () => void } =
+		$props();
 </script>
 
 <div

@@ -1,6 +1,7 @@
 # inflatedchickens
 
 ## usage
+
 ```bash
 # install dependencies
 bun i
