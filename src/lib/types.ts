@@ -45,7 +45,7 @@ export type ActionsTM = {
 };
 
 export type TeamMatch = {
-	team_action_id: number; // what is this?
+	id: number;
 	scout_id: string;
 	match_key: string;
 	team_key: string;
