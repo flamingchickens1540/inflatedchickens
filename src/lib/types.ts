@@ -2,10 +2,10 @@ export type TeamMatch = {
 	team_key: string;
 	match_key: string;
 	scout_id: string;
-	skill : number;
-	notes : string;
-	broke : boolean;
-	died : boolean;
+	skill: number;
+	notes: string;
+	broke: boolean;
+	died: boolean;
 	auto_actions: AutoActionData[];
 	tele_actions: TeleActionData[];
 };
