@@ -32,8 +32,10 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"autoprefixer": "^10.4.20",
 		"mysql2": "^3.11.4",
 		"pg": "^8.13.1",
-		"postgresql": "^0.0.1"
+		"postgresql": "^0.0.1",
+		"tailwindcss": "^3.4.14"
 	}
 }
