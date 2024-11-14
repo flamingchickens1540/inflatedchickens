@@ -1,33 +1,82 @@
 <script lang="ts">
-	import { actionResult, actionType, type ActionData } from '$lib/types';
+	import type {
+		AutoInputState,
+		TeamMatch,
+		TeleActionData,
+		TeleAction,
+		ItemInputState
+	} from '$lib/types';
+	import SuccessFail from '$lib/components/SuccessFail.svelte';
+	import { goto } from '$app/navigation';
 	import Timeline from '$lib/components/Timeline.svelte';
+	let actionState: AutoInputState = $state('None');
 
-	function addAction() {
-		//everything here is for testing, as there is no system for this yet
-		actions.push({ type: actionType.ScoreAnotherRobotsTote, result: actionResult.success });
-		actions.push({ type: actionType.EjectTote, result: actionResult.fail });
-		actions.push({ type: actionType.IntakeTote, result: actionResult.success });
-	}
+	const intake_piece = () => (actionState = actionState === 'None' ? 'Intake' : actionState);
+	const score_piece = () => (actionState = actionState === 'None' ? 'Score' : actionState);
+	const score_tote = (type: 'YourHeld' | 'OtherHeld' | 'External') =>
+		(actionState = `Score${type}Tote`);
+	const score_low = (type: 'Balloon' | 'Bunny') => (actionState = `Score${type}Low`);
 
+	const complete = (success: boolean) => {
+		let action: TeleActionData = {
+			action: actionState as TeleAction,
+
+			success: success
+		};
+		actionState = 'None';
+	};
+
+	let { match_key, team_key }: { match_key: string; team_key: string } = $props();
+	team_key = '1540';
+	let match: TeamMatch = $state({
+		team_key,
+		match_key,
+		auto_actions: [],
+		tele_actions: []
+	});
+
+	$effect(() => console.log(actionState));
+	const is_input_state = $derived(actionState instanceof ItemInputState);
+
+	let actions: ActionData[] = $state([]);
 	let timelineExtended = $state(false);
-	function toggleTimeline() {
-		timelineExtended = !timelineExtended;
-	}
-
 	let latestActions: ActionData[] = $state([]);
 </script>
 
-<main class="flex flex-col items-center gap-2 p-2 justify-center h-screen">
-	<Timeline bind:actions={latestActions} bind:displaying={timelineExtended} />
-	<div class="flex flex-col grow justify-end">
-		<!--this button to be changed in the future (deleted)-->
+<main class="text-zinc-50 flex flex-col p-2 h-svh">
+	{#if actionState != 'None'}
+		<SuccessFail {complete} cancel={() => (actionState = 'None')} />
+	{:else if is_input_state}
+		<span class="text-center font-bold pb-2">team {team_key}</span>
+		<div class="grid gap-2 grid-cols-2 flex-grow">
+			<button class="bg-zinc-500 p-2 rounded" onclick={() => score_low('Balloon')}>
+				Score
+			</button>
+			<button class="bg-zinc-500 p-2 rounded" onclick={() => (actionState = 'Intake')}
+				>Intake</button
+			>
+			<button class="bg-zinc-500 p-2 rounded col-span-2" onclick={() => goto('/scout')}>
+				Timeline
+			</button>
+		</div>
+	{/if}
+	<span class="text-center font-bold pb-2">team {team_key}</span>
+	<div class="grid gap-2 grid-cols-2 flex-grow">
+		<button class="bg-zinc-500 p-2 rounded" onclick={() => score_low('Balloon')}>
+			Score
+		</button>
+		<button class="bg-zinc-500 p-2 rounded" onclick={() => (actionState = 'Intake')}
+			>Intake</button
+		>
+		<button class="bg-zinc-500 p-2 rounded col-span-2"> Timeline </button>
 		<button
 			class="bg-btn_grey w-80 p-1 rounded border-2 border-outline_gray static"
-			onclick={addAction}>Add Action</button
+			onclick={() => console.log('todo')}>Add Action</button
 		>
 		<button
 			class="bg-btn_grey w-80 p-1 rounded border-2 border-outline_gray static"
-			onclick={toggleTimeline}>Show Timeline</button
+			onclick={() => (timelineExtended = !timelineExtended)}>Show Timeline</button
 		>
 	</div>
+	<Timeline bind:actions={latestActions} bind:displaying={timelineExtended} />
 </main>

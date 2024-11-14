@@ -7,8 +7,6 @@
 
 <style lang="postcss">
 	:global(body) {
-		@apply bg-bg_gray;
-		@apply font-mono;
-		touch-action: manipulation;
+		@apply bg-zinc-800;
 	}
 </style>
