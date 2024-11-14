@@ -11,7 +11,6 @@
 
 	let actions: AutoActionData[] = $state([]);
 	let timelineExtended = $state(false);
-	let latestActions: AutoActionData[] = $state([]);
 
 	const match: TeamMatch = $state({
 		id: 0,
@@ -31,7 +30,7 @@
 	<h1 class="row-span-1 text-center font-bold pb-2 h-5">Team {team_key}</h1>
 	{#if timelineExtended}
 		<div class="row-span-8">
-			<Timeline bind:actions={latestActions} />
+			<Timeline bind:actions />
 		</div>
 		<button
 			class="row-span-1 bg-btn_grey h-10 w-80 p-1 rounded border-2 border-outline_gray static"

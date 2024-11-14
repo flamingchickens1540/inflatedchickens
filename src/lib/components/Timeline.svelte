@@ -8,7 +8,7 @@
 
 {#each actions as _, i}
 	<Action
-		bind:action={actions[i]}
+		action_data={actions[i]}
 		deleteself={() => {
 			actions.splice(actions.indexOf(actions[i]), 1);
 		}}
