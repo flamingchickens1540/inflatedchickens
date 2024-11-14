@@ -27,15 +27,24 @@
 	});
 </script>
 
-<div class="text-zinc-50 p-2 h-svh">
-	<h1 class="text-center font-bold pb-2 h-5">Team {team_key}</h1>
+<div class="grid grid-row-10 text-zinc-50 p-2 h-svh place-items-center">
+	<h1 class="row-span-1 text-center font-bold pb-2 h-5">Team {team_key}</h1>
 	{#if timelineExtended}
-		<Timeline bind:actions={latestActions} bind:displaying={timelineExtended} />
-	{:else}
-		<ActionInputs bind:actions />
+		<div class="row-span-8">
+			<Timeline bind:actions={latestActions} />
+		</div>
 		<button
-			class="bg-btn_grey h-10 w-80 p-1 rounded border-2 border-outline_gray static"
-			onclick={() => (timelineExtended = !timelineExtended)}>Show Timeline</button
+			class="row-span-1 bg-btn_grey h-10 w-80 p-1 rounded border-2 border-outline_gray static"
+			onclick={() => (timelineExtended = false)}>Hide Timeline</button
+		>
+	{:else}
+		<div class="row-span-8">
+			<ActionInputs bind:actions />
+		</div>
+
+		<button
+			class="row-span-1 bg-btn_grey h-10 w-80 p-1 rounded border-2 border-outline_gray static"
+			onclick={() => (timelineExtended = true)}>Show Timeline</button
 		>
 	{/if}
 </div>

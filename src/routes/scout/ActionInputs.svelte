@@ -32,15 +32,15 @@
 	const is_score_state = $derived(actionState === 'Score');
 </script>
 
-<div class="grid gap-2 grid-cols-1 grid-rows-2 flex-grow">
-	<p>Number of pieces currently held: {held_pieces}</p>
+<h1>Number of pieces currently held: {held_pieces}</h1>
+<div class="grid gap-2 grid-cols-1 grid-rows-2 place-items-center">
 	{#if is_none_state}
-		<div class="grid gap-2 grid-cols-2 flex-grow">
+		<div class="grid gap-2 grid-cols-2">
 			<button class="bg-zinc-500 p-2 rounded" onclick={intake_piece}>Intake</button>
 			<button class="bg-zinc-500 p-2 rounded" onclick={score_piece}>Score</button>
 		</div>
 	{:else if is_intake_state}
-		<div class="grid gap-2 grid-cols-2 grid-rows-2 flex-grow">
+		<div class="grid gap-3 grid-cols-2 grid-rows-2 flex-grow">
 			<button class="bg-zinc-500 p-2 rounded" onclick={() => (actionState = 'IntakeBunny')}
 				>Intake Bunny</button
 			>
@@ -53,9 +53,13 @@
 			<button class="bg-zinc-500 p-2 rounded" onclick={() => (actionState = 'IntakeCoral')}
 				>Intake Ballon From Coral</button
 			>
+			<button
+				class="bg-zinc-500 col-span-2 p-2 rounded"
+				onclick={() => (actionState = 'None')}>Cancel</button
+			>
 		</div>
 	{:else if is_score_state}
-		<div class="grid gap-2 grid-cols-2 grid-rows-3 flex-grow">
+		<div class="grid gap-2 grid-cols-2 grid-rows-4">
 			<button class="bg-zinc-500 p-2 rounded" onclick={() => (actionState = 'ScoreBunnyLow')}
 				>Score Bunny in Low Zone</button
 			>
@@ -81,8 +85,15 @@
 				onclick={() => (actionState = 'ScoreOtherHeldTote')}
 				>Score Bunny in Tote Held by Other Robot</button
 			>
+			<button
+				class="bg-zinc-500 col-span-2 p-2 rounded"
+				onclick={() => (actionState = 'None')}>Cancel</button
+			>
 		</div>
 	{:else}
-		<SuccessFail {complete} cancel={() => (actionState = 'None')} />
+		<SuccessFail
+			{complete}
+			cancel={() => (actionState = actionState.substring(0, 1) === 'S' ? 'Score' : 'Intake')}
+		/>
 	{/if}
 </div>
