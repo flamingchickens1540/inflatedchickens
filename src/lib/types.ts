@@ -76,7 +76,10 @@ export type TeleAction =
 	| 'ScoreBalloonInternalTote' // Held by scorer
 	| 'ScoreBalloonExternalTote' // Held by alliance member
 	| 'ScoreBalloonUncontrolledTote'
-	| 'ScoreBalloonLow';
+	| 'ScoreBalloonLow'
+	| 'EjectBalloon'
+	| 'EjectBunny' // Could happen in Tele; we could instead move this to BunnyAction and reset held_bunnies to 0 after Auto
+	| 'EjectTote';
 
 export type BunnyAction =
 	| 'IntakeBunny'
@@ -87,6 +90,6 @@ export type BunnyAction =
 export type AutoAction = TeleAction | BunnyAction;
 
 // For state machine
-export type ItemInputState = 'Intake' | 'Score' | 'None';
+export type ItemInputState = 'Intake' | 'Score' | 'Eject' | 'None';
 export type TeleInputState = TeleAction | ItemInputState;
 export type AutoInputState = TeleInputState | BunnyAction;

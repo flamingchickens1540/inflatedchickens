@@ -9,15 +9,19 @@
 	let held_bunnies: number = $state(0);
 	let held_balloons: number = $state(0);
 	let held_totes: number = $state(0);
-	let held_pieces: number = $derived(held_balloons + held_bunnies);
+	let held_scorables: number = $derived(held_balloons + held_bunnies);
+	let held_ejectables: number = $derived(held_scorables + held_totes);
 
 	function intake_piece() {
 		actionState = actionState === 'None' ? 'Intake' : actionState;
 	}
 	function score_piece() {
-		if (held_pieces < 1) return;
 		actionState = actionState === 'None' ? 'Score' : actionState;
 	}
+	function eject_piece() {
+		actionState = actionState === 'None' ? 'Eject' : actionState;
+	}
+
 	function score_bunny(where: 'Low' | 'ExternalTote' | 'InternalTote' | 'UncontrolledTote') {
 		actionState = `ScoreBunny${where}`;
 	}
@@ -31,6 +35,9 @@
 		else if (actionState.includes('IntakeTote')) held_totes++;
 		else if (actionState.includes('ScoreBalloon')) held_balloons--;
 		else if (actionState.includes('ScoreBunny')) held_bunnies--;
+		else if (actionState.includes('EjectBalloon')) held_balloons--;
+		else if (actionState.includes('EjectBunny')) held_bunnies--;
+		else if (actionState.includes('EjectTote')) held_totes--;
 
 		const action: AutoActionData = {
 			action: actionState as AutoAction,
@@ -43,14 +50,20 @@
 	const is_none_state = $derived(actionState === 'None');
 	const is_intake_state = $derived(actionState === 'Intake');
 	const is_score_state = $derived(actionState === 'Score');
+	const is_eject_state = $derived(actionState === 'Eject');
 </script>
 
-<h1>Number of pieces currently held: {held_pieces}</h1>
+<h1>Number of pieces currently held: {held_scorables}</h1>
 <div class="grid gap-2 grid-cols-1 grid-rows-2 place-items-center">
 	{#if is_none_state}
 		<div class="grid gap-2 grid-cols-2">
 			<button class="bg-zinc-500 p-2 rounded" onclick={intake_piece}>Intake</button>
-			<button class="bg-zinc-500 p-2 rounded" onclick={score_piece}>Score</button>
+			{#if held_scorables > 0}
+				<button class="bg-zinc-500 p-2 rounded" onclick={score_piece}>Score</button>
+			{/if}
+			{#if held_ejectables > 0}
+				<button class="bg-zinc-500 p-2 rounded" onclick={eject_piece}>Eject</button>
+			{/if}
 		</div>
 	{:else if is_intake_state}
 		<div class="grid gap-3 grid-cols-2 grid-rows-2 flex-grow">
@@ -122,10 +135,39 @@
 				onclick={() => (actionState = 'None')}>Cancel</button
 			>
 		</div>
+	{:else if is_eject_state}
+		<div class="grid gap-2 grid-cols-2 grid-rows-4">
+			{#if held_bunnies > 0}
+				<button class="bg-zinc-500 p-2 rounded" onclick={() => (actionState = 'EjectBunny')}
+					>Eject Bunny</button
+				>
+			{/if}
+			{#if held_balloons > 0}
+				<button
+					class="bg-zinc-500 p-2 rounded"
+					onclick={() => (actionState = 'EjectBalloon')}>Eject Ballon</button
+				>
+			{/if}
+			{#if held_totes > 0}
+				<button class="bg-zinc-500 p-2 rounded" onclick={() => (actionState = 'EjectTote')}
+					>Eject Tote</button
+				>
+			{/if}
+			<button
+				class="bg-zinc-500 col-span-2 p-2 rounded"
+				onclick={() => (actionState = 'None')}>Cancel</button
+			>
+		</div>
 	{:else}
 		<SuccessFail
 			{complete}
-			cancel={() => (actionState = actionState.substring(0, 1) === 'S' ? 'Score' : 'Intake')}
+			cancel={() =>
+				(actionState =
+					actionState.substring(0, 1) === 'S'
+						? 'Score'
+						: actionState.substring(0, 1) === 'E'
+							? 'Eject'
+							: 'Intake')}
 		/>
 	{/if}
 </div>
