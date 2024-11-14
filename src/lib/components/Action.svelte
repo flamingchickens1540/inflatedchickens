@@ -7,7 +7,9 @@
 	}: { action_data: AutoActionData; deleteself: () => void } = $props();
 
 	//let actionBorderColor = $derived(action.success ? 'border-cresc_green' : 'border-fail_red');
-	let actionBackgroundColor = $derived(action_data.success ? 'bg-cresc_green' : 'bg-fail_red');
+	let actionBackgroundColor = $derived(
+		action_data.success ? 'bg-jungle_green' : 'bg-flaming_red'
+	);
 </script>
 
 <!-- <button -->
@@ -18,7 +20,7 @@
 <!-- </button> -->
 
 <button
-	class="{actionBackgroundColor} w-full p-1 rounded border-2 border-outline_gray text-text_white"
+	class="{actionBackgroundColor} w-full p-1 rounded border-2 border-outline_gray text-white"
 	onclick={deleteself}
 >
 	{action_data.action}

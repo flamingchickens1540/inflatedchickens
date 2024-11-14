@@ -4,18 +4,18 @@
 </script>
 
 <div
-	class="bg-zinc-800 text-zinc-50 text-xl font-extrabold fixed inset-0 grid grid-cols-2 grid-rows-3 gap-4 p-4"
+	class="bg-eerie_black text-white text-xl font-extrabold fixed inset-0 grid grid-cols-2 grid-rows-4 gap-4 p-4"
 >
 	<button
-		class="rounded-lg row-span-2 shadow-lg shadow-green-600/50 bg-green-600"
+		class="rounded-lg row-span-3 shadow-lg shadow-jungle_green/50 bg-jungle_green"
 		onclick={() => complete(true)}>Success</button
 	>
 	<button
-		class="rounded-lg row-span-2 shadow-lg shadow-red-600/50 bg-red-600"
+		class="rounded-lg row-span-3 shadow-lg shadow-flaming_red/50 bg-flaming_red"
 		onclick={() => complete(false)}>Fail</button
 	>
 	<button
-		class="rounded-lg col-span-2 shadow-lg shadow-zinc-600/50 bg-zinc-600"
+		class="rounded-lg col-span-2 shadow-lg shadow-gunmetal/50 bg-gunmetal"
 		onclick={() => cancel()}>Cancel</button
 	>
 </div>
