@@ -68,16 +68,22 @@ export type TeleActionData = {
 };
 
 // Action Types
+// Naming Convention: action_type + game_piece + where
 export type TeleAction =
 	| 'IntakeTote'
 	| 'IntakeBalloon'
-	| 'IntakeCoral'
-	| 'ScoreYourHeldTote'
-	| 'ScoreOtherHeldTote'
-	| 'ScoreExternalTote'
+	| 'IntakeBalloonCoral'
+	| 'ScoreBalloonInternalTote' // Held by scorer
+	| 'ScoreBalloonExternalTote' // Held by alliance member
+	| 'ScoreBalloonUncontrolledTote'
 	| 'ScoreBalloonLow';
 
-export type BunnyAction = 'IntakeBunny' | 'ScoreBunnyTote' | 'ScoreBunnyLow';
+export type BunnyAction =
+	| 'IntakeBunny'
+	| 'ScoreBunnyInternalTote'
+	| 'ScoreBunnyExternalTote'
+	| 'ScoreBunnyUncontrolledTote'
+	| 'ScoreBunnyLow';
 export type AutoAction = TeleAction | BunnyAction;
 
 // For state machine

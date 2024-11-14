@@ -5,7 +5,11 @@
 	const { actions = $bindable() }: { actions: AutoActionData[] } = $props();
 
 	let actionState: AutoInputState = $state('None') as AutoInputState;
-	let held_pieces: number = $state(0);
+
+	let held_bunnies: number = $state(0);
+	let held_balloons: number = $state(0);
+	let held_totes: number = $state(0);
+	let held_pieces: number = $derived(held_balloons + held_bunnies);
 
 	function intake_piece() {
 		actionState = actionState === 'None' ? 'Intake' : actionState;
@@ -14,10 +18,19 @@
 		if (held_pieces < 1) return;
 		actionState = actionState === 'None' ? 'Score' : actionState;
 	}
+	function score_bunny(where: 'Low' | 'ExternalTote' | 'InternalTote' | 'UncontrolledTote') {
+		actionState = `ScoreBunny${where}`;
+	}
+	function score_balloon(where: 'Low' | 'InternalTote' | 'ExternalTote' | 'UncontrolledTote') {
+		actionState = `ScoreBalloon${where}`;
+	}
 	function complete(success: boolean) {
 		// Assume that the robot ejects even if they fail to score
-		if (actionState.substring(0, 5) === 'Score') held_pieces--;
-		else if (actionState.substring(0, 6) === 'Intake' && success) held_pieces++;
+		if (actionState.includes('IntakeBalloon')) held_balloons++;
+		else if (actionState.includes('IntakeBunny')) held_bunnies++;
+		else if (actionState.includes('IntakeTote')) held_totes++;
+		else if (actionState.includes('ScoreBalloon')) held_balloons--;
+		else if (actionState.includes('ScoreBunny')) held_bunnies--;
 
 		const action: AutoActionData = {
 			action: actionState as AutoAction,
@@ -50,7 +63,9 @@
 			<button class="bg-zinc-500 p-2 rounded" onclick={() => (actionState = 'IntakeBalloon')}
 				>Intake Balloon From Ground</button
 			>
-			<button class="bg-zinc-500 p-2 rounded" onclick={() => (actionState = 'IntakeCoral')}
+			<button
+				class="bg-zinc-500 p-2 rounded"
+				onclick={() => (actionState = 'IntakeBalloonCoral')}
 				>Intake Ballon From Coral</button
 			>
 			<button
@@ -60,31 +75,48 @@
 		</div>
 	{:else if is_score_state}
 		<div class="grid gap-2 grid-cols-2 grid-rows-4">
-			<button class="bg-zinc-500 p-2 rounded" onclick={() => (actionState = 'ScoreBunnyLow')}
-				>Score Bunny in Low Zone</button
-			>
-			<button class="bg-zinc-500 p-2 rounded" onclick={() => (actionState = 'ScoreBunnyTote')}
-				>Score Bunny in Tote</button
-			>
-			<button
-				class="bg-zinc-500 p-2 rounded"
-				onclick={() => (actionState = 'ScoreBalloonLow')}>Score Ballon in Low Zone</button
-			>
-			<button
-				class="bg-zinc-500 p-2 rounded"
-				onclick={() => (actionState = 'ScoreExternalTote')}
-				>Score Bunny in Uncontrolled Tote</button
-			>
-			<button
-				class="bg-zinc-500 p-2 rounded"
-				onclick={() => (actionState = 'ScoreYourHeldTote')}
-				>Score Bunny in Your Held Tote</button
-			>
-			<button
-				class="bg-zinc-500 p-2 rounded"
-				onclick={() => (actionState = 'ScoreOtherHeldTote')}
-				>Score Bunny in Tote Held by Other Robot</button
-			>
+			{#if held_bunnies > 0}
+				<button class="bg-zinc-500 p-2 rounded" onclick={() => score_bunny('Low')}
+					>Score Bunny in Low Zone</button
+				>
+				<button
+					class="bg-zinc-500 p-2 rounded"
+					onclick={() => score_bunny('UncontrolledTote')}
+					>Score Bunny in Uncontrolled Tote</button
+				>
+				{#if held_totes > 0}
+					<button
+						class="bg-zinc-500 p-2 rounded"
+						onclick={() => score_bunny('InternalTote')}
+						>Score Bunny in Internal Held Tote</button
+					>
+				{/if}
+				<button class="bg-zinc-500 p-2 rounded" onclick={() => score_bunny('ExternalTote')}
+					>Score Bunny in External Held Tote</button
+				>
+			{/if}
+			{#if held_balloons > 0}
+				<button class="bg-zinc-500 p-2 rounded" onclick={() => score_balloon('Low')}
+					>Score Ballon in Low Zone</button
+				>
+				<button
+					class="bg-zinc-500 p-2 rounded"
+					onclick={() => score_balloon('UncontrolledTote')}
+					>Score Bunny in Uncontrolled Tote</button
+				>
+				{#if held_totes > 0}
+					<button
+						class="bg-zinc-500 p-2 rounded"
+						onclick={() => score_balloon('InternalTote')}
+						>Score Balloon in Internal Held Tote</button
+					>
+				{/if}
+				<button
+					class="bg-zinc-500 p-2 rounded"
+					onclick={() => score_balloon('ExternalTote')}
+					>Score Balloon in External Held Tote
+				</button>
+			{/if}
 			<button
 				class="bg-zinc-500 col-span-2 p-2 rounded"
 				onclick={() => (actionState = 'None')}>Cancel</button
