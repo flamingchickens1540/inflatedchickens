@@ -49,7 +49,7 @@ export type TeamMatch = {
 	scout_id: string;
 	match_key: string;
 	team_key: string;
-	skills: number;
+	skill: number;
 	notes: string;
 	broke: boolean;
 	died: boolean;
@@ -68,16 +68,17 @@ export type TeleActionData = {
 };
 
 // Action Types
-export type AutoAction = TeleAction | BunnyAction;
-export type BunnyAction = 'IntakeBunny' | 'ScoreBunnyTote' | 'ScoreBunnyLow';
 export type TeleAction =
 	| 'IntakeTote'
 	| 'IntakeBalloon'
-	| 'TakeBalloonFromCoral'
+	| 'IntakeCoral'
 	| 'ScoreYourHeldTote'
 	| 'ScoreOtherHeldTote'
 	| 'ScoreExternalTote'
 	| 'ScoreBalloonLow';
+
+export type BunnyAction = 'IntakeBunny' | 'ScoreBunnyTote' | 'ScoreBunnyLow';
+export type AutoAction = TeleAction | BunnyAction;
 
 // For state machine
 export type ItemInputState = 'Intake' | 'Score' | 'None';
