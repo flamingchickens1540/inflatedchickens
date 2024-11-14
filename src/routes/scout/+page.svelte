@@ -28,22 +28,16 @@
 
 <div class="grid grid-row-10 p-2 h-dvh place-items-center">
 	<h1 class="row-span-1 text-center font-bold pb-2 h-5">Team {team_key}</h1>
-	{#if timelineExtended}
-		<div class="row-span-8">
-			<Timeline bind:actions />
-		</div>
-		<button
-			class="row-span-1 bg-gunmetal h-10 w-80 p-1 rounded static"
-			onclick={() => (timelineExtended = false)}>Hide Timeline</button
-		>
-	{:else}
-		<div class="row-span-8">
-			<ActionInputs bind:actions />
-		</div>
+	<div class="row-span-8">
+		<ActionInputs bind:actions />
+	</div>
 
-		<button
-			class="row-span-1 bg-gunmetal h-10 w-80 p-1 rounded static"
-			onclick={() => (timelineExtended = true)}>Show Timeline</button
-		>
-	{/if}
+	<button
+		class="row-span-1 bg-gunmetal h-10 w-80 p-1 rounded static"
+		onclick={(e: Event) => {
+			e.stopPropagation();
+			timelineExtended = true;
+		}}>Show Timeline</button
+	>
+	<Timeline bind:actions bind:displaying={timelineExtended} />
 </div>
