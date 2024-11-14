@@ -49,7 +49,7 @@ export type TeamMatch = {
 	scout_id: string;
 	match_key: string;
 	team_key: string;
-	skills: number;
+	skill: number;
 	notes: string;
 	broke: boolean;
 	died: boolean;
