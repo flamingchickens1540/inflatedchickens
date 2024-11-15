@@ -26,18 +26,18 @@
 	});
 </script>
 
-<div class="grid grid-row-10 p-2 h-dvh justify-items-center">
-	<span class="font-bold pb-2">Team {team_key}</span>
+<div class="grid-row-10 grid h-dvh justify-items-center p-2">
+	<span class="pb-2 font-bold">Team {team_key}</span>
 	<div class="row-span-8">
 		<ActionInputs bind:actions />
 	</div>
 
 	<button
-		class="self-end row-span-1 bg-gunmetal h-10 w-80 p-1 rounded static"
+		class="static row-span-1 h-10 w-80 self-end rounded bg-gunmetal p-1"
 		onclick={(e: Event) => {
 			e.stopPropagation();
 			timelineExtended = true;
 		}}>Show Timeline</button
 	>
-    <Timeline bind:actions bind:displaying={timelineExtended} />
+	<Timeline bind:actions bind:displaying={timelineExtended} />
 </div>
