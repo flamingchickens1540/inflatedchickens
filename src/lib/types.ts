@@ -68,18 +68,28 @@ export type TeleActionData = {
 };
 
 // Action Types
-export type AutoAction = TeleAction | BunnyAction;
-export type BunnyAction = 'IntakeBunny' | 'ScoreBunnyTote' | 'ScoreBunnyLow';
+// Naming Convention: action_type + game_piece + where
 export type TeleAction =
 	| 'IntakeTote'
 	| 'IntakeBalloon'
-	| 'TakeBalloonFromCoral'
-	| 'ScoreYourHeldTote'
-	| 'ScoreOtherHeldTote'
-	| 'ScoreExternalTote'
-	| 'ScoreBalloonLow';
+	| 'IntakeBalloonCoral'
+	| 'ScoreBalloonInternalTote' // Held by scorer
+	| 'ScoreBalloonExternalTote' // Held by alliance member
+	| 'ScoreBalloonUncontrolledTote'
+	| 'ScoreBalloonLow'
+	| 'EjectBalloon'
+	| 'EjectBunny' // Could happen in Tele; we could instead move this to BunnyAction and reset held_bunnies to 0 after Auto
+	| 'EjectTote';
+
+export type BunnyAction =
+	| 'IntakeBunny'
+	| 'ScoreBunnyInternalTote'
+	| 'ScoreBunnyExternalTote'
+	| 'ScoreBunnyUncontrolledTote'
+	| 'ScoreBunnyLow';
+export type AutoAction = TeleAction | BunnyAction;
 
 // For state machine
-export type ItemInputState = 'Intake' | 'Score' | 'None';
+export type ItemInputState = 'Intake' | 'Score' | 'Eject' | 'None';
 export type TeleInputState = TeleAction | ItemInputState;
 export type AutoInputState = TeleInputState | BunnyAction;
