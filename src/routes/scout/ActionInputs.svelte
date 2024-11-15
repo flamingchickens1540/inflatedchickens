@@ -54,7 +54,7 @@
 </script>
 
 <h1>Number of pieces currently held: {held_scorables}</h1>
-<div class="grid gap-2 grid-cols-1 grid-rows-1 place-items-center">
+<div class="grid gap-2 grid-cols-1 grid-rows-1">
 	{#if is_none_state}
 		<div class="grid gap-2 grid-cols-2">
 			<button class="bg-gunmetal p-2 rounded" onclick={intake_piece}>Intake</button>
