@@ -26,7 +26,7 @@
 	}}
 >
 	<div
-		class="absolute inset-x-0 bottom-0 flex h-[50svh] w-dvw flex-col items-center gap-2 rounded-t-lg bg-gunmetal p-3 text-white"
+		class="absolute inset-x-0 bottom-0 flex h-[50dvh] w-dvw flex-col items-center gap-3 rounded-t-lg bg-gunmetal p-3 text-white"
 		id="timeline"
 	>
 		{#each actions as _, i}

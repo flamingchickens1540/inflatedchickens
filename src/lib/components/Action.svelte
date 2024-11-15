@@ -21,22 +21,21 @@
 	);
 </script>
 
-<!-- <button -->
-<!-- 	class="{actionBorderColor} w-full p-1 rounded border-2 text-text_yellow" -->
-<!-- 	onclick={deleteself} -->
-<!-- > -->
-<!-- 	{action.type} -->
-<!-- </button> -->
-
 <div
-	class="flex flex-row content-center justify-between {color} w-full rounded p-1 text-white shadow-lg"
+	class="group flex flex-row content-center justify-between {color} w-full rounded p-2 text-white shadow-lg"
 >
 	<span class="w-auto shrink text-clip">{action_data.action}</span>
-	<div class="flex shrink-0 flex-row content-center justify-end gap-2">
-		<button onclick={() => shift(index, -1)}>
+	<div class="flex shrink-0 flex-row content-center justify-end gap-4">
+		<button
+			class="group-first:pointer-events-none group-first:opacity-30"
+			onclick={() => shift(index, -1)}
+		>
 			<MoveUp />
 		</button>
-		<button onclick={() => shift(index, 1)}>
+		<button
+			class="group-last:pointer-events-none group-last:opacity-30"
+			onclick={() => shift(index, 1)}
+		>
 			<MoveDown />
 		</button>
 		<button onclick={() => remove(index)}>
