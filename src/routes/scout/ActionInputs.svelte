@@ -53,20 +53,26 @@
 	const is_eject_state = $derived(actionState === 'Eject');
 </script>
 
-<h1>Number of pieces currently held: {held_scorables}</h1>
-<div class="grid grid-cols-1 grid-rows-1 gap-2">
+<span class="font-bold">Number of pieces currently held: {held_scorables}</span>
+<div class="align-center flex min-w-[60%] flex-grow flex-col">
 	{#if is_none_state}
-		<div class="grid grid-cols-2 gap-2">
-			<button class="rounded bg-gunmetal p-2" onclick={intake_piece}>Intake</button>
+		<div class="flex flex-col gap-4">
+			<button class="text-md rounded bg-gunmetal p-2 font-bold" onclick={intake_piece}
+				>Intake</button
+			>
 			{#if held_scorables > 0}
-				<button class="rounded bg-gunmetal p-2" onclick={score_piece}>Score</button>
+				<button class="fond-bold text-md rounded bg-gunmetal p-2" onclick={score_piece}
+					>Score</button
+				>
 			{/if}
 			{#if held_ejectables > 0}
-				<button class="rounded bg-gunmetal p-2" onclick={eject_piece}>Eject</button>
+				<button class="text-md rounded bg-gunmetal p-2 font-bold" onclick={eject_piece}
+					>Eject</button
+				>
 			{/if}
 		</div>
 	{:else if is_intake_state}
-		<div class="grid flex-grow grid-cols-2 grid-rows-2 gap-3">
+		<div class="flex flex-col gap-4">
 			<button class="rounded bg-gunmetal p-2" onclick={() => (actionState = 'IntakeBunny')}
 				>Intake Bunny</button
 			>
@@ -87,75 +93,79 @@
 			>
 		</div>
 	{:else if is_score_state}
-		<div class="grid grid-cols-2 grid-rows-4 gap-2">
+		<div class="flex flex-grow flex-col items-center gap-4">
 			{#if held_bunnies > 0}
-				<button class="rounded bg-gunmetal p-2" onclick={() => score_bunny('Low')}
-					>Score Bunny in Low Zone</button
-				>
-				<button
-					class="rounded bg-gunmetal p-2"
-					onclick={() => score_bunny('UncontrolledTote')}
-					>Score Bunny in Uncontrolled Tote</button
-				>
-				{#if held_totes > 0}
+				<h1 class="text-xl font-bold">Score Bunny</h1>
+				<div class="-mt-2 grid flex-grow grid-cols-2 grid-rows-2 gap-2">
+					<button class="rounded bg-gunmetal p-2" onclick={() => score_bunny('Low')}
+						>Low Zone</button
+					>
 					<button
 						class="rounded bg-gunmetal p-2"
-						onclick={() => score_bunny('InternalTote')}
-						>Score Bunny in Internal Held Tote</button
+						onclick={() => score_bunny('UncontrolledTote')}>Uncontrolled Tote</button
 					>
-				{/if}
-				<button class="rounded bg-gunmetal p-2" onclick={() => score_bunny('ExternalTote')}
-					>Score Bunny in External Held Tote</button
-				>
+					{#if held_totes > 0}
+						<button
+							class="rounded bg-gunmetal p-2"
+							onclick={() => score_bunny('InternalTote')}>Internal Held Tote</button
+						>
+					{/if}
+					<button
+						class="rounded bg-gunmetal p-2 {held_totes <= 0 ? 'col-span-2' : ''}"
+						onclick={() => score_bunny('ExternalTote')}>External Held Tote</button
+					>
+				</div>
 			{/if}
 			{#if held_balloons > 0}
-				<button class="rounded bg-gunmetal p-2" onclick={() => score_balloon('Low')}
-					>Score Ballon in Low Zone</button
-				>
-				<button
-					class="rounded bg-gunmetal p-2"
-					onclick={() => score_balloon('UncontrolledTote')}
-					>Score Bunny in Uncontrolled Tote</button
-				>
-				{#if held_totes > 0}
+				<h1 class="text-xl font-bold">Score Ballon</h1>
+				<div class="-mt-2 grid flex-grow grid-cols-2 grid-rows-2 gap-2">
+					<button class="rounded bg-gunmetal p-2" onclick={() => score_balloon('Low')}
+						>Low Zone</button
+					>
 					<button
 						class="rounded bg-gunmetal p-2"
-						onclick={() => score_balloon('InternalTote')}
-						>Score Balloon in Internal Held Tote</button
+						onclick={() => score_balloon('UncontrolledTote')}>Uncontrolled Tote</button
 					>
-				{/if}
-				<button
-					class="rounded bg-gunmetal p-2"
-					onclick={() => score_balloon('ExternalTote')}
-					>Score Balloon in External Held Tote
-				</button>
+					{#if held_totes > 0}
+						<button
+							class="rounded bg-gunmetal p-2"
+							onclick={() => score_balloon('InternalTote')}>Internal Held Tote</button
+						>
+					{/if}
+					<button
+						class="rounded bg-gunmetal p-2 {held_totes <= 0 ? 'col-span-2' : ''}"
+						onclick={() => score_balloon('ExternalTote')}
+						>External Held Tote
+					</button>
+				</div>
 			{/if}
-			<button
-				class="col-span-2 rounded bg-gunmetal p-2"
-				onclick={() => (actionState = 'None')}>Cancel</button
+			<button class="w-full rounded bg-gunmetal p-2" onclick={() => (actionState = 'None')}
+				>Cancel</button
 			>
 		</div>
 	{:else if is_eject_state}
-		<div class="grid grid-cols-2 grid-rows-4 gap-2">
+		<div class="flex flex-col items-center gap-4">
+			<h2 class="w-full text-center font-semibold">Eject</h2>
 			{#if held_bunnies > 0}
-				<button class="rounded bg-gunmetal p-2" onclick={() => (actionState = 'EjectBunny')}
-					>Eject Bunny</button
+				<button
+					class="w-full rounded bg-gunmetal p-2"
+					onclick={() => (actionState = 'EjectBunny')}>Bunny</button
 				>
 			{/if}
 			{#if held_balloons > 0}
 				<button
-					class="rounded bg-gunmetal p-2"
-					onclick={() => (actionState = 'EjectBalloon')}>Eject Ballon</button
+					class="w-full rounded bg-gunmetal p-2"
+					onclick={() => (actionState = 'EjectBalloon')}>Ballon</button
 				>
 			{/if}
 			{#if held_totes > 0}
-				<button class="rounded bg-gunmetal p-2" onclick={() => (actionState = 'EjectTote')}
-					>Eject Tote</button
+				<button
+					class="w-full rounded bg-gunmetal p-2"
+					onclick={() => (actionState = 'EjectTote')}>Tote</button
 				>
 			{/if}
-			<button
-				class="col-span-2 rounded bg-gunmetal p-2"
-				onclick={() => (actionState = 'None')}>Cancel</button
+			<button class="w-full rounded bg-gunmetal p-2" onclick={() => (actionState = 'None')}
+				>Cancel</button
 			>
 		</div>
 	{:else}

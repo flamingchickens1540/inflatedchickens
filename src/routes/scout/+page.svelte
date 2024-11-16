@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type TeamMatch, type AutoActionData } from '$lib/types';
+	import type { TeamMatch, AutoActionData } from '$lib/types';
 	import Timeline from '$lib/components/Timeline.svelte';
 	import ActionInputs from './ActionInputs.svelte';
 
@@ -26,14 +26,13 @@
 	});
 </script>
 
-<div class="grid-row-10 grid h-dvh justify-items-center p-2">
-	<span class="pb-2 font-bold">Team {team_key}</span>
-	<div class="row-span-8">
-		<ActionInputs bind:actions />
-	</div>
+<div class="m-auto flex h-dvh max-w-md flex-col items-center gap-2 p-2">
+	<span class="w-full border-b-2 border-white/10 pb-2 font-semibold">Team {team_key}</span>
+
+	<ActionInputs bind:actions />
 
 	<button
-		class="static row-span-1 h-10 w-80 self-end rounded bg-gunmetal p-1"
+		class="w-full border-t-2 border-white/10 pt-2 text-center font-semibold"
 		onclick={(e: Event) => {
 			e.stopPropagation();
 			timelineExtended = true;
