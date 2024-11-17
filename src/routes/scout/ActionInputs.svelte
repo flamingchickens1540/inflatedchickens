@@ -9,8 +9,8 @@
 	let held_bunnies: number = $state(0);
 	let held_balloons: number = $state(0);
 	let held_totes: number = $state(0);
-	let held_scorables: number = $derived(held_balloons + held_bunnies);
-	let held_ejectables: number = $derived(held_scorables + held_totes);
+	const held_scorables: number = $derived(held_balloons + held_bunnies);
+	const held_ejectables: number = $derived(held_scorables + held_totes);
 
 	function intake_piece() {
 		actionState = actionState === 'None' ? 'Intake' : actionState;
@@ -46,13 +46,13 @@
 			action: actionState as AutoAction,
 			success: success
 		};
-		actions.push(action);
+		actions.unshift(action); // TODO: Make sure unshift works
 		actionState = 'None';
 	}
 
-	const is_none_state = $derived(actionState === 'None');
-	const is_intake_state = $derived(actionState === 'Intake');
-	const is_score_state = $derived(actionState === 'Score');
+	const is_none_state: boolean = $derived(actionState === 'None');
+	const is_intake_state: boolean = $derived(actionState === 'Intake');
+	const is_score_state: boolean = $derived(actionState === 'Score');
 	const is_eject_state = $derived(actionState === 'Eject');
 </script>
 
