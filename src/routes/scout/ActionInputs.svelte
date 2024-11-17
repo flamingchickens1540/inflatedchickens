@@ -29,15 +29,18 @@
 		actionState = `ScoreBalloon${where}`;
 	}
 	function complete(success: boolean) {
-		// Assume that the robot ejects even if they fail to score
-		if (actionState.includes('IntakeBalloon')) held_balloons++;
-		else if (actionState.includes('IntakeBunny')) held_bunnies++;
-		else if (actionState.includes('IntakeTote')) held_totes++;
-		else if (actionState.includes('ScoreBalloon')) held_balloons--;
+		// Assume that a failure means a note remains where it is
+		if (success) {
+			if (actionState.includes('IntakeBalloon')) held_balloons++;
+			else if (actionState.includes('IntakeBunny')) held_bunnies++;
+			else if (actionState.includes('IntakeTote')) held_totes++;
+			else if (actionState.includes('EjectBalloon')) held_balloons--;
+			else if (actionState.includes('EjectBunny')) held_bunnies--;
+			else if (actionState.includes('EjectTote')) held_totes--;
+		}
+		// Assume failed scoring is still ejecting
+		if (actionState.includes('ScoreBalloon')) held_balloons--;
 		else if (actionState.includes('ScoreBunny')) held_bunnies--;
-		else if (actionState.includes('EjectBalloon')) held_balloons--;
-		else if (actionState.includes('EjectBunny')) held_bunnies--;
-		else if (actionState.includes('EjectTote')) held_totes--;
 
 		const action: AutoActionData = {
 			action: actionState as AutoAction,
@@ -61,7 +64,7 @@
 				>Intake</button
 			>
 			{#if held_scorables > 0}
-				<button class="fond-bold text-md rounded bg-gunmetal p-2" onclick={score_piece}
+				<button class="text-md rounded bg-gunmetal p-2 font-bold" onclick={score_piece}
 					>Score</button
 				>
 			{/if}
@@ -72,7 +75,7 @@
 			{/if}
 		</div>
 	{:else if is_intake_state}
-		<div class="flex flex-col gap-4">
+		<div class="flex flex-grow flex-col gap-4">
 			<button class="rounded bg-gunmetal p-2" onclick={() => (actionState = 'IntakeBunny')}
 				>Intake Bunny</button
 			>
