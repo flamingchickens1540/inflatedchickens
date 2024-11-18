@@ -57,7 +57,7 @@
 </script>
 
 <span class="font-bold">Number of pieces currently held: {held_scorables}</span>
-<div class="align-center flex min-w-[60%] flex-grow flex-col">
+<div class="align-center flex min-w-[60%] max-w-96 w-[80%] flex-grow flex-col">
 	{#if is_none_state}
 		<div class="flex flex-col gap-4">
 			<button class="text-md rounded bg-gunmetal p-2 font-bold" onclick={intake_piece}
@@ -75,31 +75,32 @@
 			{/if}
 		</div>
 	{:else if is_intake_state}
-		<div class="flex flex-grow flex-col gap-4">
+        <h1 class="text-xl font-bold w-full text-center">Intake</h1>
+		<div class="flex flex-grow flex-col gap-4 py-4">
 			<button class="rounded bg-gunmetal p-2" onclick={() => (actionState = 'IntakeBunny')}
-				>Intake Bunny</button
+				>Bunny</button
 			>
 			<button class="rounded bg-gunmetal p-2" onclick={() => (actionState = 'IntakeTote')}
-				>Intake Tote</button
+				>Tote</button
 			>
 			<button class="rounded bg-gunmetal p-2" onclick={() => (actionState = 'IntakeBalloon')}
-				>Intake Balloon From Ground</button
+				>Balloon From Ground</button
 			>
 			<button
 				class="rounded bg-gunmetal p-2"
 				onclick={() => (actionState = 'IntakeBalloonCoral')}
-				>Intake Ballon From Coral</button
-			>
-			<button
-				class="col-span-2 rounded bg-gunmetal p-2"
-				onclick={() => (actionState = 'None')}>Cancel</button
+				>Ballon From Coral</button
 			>
 		</div>
+        <button
+            class="col-span-2 rounded bg-gunmetal p-2"
+            onclick={() => (actionState = 'None')}>Cancel</button
+        >
 	{:else if is_score_state}
 		<div class="flex flex-grow flex-col items-center gap-4">
 			{#if held_bunnies > 0}
 				<h1 class="text-xl font-bold">Score Bunny</h1>
-				<div class="-mt-2 grid flex-grow grid-cols-2 grid-rows-2 gap-2">
+				<div class="-mt-2 grid grid-cols-2 grid-rows-2 gap-2">
 					<button class="rounded bg-gunmetal p-2" onclick={() => score_bunny('Low')}
 						>Low Zone</button
 					>
@@ -121,7 +122,7 @@
 			{/if}
 			{#if held_balloons > 0}
 				<h1 class="text-xl font-bold">Score Ballon</h1>
-				<div class="-mt-2 grid flex-grow grid-cols-2 grid-rows-2 gap-2">
+				<div class="-mt-2 grid grid-cols-2 grid-rows-2 gap-2">
 					<button class="rounded bg-gunmetal p-2" onclick={() => score_balloon('Low')}
 						>Low Zone</button
 					>
@@ -142,13 +143,13 @@
 					</button>
 				</div>
 			{/if}
-			<button class="w-full rounded bg-gunmetal p-2" onclick={() => (actionState = 'None')}
-				>Cancel</button
-			>
 		</div>
+        <button class="w-full rounded bg-gunmetal p-2" onclick={() => (actionState = 'None')}
+            >Cancel</button
+        >
 	{:else if is_eject_state}
-		<div class="flex flex-col items-center gap-4">
-			<h2 class="w-full text-center font-semibold">Eject</h2>
+		<div class="flex flex-col flex-grow items-center gap-4">
+            <h1 class="text-xl font-bold">Eject</h1>
 			{#if held_bunnies > 0}
 				<button
 					class="w-full rounded bg-gunmetal p-2"
@@ -167,10 +168,10 @@
 					onclick={() => (actionState = 'EjectTote')}>Tote</button
 				>
 			{/if}
-			<button class="w-full rounded bg-gunmetal p-2" onclick={() => (actionState = 'None')}
-				>Cancel</button
-			>
 		</div>
+        <button class="w-full rounded bg-gunmetal p-2" onclick={() => (actionState = 'None')}
+            >Cancel</button
+        >
 	{:else}
 		<SuccessFail
 			{complete}
