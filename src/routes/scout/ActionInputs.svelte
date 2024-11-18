@@ -57,7 +57,7 @@
 </script>
 
 <span class="font-bold">Number of pieces currently held: {held_scorables}</span>
-<div class="align-center flex min-w-[60%] max-w-96 w-[80%] flex-grow flex-col">
+<div class="align-center flex w-[80%] min-w-[60%] max-w-96 flex-grow flex-col">
 	{#if is_none_state}
 		<div class="flex flex-col gap-4">
 			<button class="text-md rounded bg-gunmetal p-2 font-bold" onclick={intake_piece}
@@ -75,7 +75,7 @@
 			{/if}
 		</div>
 	{:else if is_intake_state}
-        <h1 class="text-xl font-bold w-full text-center">Intake</h1>
+		<h1 class="w-full text-center text-xl font-bold">Intake</h1>
 		<div class="flex flex-grow flex-col gap-4 py-4">
 			<button class="rounded bg-gunmetal p-2" onclick={() => (actionState = 'IntakeBunny')}
 				>Bunny</button
@@ -88,14 +88,12 @@
 			>
 			<button
 				class="rounded bg-gunmetal p-2"
-				onclick={() => (actionState = 'IntakeBalloonCoral')}
-				>Ballon From Coral</button
+				onclick={() => (actionState = 'IntakeBalloonCoral')}>Ballon From Coral</button
 			>
 		</div>
-        <button
-            class="col-span-2 rounded bg-gunmetal p-2"
-            onclick={() => (actionState = 'None')}>Cancel</button
-        >
+		<button class="col-span-2 rounded bg-gunmetal p-2" onclick={() => (actionState = 'None')}
+			>Cancel</button
+		>
 	{:else if is_score_state}
 		<div class="flex flex-grow flex-col items-center gap-4">
 			{#if held_bunnies > 0}
@@ -144,12 +142,12 @@
 				</div>
 			{/if}
 		</div>
-        <button class="w-full rounded bg-gunmetal p-2" onclick={() => (actionState = 'None')}
-            >Cancel</button
-        >
+		<button class="w-full rounded bg-gunmetal p-2" onclick={() => (actionState = 'None')}
+			>Cancel</button
+		>
 	{:else if is_eject_state}
-		<div class="flex flex-col flex-grow items-center gap-4">
-            <h1 class="text-xl font-bold">Eject</h1>
+		<div class="flex flex-grow flex-col items-center gap-4">
+			<h1 class="text-xl font-bold">Eject</h1>
 			{#if held_bunnies > 0}
 				<button
 					class="w-full rounded bg-gunmetal p-2"
@@ -169,9 +167,9 @@
 				>
 			{/if}
 		</div>
-        <button class="w-full rounded bg-gunmetal p-2" onclick={() => (actionState = 'None')}
-            >Cancel</button
-        >
+		<button class="w-full rounded bg-gunmetal p-2" onclick={() => (actionState = 'None')}
+			>Cancel</button
+		>
 	{:else}
 		<SuccessFail
 			{complete}
