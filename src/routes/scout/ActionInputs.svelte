@@ -56,7 +56,6 @@
 	const is_eject_state = $derived(actionState === 'Eject');
 </script>
 
-<span class="font-bold">Number of pieces currently held: {held_scorables}</span>
 <div class="align-center flex w-[80%] min-w-[60%] max-w-96 flex-grow flex-col">
 	{#if is_none_state}
 		<div class="flex flex-col gap-4">
