@@ -11,6 +11,7 @@
 
 	let actions: AutoActionData[] = $state([]);
 	let timelineExtended = $state(false);
+	let pageName = $state('');
 
 	const match: TeamMatch = $state({
 		id: 0,
@@ -27,9 +28,12 @@
 </script>
 
 <div class="m-auto flex h-dvh max-w-md flex-col items-center gap-2 p-2">
-	<span class="w-full border-b-2 border-white/10 pb-2 font-semibold">Team {team_key}</span>
+	<div class="flex w-full justify-between border-b-2 border-white/10 pb-2 font-semibold">
+		<span class="flex-grow">Team {team_key}</span>
+		<span class="flex-grow text-right">{pageName}</span>
+	</div>
 
-	<ActionInputs bind:actions />
+	<ActionInputs bind:actions bind:pageName />
 
 	<button
 		class="w-full border-t-2 border-white/10 pt-2 text-center font-semibold"
