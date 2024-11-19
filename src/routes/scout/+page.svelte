@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type TeamMatch, type AutoActionData } from '$lib/types';
+	import type { TeamMatch, AutoActionData } from '$lib/types';
 	import Timeline from '$lib/components/Timeline.svelte';
 	import ActionInputs from './ActionInputs.svelte';
 
@@ -11,6 +11,7 @@
 
 	let actions: AutoActionData[] = $state([]);
 	let timelineExtended = $state(false);
+	let pageName = $state('');
 
 	const match: TeamMatch = $state({
 		id: 0,
@@ -26,24 +27,20 @@
 	});
 </script>
 
-<div class="grid grid-row-10 text-zinc-50 p-2 h-svh place-items-center">
-	<h1 class="row-span-1 text-center font-bold pb-2 h-5">Team {team_key}</h1>
-	{#if timelineExtended}
-		<div class="row-span-8">
-			<Timeline bind:actions />
-		</div>
-		<button
-			class="row-span-1 bg-btn_grey h-10 w-80 p-1 rounded border-2 border-outline_gray static"
-			onclick={() => (timelineExtended = false)}>Hide Timeline</button
-		>
-	{:else}
-		<div class="row-span-8">
-			<ActionInputs bind:actions />
-		</div>
+<div class="m-auto flex h-dvh max-w-md flex-col items-center gap-2 p-2">
+	<div class="flex w-full justify-between border-b-2 border-white/10 pb-2 font-semibold">
+		<span class="flex-grow">Team {team_key}</span>
+		<span class="flex-grow text-right">{pageName}</span>
+	</div>
 
-		<button
-			class="row-span-1 bg-btn_grey h-10 w-80 p-1 rounded border-2 border-outline_gray static"
-			onclick={() => (timelineExtended = true)}>Show Timeline</button
-		>
-	{/if}
+	<ActionInputs bind:actions bind:pageName />
+
+	<button
+		class="w-full border-t-2 border-white/10 pt-2 text-center font-semibold"
+		onclick={(e: Event) => {
+			e.stopPropagation();
+			timelineExtended = true;
+		}}>Show Timeline</button
+	>
+	<Timeline bind:actions bind:displaying={timelineExtended} />
 </div>
