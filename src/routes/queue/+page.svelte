@@ -9,9 +9,16 @@
 		socket.emit('join_queue');
 	});
 
-	socket.on('time_to_scout', ([team_key, color]: [string, 'red' | 'blue']) => {
-		goto(`/scout/${team_key}_${color}`);
+	socket.on('time_to_scout', ([match_key, team_key, color]: [string, string, 'red' | 'blue']) => {
+		goto(`/scout/${match_key}-${team_key}-${color}`);
 	});
+
+	const leave = () => {
+		socket.emit('leave_queue');
+		goto('/');
+	};
 </script>
 
 <h1>In Queue</h1>
+
+<button onclick={leave}>Leave Queue</button>

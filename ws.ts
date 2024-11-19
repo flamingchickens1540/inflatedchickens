@@ -11,8 +11,7 @@ const webSocketServer = {
 		const io = new Server(server.httpServer);
 
 		io.on('connect', (socket) => {
-			if (socket.handshake.headers.authorization === 'super-secret')
-				socket.join('admin_room');
+			if (socket.handshake.auth.token === 'celary') socket.join('admin_room');
 			socket.emit('messageFromServer', 'Houston');
 
 			socket.on('join_queue', (_) => {
@@ -29,15 +28,23 @@ const webSocketServer = {
 			});
 
 			socket.on('send_match', ([match_key, teams]: [string, [string, 'red' | 'blue'][]]) => {
+				console.log(`match_key: ${match_key}`);
+				console.log(`teams: ${teams}`);
 				if (!socket.rooms.has('admin_room')) return;
 
-				const scout_queue: Set<string> = io.of('/').adapter.rooms.get('scout_queue')!;
-				for (const sid of scout_queue.values()) {
-					const team_data = teams.pop();
-					if (!team_data) break;
+				const scout_queue: Set<string> | undefined = io
+					.of('/')
+					.adapter.rooms.get('scout_queue');
+				if (scout_queue) {
+					for (const sid of scout_queue.values()) {
+						const team_data = teams.pop();
+						if (!team_data) break;
 
-					io.to(sid).emit('time_to_scout', [match_key, ...team_data]);
+						socket.leave('scout_queue');
+						io.to(sid).emit('time_to_scout', [match_key, ...team_data]);
+					}
 				}
+
 				robotQueue.push(...teams);
 
 				// Update all connected sockets with new match info (for cosmetic purposes)
