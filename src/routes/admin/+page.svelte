@@ -7,17 +7,17 @@
 		}
 	});
 
-	socket.on('messageFromServer', (data) => console.log(data));
-
 	let match_key: string = $state('');
 	const colors = ['red', 'red', 'red', 'blue', 'blue', 'blue'] as const;
-	const teams: string[] = $state(['', '', '', '', '', '']);
+	let teams: string[] = $state(['', '', '', '', '', '']);
 	const team_color = $derived(
 		teams.map((team, i) => [team, colors[i]] as [string, 'red' | 'blue'])
 	);
 
 	const queue_match = () => {
 		socket.emit('send_match', [match_key, team_color]);
+		match_key = '';
+		teams = ['', '', '', '', '', ''];
 	};
 </script>
 
