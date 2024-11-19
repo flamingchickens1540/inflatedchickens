@@ -7,7 +7,6 @@ export const load: PageLoad = ({ params }) => {
 
 	// TODO: Check if this does anything
 	if (!team_key) return error(400, 'Bad query parameters');
-	console.log('match_key: ' + color);
 	return {
 		match_key: match_key,
 		team_key: team_key,
