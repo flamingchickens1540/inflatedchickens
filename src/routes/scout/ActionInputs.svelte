@@ -60,15 +60,7 @@
 	const is_eject_state = $derived(actionState === 'Eject');
 
 	$effect(() => {
-		pageName = is_none_state
-			? 'Home'
-			: is_intake_state
-				? 'Intake'
-				: is_score_state
-					? 'Score'
-					: is_eject_state
-						? 'Eject'
-						: '';
+        pageName = actionState === 'None' ? 'Home' : actionState;
 	});
 </script>
 
