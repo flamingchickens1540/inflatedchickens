@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	let controller
-	let promise
-	let team
+	let controller;
+	let promise;
+	let team;
 
 	async function err() {
 		throw new Error();
@@ -24,7 +24,9 @@
 <div>
 	{#if typeof window != 'undefined'}
 		{#await promise}
-			<button style="background-color: Tomato" onclick={() => controller.abort()}>Log Out</button>
+			<button style="background-color: Tomato" onclick={() => controller.abort()}
+				>Log Out</button
+			>
 		{:then}
 			<h1 style="color: White">Scouting {team}</h1>
 		{:catch}
