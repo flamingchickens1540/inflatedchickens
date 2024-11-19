@@ -2,6 +2,7 @@ import { Server } from 'socket.io';
 import { type ViteDevServer } from 'vite';
 
 const robotQueue: [string, 'red' | 'blue'][] = [];
+let curr_match_key: string = '';
 
 const webSocketServer = {
 	name: 'webSocketServer',
@@ -27,7 +28,7 @@ const webSocketServer = {
 				socket.leave('scout_queue');
 			});
 
-			socket.on('send_match', (teams: [string, 'red' | 'blue'][]) => {
+			socket.on('send_match', ([match_key, teams]: [string, [string, 'red' | 'blue'][]]) => {
 				if (!socket.rooms.has('admin_room')) return;
 
 				const scout_queue: Set<string> = io.of('/').adapter.rooms.get('scout_queue')!;
@@ -35,6 +36,16 @@ const webSocketServer = {
 					.values()
 					.forEach((sid) => io.to(sid).emit('time_to_scout', teams.pop()));
 				robotQueue.push(...teams);
+
+				// TODO: Decide if we care about this
+				// Update all connected sockets with new match info (for cosmetic purposes)
+				io.emit('new_match', match_key);
+				curr_match_key = match_key;
+			});
+
+			// Event-listener sockets that were offline to sync back up with the current match key
+			socket.on('request_curr_match', () => {
+				socket.emit('new_match', curr_match_key);
 			});
 		});
 	}
