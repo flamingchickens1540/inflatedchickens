@@ -19,6 +19,10 @@
 	};
 </script>
 
-<h1>In Queue</h1>
+<div
+	class="h-full w-full grid grid-cols-1 grid-rows-2 align-middle text-4xl text-white place-items-center gap-4"
+>
+	<h1 class="p-2">In Queue</h1>
 
-<button onclick={leave}>Leave Queue</button>
+	<button class="rounded border p-4" onclick={leave}>Leave Queue</button>
+</div>

@@ -36,7 +36,7 @@
 		</div>
 		<div class="grid grid-cols-2 grid-rows-3 row-span-3 gap-4 text-black grid-flow-col">
 			{#each teams as _, i}
-				<input bind:value={teams[i]} type="text" class="rounded" />
+				<input bind:value={teams[i]} type="text" class="rounded p-1" />
 			{/each}
 		</div>
 	</div>
