@@ -60,7 +60,7 @@
 	const is_eject_state = $derived(actionState === 'Eject');
 
 	$effect(() => {
-        pageName = actionState === 'None' ? 'Home' : actionState;
+		pageName = actionState === 'None' ? 'Home' : actionState;
 	});
 </script>
 
