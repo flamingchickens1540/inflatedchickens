@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ActionInputStateMachine } from '$lib/ActionInputStateMachine.svelte';
 	import type { AutoActionData } from '$lib/types';
 	import Action from './Action.svelte';
 
@@ -6,23 +7,25 @@
 		actions = $bindable(),
 		displaying = $bindable()
 	}: { actions: AutoActionData[]; displaying: boolean } = $props();
-	// let latestActions: AutoActionData[] = $derived(actions.toReversed().slice(0, 5));
 
-	const remove = (index: number) => {
+	/// Determine if currying is the right solution or if we should use a binding
+	function remove(index: number) {
 		actions.splice(index, 1);
-	};
+		verify();
+	}
 
-	const shift = (index: number, change: number) => {
+	function shift(index: number, change: number) {
 		let item = actions[index];
 		actions.splice(index, 1);
 		actions.splice(index + change, 0, item);
-	};
+		verify();
+	}
 
 	function verify() {
-		actions
-			.slice()
-			.reverse()
-			.forEach(() => {});
+		const action_state_machine = new ActionInputStateMachine();
+		actions.forEach((action) => {
+			action.ok = action_state_machine.new_action(action);
+		});
 	}
 </script>
 
@@ -37,7 +40,12 @@
 		id="timeline"
 	>
 		{#each actions as _, i}
-			<Action action_data={actions[i]} index={i} {remove} {shift} />
+			<Action
+				action_data={actions[actions.length - i - 1]}
+				index={actions.length - i - 1}
+				{remove}
+				{shift}
+			/>
 		{/each}
 		{#if actions.length === 0}
 			<h3 class="m-auto">No actions yet :3</h3>

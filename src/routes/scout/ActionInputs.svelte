@@ -1,27 +1,60 @@
 <script lang="ts">
 	import SuccessFail from '$lib/components/SuccessFail.svelte';
 	import type { AutoAction, AutoInputState, AutoActionData } from '$lib/types';
-	import { ActionInputStateMachine } from '$lib/ActionInputStateMachine.svelte';
 
 	let {
 		actions = $bindable(),
 		pageName = $bindable()
 	}: { actions: AutoActionData[]; pageName: string } = $props();
 
-	const action_state_machine = new ActionInputStateMachine();
+	let actionState: AutoInputState = $state('None') as AutoInputState;
 
-	function complete(success: boolean) {
-		// Assume that a failure means a note remains where it is
+	let held_bunnies: number = $state(0);
+	let held_balloons: number = $state(0);
+	let held_totes: number = $state(0);
+	const held_scorables: number = $derived(held_balloons + held_bunnies);
+	const held_ejectables: number = $derived(held_scorables + held_totes);
 
-		const actionState = action_state_machine.complete_action();
-		const action: AutoActionData = {
-			action: actionState as AutoAction,
-			success: success
-		};
-		actions.unshift(action);
+	function intake_piece() {
+		actionState = actionState === 'None' ? 'Intake' : actionState;
+	}
+	function score_piece() {
+		actionState = actionState === 'None' ? 'Score' : actionState;
+	}
+	function eject_piece() {
+		actionState = actionState === 'None' ? 'Eject' : actionState;
 	}
 
-	const is_none_state: boolean = $derived(action_state_machine.actionState === 'None');
+	function score_bunny(where: 'Low' | 'ExternalTote' | 'InternalTote' | 'UncontrolledTote') {
+		actionState = `ScoreBunny${where}`;
+	}
+	function score_balloon(where: 'Low' | 'InternalTote' | 'ExternalTote' | 'UncontrolledTote') {
+		actionState = `ScoreBalloon${where}`;
+	}
+	function complete(success: boolean) {
+		// Assume that a failure means a note remains where it is
+		if (success) {
+			if (actionState.includes('IntakeBalloon')) held_balloons++;
+			else if (actionState.includes('IntakeBunny')) held_bunnies++;
+			else if (actionState.includes('IntakeTote')) held_totes++;
+			else if (actionState.includes('EjectBalloon')) held_balloons--;
+			else if (actionState.includes('EjectBunny')) held_bunnies--;
+			else if (actionState.includes('EjectTote')) held_totes--;
+		}
+		// Assume failed scoring is still ejecting
+		if (actionState.includes('ScoreBalloon')) held_balloons--;
+		else if (actionState.includes('ScoreBunny')) held_bunnies--;
+
+		const action: AutoActionData = {
+			action: actionState as AutoAction,
+			success: success,
+			ok: true
+		};
+		actions.push(action);
+		actionState = 'None';
+	}
+
+	const is_none_state: boolean = $derived(actionState === 'None');
 	const is_intake_state: boolean = $derived(actionState === 'Intake');
 	const is_score_state: boolean = $derived(actionState === 'Score');
 	const is_eject_state = $derived(actionState === 'Eject');
