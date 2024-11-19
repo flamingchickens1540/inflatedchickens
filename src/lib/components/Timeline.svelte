@@ -17,6 +17,13 @@
 		actions.splice(index, 1);
 		actions.splice(index + change, 0, item);
 	};
+
+	function verify() {
+		actions
+			.slice()
+			.reverse()
+			.forEach(() => {});
+	}
 </script>
 
 <button
