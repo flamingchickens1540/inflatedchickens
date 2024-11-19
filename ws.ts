@@ -12,7 +12,6 @@ const webSocketServer = {
 
 		io.on('connect', (socket) => {
 			if (socket.handshake.auth.token === 'celary') socket.join('admin_room');
-			socket.emit('messageFromServer', 'Houston');
 
 			socket.on('join_queue', (_) => {
 				const team_data = robotQueue.pop();
@@ -28,8 +27,6 @@ const webSocketServer = {
 			});
 
 			socket.on('send_match', ([match_key, teams]: [string, [string, 'red' | 'blue'][]]) => {
-				console.log(`match_key: ${match_key}`);
-				console.log(`teams: ${teams}`);
 				if (!socket.rooms.has('admin_room')) return;
 
 				const scout_queue: Set<string> | undefined = io
