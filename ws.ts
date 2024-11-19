@@ -21,7 +21,7 @@ const webSocketServer = {
 					socket.join('scout_queue');
 					return;
 				}
-				socket.emit('time_to_scout', team_data);
+				socket.emit('time_to_scout', [curr_match_key, ...team_data]);
 			});
 
 			socket.on('leave_queue', (_) => {
@@ -32,12 +32,14 @@ const webSocketServer = {
 				if (!socket.rooms.has('admin_room')) return;
 
 				const scout_queue: Set<string> = io.of('/').adapter.rooms.get('scout_queue')!;
-				scout_queue
-					.values()
-					.forEach((sid) => io.to(sid).emit('time_to_scout', teams.pop()));
+				for (const sid of scout_queue.values()) {
+					const team_data = teams.pop();
+					if (!team_data) break;
+
+					io.to(sid).emit('time_to_scout', [match_key, ...team_data]);
+				}
 				robotQueue.push(...teams);
 
-				// TODO: Decide if we care about this
 				// Update all connected sockets with new match info (for cosmetic purposes)
 				io.emit('new_match', match_key);
 				curr_match_key = match_key;
