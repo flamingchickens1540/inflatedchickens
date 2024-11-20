@@ -24,12 +24,15 @@
 	function verify() {
 		new ActionInputVerifier().verify_actions(actions);
 	}
+	const is_valid_timeline = $derived(actions.filter((action) => !action.ok).length === 0);
 </script>
 
 <button
 	class="fixed inset-0 transition-all {displaying ? 'backdrop-blur' : 'translate-y-full'}"
 	onclick={(e: Event) => {
-		if (e.target === e.currentTarget) displaying = false;
+		if (e.target === e.currentTarget && is_valid_timeline) {
+			displaying = false;
+		}
 	}}
 >
 	<div
