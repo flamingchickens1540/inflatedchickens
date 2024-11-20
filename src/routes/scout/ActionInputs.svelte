@@ -1,7 +1,6 @@
 <script lang="ts">
 	import SuccessFail from '$lib/components/SuccessFail.svelte';
 	import type { AutoAction, AutoInputState, AutoActionData } from '$lib/types';
-	import { derived } from 'svelte/store';
 
 	let {
 		actions = $bindable(),
@@ -48,9 +47,10 @@
 
 		const action: AutoActionData = {
 			action: actionState as AutoAction,
-			success: success
+			success: success,
+			ok: true
 		};
-		actions.unshift(action); // TODO: Make sure unshift works
+		actions.push(action);
 		actionState = 'None';
 	}
 
