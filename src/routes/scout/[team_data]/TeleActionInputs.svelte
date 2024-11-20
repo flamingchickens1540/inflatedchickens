@@ -1,12 +1,19 @@
 <script lang="ts">
 	import SuccessFail from '$lib/components/SuccessFail.svelte';
-	import type { TeleAction, TeleInputState, TeleActionData, TeleHeldItems } from '$lib/types';
+	import type {
+		TeleAction,
+		TeleInputState,
+		TeleActionData,
+		AutoHeldItems,
+		AutoActionData
+	} from '$lib/types';
 
 	let {
 		actions = $bindable(),
 		held = $bindable(),
 		pageName = $bindable()
-	}: { actions: TeleActionData[]; held: TeleHeldItems; pageName: string } = $props();
+		// Not a mistake, this is intentional to allow a shared timeline
+	}: { actions: AutoActionData[]; held: AutoHeldItems; pageName: string } = $props();
 
 	let actionState: TeleInputState = $state('None') as TeleInputState;
 
@@ -41,7 +48,7 @@
 			success: success,
 			ok: true
 		};
-		actions.push(action);
+		actions.push(action); // This is fine because TeleActionData is a subset of AutoActionData
 		actionState = 'None';
 	}
 

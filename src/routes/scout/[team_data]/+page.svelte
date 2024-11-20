@@ -1,11 +1,5 @@
 <script lang="ts">
-	import type {
-		TeamMatch,
-		AutoActionData,
-		TeleActionData,
-		AutoHeldItems,
-		TeleHeldItems
-	} from '$lib/types';
+	import type { TeamMatch, AutoActionData, AutoHeldItems } from '$lib/types';
 	import Timeline from '$lib/components/Timeline.svelte';
 	import AutoActionInputs from './AutoActionInputs.svelte';
 	import TeleActionInputs from './TeleActionInputs.svelte';
@@ -17,34 +11,21 @@
 
 	const scout_id = browser ? (localStorage?.getItem('scout_id') ?? '') : '';
 
-	let autoActions: AutoActionData[] = $state([]);
-	let autoHeld: AutoHeldItems = $state({
+	let actions: AutoActionData[] = $state([]);
+	let held: AutoHeldItems = $state({
 		bunnies: 0,
 		balloons: 0,
 		totes: 0
 	});
-	let teleActions: TeleActionData[] = $state([]);
-	let teleHeld: TeleHeldItems = $state({
-		balloons: 0,
-		totes: 0
-	});
+
+	let skill = $state(0);
+	let broke = $state(false);
+	let died = $state(false);
+	let notes = $state('');
 
 	let timelineExtended = $state(false);
 	let gamePhase = $state('Auto') as 'Auto' | 'Tele' | 'Post';
 	let pageName = $state('');
-
-	const match: TeamMatch = $state({
-		id: 0,
-		scout_id,
-		team_key: data.team_key,
-		match_key: data.match_key,
-		skill: 3,
-		notes: '',
-		broke: false,
-		died: false,
-		auto_actions: [],
-		tele_actions: []
-	});
 
 	function phaseShiftRight() {
 		gamePhase = gamePhase === 'Auto' ? 'Tele' : gamePhase === 'Tele' ? 'Post' : 'Post'; // Last case should never happen
@@ -69,7 +50,7 @@
 	</div>
 
 	{#if gamePhase === 'Auto'}
-		<AutoActionInputs bind:held={autoHeld} bind:actions={autoActions} bind:pageName />
+		<AutoActionInputs bind:held bind:actions bind:pageName />
 		<button
 			class="w-full border-t-2 border-white/10 pt-2 text-center font-semibold"
 			onclick={(e: Event) => {
@@ -77,13 +58,9 @@
 				timelineExtended = true;
 			}}>Show Timeline</button
 		>
-		<Timeline
-			bind:held={autoHeld}
-			bind:actions={autoActions}
-			bind:displaying={timelineExtended}
-		/>
+		<Timeline bind:held bind:actions bind:displaying={timelineExtended} />
 	{:else if gamePhase === 'Tele'}
-		<TeleActionInputs bind:held={teleHeld} bind:actions={teleActions} bind:pageName />
+		<TeleActionInputs bind:held bind:actions bind:pageName />
 		<button
 			class="w-full border-t-2 border-white/10 pt-2 text-center font-semibold"
 			onclick={(e: Event) => {
@@ -91,11 +68,7 @@
 				timelineExtended = true;
 			}}>Show Timeline</button
 		>
-		<Timeline
-			bind:held={teleHeld}
-			bind:actions={teleActions}
-			bind:displaying={timelineExtended}
-		/>
+		<Timeline bind:held bind:actions bind:displaying={timelineExtended} />
 	{:else}
 		<div>Postmatch</div>
 	{/if}

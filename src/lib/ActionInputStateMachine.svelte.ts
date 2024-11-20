@@ -20,9 +20,12 @@ export class ActionInputVerifier {
 	}
 
 	public verify_actions(action_data: AutoActionData[]) {
-		action_data
-			.reverse()
-			.forEach((action_data) => (action_data.ok = this.verify_new_action(action_data)));
+		action_data.forEach((action) => {
+			action.ok = this.verify_new_action(action);
+			this.held_totes = Math.max(this.held_totes, 0);
+			this.held_balloons = Math.max(this.held_balloons, 0);
+			this.held_bunnies = Math.max(this.held_bunnies, 0);
+		});
 	}
 
 	// Takes an action and returns if it's a legal one
