@@ -5,8 +5,14 @@
 	let {
 		actions = $bindable(),
 		held = $bindable(),
+		furthest_auto_index = $bindable(),
 		pageName = $bindable()
-	}: { actions: AutoActionData[]; held: AutoHeldItems; pageName: string } = $props();
+	}: {
+		actions: AutoActionData[];
+		held: AutoHeldItems;
+		furthest_auto_index: number;
+		pageName: string;
+	} = $props();
 
 	let actionState: AutoInputState = $state('None') as AutoInputState;
 
@@ -49,6 +55,7 @@
 			ok: true
 		};
 		actions.push(action);
+		furthest_auto_index++;
 		actionState = 'None';
 	}
 

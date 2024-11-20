@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { TeamMatch, AutoActionData, AutoHeldItems } from '$lib/types';
+	import type { TeamMatch, AutoActionData, AutoHeldItems, TeleActionData } from '$lib/types';
 	import Timeline from '$lib/components/Timeline.svelte';
 	import AutoActionInputs from './AutoActionInputs.svelte';
 	import TeleActionInputs from './TeleActionInputs.svelte';
@@ -17,6 +17,8 @@
 		balloons: 0,
 		totes: 0
 	});
+	// The furthest index in actions that was made during auto
+	let furthest_auto_index = $state(0);
 
 	let skill = $state(0);
 	let broke = $state(false);
@@ -32,6 +34,23 @@
 	}
 	function phaseShiftLeft() {
 		gamePhase = gamePhase === 'Post' ? 'Tele' : gamePhase === 'Tele' ? 'Auto' : 'Auto'; // Last case should never happen
+	}
+
+	function submit() {
+		const auto_actions = actions.slice(0, furthest_auto_index + 1);
+		const tele_actions = actions.slice(furthest_auto_index + 1) as TeleActionData[]; // TODO: Add verification function to ensure that this always works
+		const match: TeamMatch = {
+			id: 0,
+			scout_id,
+			team_key: data.team_key,
+			match_key: data.match_key,
+			skill,
+			broke,
+			died,
+			notes,
+			auto_actions,
+			tele_actions
+		};
 	}
 </script>
 
@@ -50,7 +69,7 @@
 	</div>
 
 	{#if gamePhase === 'Auto'}
-		<AutoActionInputs bind:held bind:actions bind:pageName />
+		<AutoActionInputs bind:furthest_auto_index bind:held bind:actions bind:pageName />
 		<button
 			class="w-full border-t-2 border-white/10 pt-2 text-center font-semibold"
 			onclick={(e: Event) => {
@@ -58,7 +77,12 @@
 				timelineExtended = true;
 			}}>Show Timeline</button
 		>
-		<Timeline bind:held bind:actions bind:displaying={timelineExtended} />
+		<Timeline
+			bind:furthest_auto_index
+			bind:held
+			bind:actions
+			bind:displaying={timelineExtended}
+		/>
 	{:else if gamePhase === 'Tele'}
 		<TeleActionInputs bind:held bind:actions bind:pageName />
 		<button
@@ -68,7 +92,12 @@
 				timelineExtended = true;
 			}}>Show Timeline</button
 		>
-		<Timeline bind:held bind:actions bind:displaying={timelineExtended} />
+		<Timeline
+			bind:furthest_auto_index
+			bind:held
+			bind:actions
+			bind:displaying={timelineExtended}
+		/>
 	{:else}
 		<div>Postmatch</div>
 	{/if}
