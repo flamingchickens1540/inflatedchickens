@@ -19,7 +19,7 @@
 </script>
 
 <div
-	class="h-full w-full grid grid-cols-1 grid-rows-2 align-middle text-4xl text-white place-items-center gap-4"
+	class="grid h-full w-full grid-cols-1 grid-rows-2 place-items-center gap-4 align-middle text-4xl text-white"
 >
 	<h1 class="p-2">In Queue</h1>
 
