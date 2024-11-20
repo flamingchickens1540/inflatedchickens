@@ -9,21 +9,21 @@
 	function submit() {}
 </script>
 
-<div class="flex flex-col items-start align-top h-dvh p-3 accent-text_yellow">
-	<div class="flex w-full rounded border-solid border-2 border-text_red bg-btn_grey p-2 mb-3">
+<div class="accent-text_yellow flex h-dvh flex-col items-start p-3 align-top">
+	<div class="border-text_red bg-btn_grey mb-3 flex w-full rounded border-2 border-solid p-2">
 		<h1 class="text-text_red text-3xl">Post Match</h1>
 	</div>
 	<div
-		class="flex w-full rounded border-solid border-2 border-text_red bg-btn_grey p-2 mb-3 content-start"
+		class="border-text_red bg-btn_grey mb-3 flex w-full content-start rounded border-2 border-solid p-2"
 	>
-		<label class="text-text_red text-3xl w-full"
+		<label class="text-text_red w-full text-3xl"
 			>Driver Skill
-			<div class="w-full flex justify-items-stretch text-base">
-				<div class="p-2 w-1/2 text-center text-text_yellow">
+			<div class="flex w-full justify-items-stretch text-base">
+				<div class="text-text_yellow w-1/2 p-2 text-center">
 					Quickness: {driverquickness}
 					<input type="range" min="0" max="5" step="1" bind:value={driverquickness} />
 				</div>
-				<div class="p-2 w-1/2 text-center text-text_yellow">
+				<div class="text-text_yellow w-1/2 p-2 text-center">
 					Field awareness: {driverfieldawareness}
 					<input
 						type="range"
@@ -37,12 +37,12 @@
 		</label>
 	</div>
 	<div
-		class="flex w-full rounded border-solid border-2 border-text_red bg-btn_grey p-2 mb-3 content-start"
+		class="border-text_red bg-btn_grey mb-3 flex w-full content-start rounded border-2 border-solid p-2"
 	>
-		<label class="text-text_red text-3xl w-full"
+		<label class="text-text_red w-full text-3xl"
 			>Robot
 			<div
-				class="w-full flex justify-items-stretch text-base border-solid border-2 border-text_red rounded mb-2"
+				class="border-text_red mb-2 flex w-full justify-items-stretch rounded border-2 border-solid text-base"
 			>
 				<label class="text-text_yellow w-1/2 p-2 text-left"
 					><input
@@ -64,7 +64,7 @@
 				>
 			</div>
 			<div
-				class="w-full flex justify-items-stretch text-base border-solid border-2 border-text_red rounded"
+				class="border-text_red flex w-full justify-items-stretch rounded border-2 border-solid text-base"
 			>
 				<label class="text-text_yellow w-1/2 p-2 text-left"
 					><input
@@ -88,24 +88,24 @@
 		</label>
 	</div>
 	<div
-		class="flex w-full rounded border-solid border-2 border-text_red bg-btn_grey p-2 mb-3 content-start"
+		class="border-text_red bg-btn_grey mb-3 flex w-full content-start rounded border-2 border-solid p-2"
 	>
-		<label class="text-text_red text-3xl w-full"
+		<label class="text-text_red w-full text-3xl"
 			>Notes
 			<textarea
-				class="border-solid border-2 border-text_red bg-btn_grey text-text_yellow text-base w-full p-2 rounded"
+				class="border-text_red bg-btn_grey text-text_yellow w-full rounded border-2 border-solid p-2 text-base"
 				bind:value={notes}
 			></textarea>
 		</label>
 	</div>
 	<div class="flex w-full">
 		<button
-			class="m-0 rounded border-solid border-2 border-text_red bg-btn_grey p-2 text-text_red text-3xl w-1/2 mr-2"
+			class="border-text_red bg-btn_grey text-text_red m-0 mr-2 w-1/2 rounded border-2 border-solid p-2 text-3xl"
 			>←</button
 		>
 		<button
 			on:click={submit}
-			class="m-0 rounded border-solid border-2 border-text_red bg-btn_grey p-2 text-text_red text-3xl w-1/2"
+			class="border-text_red bg-btn_grey text-text_red m-0 w-1/2 rounded border-2 border-solid p-2 text-3xl"
 			>Submit</button
 		>
 	</div>

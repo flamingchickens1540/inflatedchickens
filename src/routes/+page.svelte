@@ -21,17 +21,17 @@
 	}
 </script>
 
-<div class="flex flex-col items-center justify-evenly h-dvh">
-	<h1 class="text-center text-text_red text-5xl font-bold">hiiii :3</h1>
+<div class="flex h-dvh flex-col items-center justify-evenly">
+	<h1 class="text-text_red text-center text-5xl font-bold">hiiii :3</h1>
 	<div>
 		<input
-			class="rounded bg-btn_grey border-solid border-2 border-text_red px-4 py-2 text-text_yellow"
+			class="bg-btn_grey border-text_red text-text_yellow rounded border-2 border-solid px-4 py-2"
 			type="text"
 			placeholder="Enter your name here"
 			bind:value={inputname}
 		/>
 		<button
-			class="text-center text-text_yellow text-l rounded bg-btn_grey px-4 py-2 border-solid border-2 border-text_red"
+			class="text-text_yellow text-l bg-btn_grey border-text_red rounded border-2 border-solid px-4 py-2 text-center"
 			on:click={login}
 		>
 			Login
