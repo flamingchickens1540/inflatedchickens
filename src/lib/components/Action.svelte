@@ -26,6 +26,9 @@
 >
 	<span class="w-auto shrink text-clip">{action_data.action}</span>
 	<div class="flex shrink-0 flex-row content-center justify-end gap-4">
+		{#if !action_data.ok}
+			<span class="text-yellow-400">Warning</span>
+		{/if}
 		<button
 			class="group-first:pointer-events-none group-first:opacity-30"
 			onclick={() => shift(index, -1)}
