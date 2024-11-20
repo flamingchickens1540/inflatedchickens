@@ -57,7 +57,7 @@
 <div class="m-auto flex h-dvh max-w-md flex-col items-center gap-2 p-2">
 	<div class="flex w-full justify-between border-b-2 border-white/10 pb-2 font-semibold">
 		<span class="flex-shrink-0">Team {data.team_key}</span>
-		<div class="flex">
+		<div class="flex gap-2">
 			<button
 				onclick={phaseShiftLeft}
 				class={gamePhase === 'Auto' ? 'pointer-events-none opacity-30' : ''}
