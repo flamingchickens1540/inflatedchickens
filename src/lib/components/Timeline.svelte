@@ -1,12 +1,17 @@
 <script lang="ts">
 	import { ActionInputVerifier } from '$lib/ActionInputStateMachine.svelte';
-	import type { AutoActionData } from '$lib/types';
+	import type { AutoActionData, AutoHeldItems, TeleHeldItems } from '$lib/types';
 	import Action from './Action.svelte';
 
 	let {
 		actions = $bindable(),
+		held = $bindable(),
 		displaying = $bindable()
-	}: { actions: AutoActionData[]; displaying: boolean } = $props();
+	}: {
+		actions: AutoActionData[];
+		held: AutoHeldItems | TeleHeldItems;
+		displaying: boolean;
+	} = $props();
 
 	/// Determine if currying is the right solution or if we should use a binding
 	function remove(index: number) {
@@ -14,15 +19,18 @@
 		verify();
 	}
 
-	function shift(index: number, change: number) {
-		let item = actions[index];
-		actions.splice(index, 1);
-		actions.splice(index + change, 0, item);
+	function shift(index: number, change: -1 | 1) {
+		[actions[index], actions[index + change]] = [actions[index + change], actions[index]];
 		verify();
 	}
 
 	function verify() {
-		new ActionInputVerifier().verify_actions(actions);
+		const action_input_verifier = new ActionInputVerifier();
+		action_input_verifier.verify_actions(actions);
+		// TODO: Fix this horrible and jank solution
+		held = Object.hasOwn(held, 'bunnies')
+			? action_input_verifier.get_held_auto()
+			: action_input_verifier.get_held_tele();
 	}
 	const is_valid_timeline = $derived(actions.filter((action) => !action.ok).length === 0);
 </script>

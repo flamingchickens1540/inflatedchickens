@@ -5,6 +5,20 @@ export class ActionInputVerifier {
 	private held_balloons: number = 0;
 	private held_totes: number = 0;
 
+	public get_held_tele(): { balloons: number; totes: number } {
+		return {
+			balloons: this.held_balloons,
+			totes: this.held_totes
+		};
+	}
+	public get_held_auto(): { bunnies: number; balloons: number; totes: number } {
+		return {
+			bunnies: this.held_bunnies,
+			balloons: this.held_balloons,
+			totes: this.held_totes
+		};
+	}
+
 	public verify_actions(action_data: AutoActionData[]) {
 		action_data
 			.reverse()

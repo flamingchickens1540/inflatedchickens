@@ -1,5 +1,11 @@
 <script lang="ts">
-	import type { TeamMatch, AutoActionData, TeleActionData } from '$lib/types';
+	import type {
+		TeamMatch,
+		AutoActionData,
+		TeleActionData,
+		AutoHeldItems,
+		TeleHeldItems
+	} from '$lib/types';
 	import Timeline from '$lib/components/Timeline.svelte';
 	import AutoActionInputs from './AutoActionInputs.svelte';
 	import TeleActionInputs from './TeleActionInputs.svelte';
@@ -12,7 +18,17 @@
 	const scout_id = browser ? (localStorage?.getItem('scout_id') ?? '') : '';
 
 	let autoActions: AutoActionData[] = $state([]);
+	let autoHeld: AutoHeldItems = $state({
+		bunnies: 0,
+		balloons: 0,
+		totes: 0
+	});
 	let teleActions: TeleActionData[] = $state([]);
+	let teleHeld: TeleHeldItems = $state({
+		balloons: 0,
+		totes: 0
+	});
+
 	let timelineExtended = $state(false);
 	let gamePhase = $state('Auto') as 'Auto' | 'Tele' | 'Post';
 	let pageName = $state('');
@@ -53,7 +69,7 @@
 	</div>
 
 	{#if gamePhase === 'Auto'}
-		<AutoActionInputs bind:actions={autoActions} bind:pageName />
+		<AutoActionInputs bind:held={autoHeld} bind:actions={autoActions} bind:pageName />
 		<button
 			class="w-full border-t-2 border-white/10 pt-2 text-center font-semibold"
 			onclick={(e: Event) => {
@@ -61,9 +77,13 @@
 				timelineExtended = true;
 			}}>Show Timeline</button
 		>
-		<Timeline bind:actions={autoActions} bind:displaying={timelineExtended} />
+		<Timeline
+			bind:held={autoHeld}
+			bind:actions={autoActions}
+			bind:displaying={timelineExtended}
+		/>
 	{:else if gamePhase === 'Tele'}
-		<TeleActionInputs bind:actions={teleActions} bind:pageName />
+		<TeleActionInputs bind:held={teleHeld} bind:actions={teleActions} bind:pageName />
 		<button
 			class="w-full border-t-2 border-white/10 pt-2 text-center font-semibold"
 			onclick={(e: Event) => {
@@ -71,7 +91,11 @@
 				timelineExtended = true;
 			}}>Show Timeline</button
 		>
-		<Timeline bind:actions={teleActions} bind:displaying={timelineExtended} />
+		<Timeline
+			bind:held={teleHeld}
+			bind:actions={teleActions}
+			bind:displaying={timelineExtended}
+		/>
 	{:else}
 		<div>Postmatch</div>
 	{/if}

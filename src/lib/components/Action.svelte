@@ -10,7 +10,7 @@
 	}: {
 		action_data: AutoActionData;
 		index: number;
-		shift: (index: number, change: number) => void;
+		shift: (index: number, change: -1 | 1) => void;
 		remove: (index: number) => void;
 	} = $props();
 
