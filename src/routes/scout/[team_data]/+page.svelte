@@ -56,16 +56,20 @@
 
 <div class="m-auto flex h-dvh max-w-md flex-col items-center gap-2 p-2">
 	<div class="flex w-full justify-between border-b-2 border-white/10 pb-2 font-semibold">
-		<span class="">Team {data.team_key}</span>
-		{#if gamePhase !== 'Auto'}
-			<button onclick={phaseShiftLeft} class=""><ArrowLeft /></button>
-		{/if}
-		<span class="text-right">{gamePhase}: {pageName}</span>
-		{#if gamePhase === 'Post'}
-			<button class="rounded border pl-2 pr-2">Submit </button>
-		{:else}
-			<button onclick={phaseShiftRight} class=""><ArrowRight /></button>
-		{/if}
+		<span class="flex-shrink-0">Team {data.team_key}</span>
+		<div class="flex">
+			<button
+				onclick={phaseShiftLeft}
+				class={gamePhase === 'Auto' ? 'pointer-events-none opacity-30' : ''}
+				><ArrowLeft /></button
+			>
+			<span class="text-right">{gamePhase}: {pageName}</span>
+			<button
+				onclick={phaseShiftRight}
+				class={gamePhase === 'Post' ? 'pointer-events-none opacity-30' : ''}
+				><ArrowRight /></button
+			>
+		</div>
 	</div>
 
 	{#if gamePhase === 'Auto'}
@@ -100,5 +104,6 @@
 		/>
 	{:else}
 		<div>Postmatch</div>
+		<button class="mt-auto w-full rounded bg-gunmetal p-2 font-bold">Submit</button>
 	{/if}
 </div>
