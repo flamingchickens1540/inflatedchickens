@@ -2,12 +2,12 @@
 	import type { TeamMatch, AutoActionData } from '$lib/types';
 	import Timeline from '$lib/components/Timeline.svelte';
 	import ActionInputs from './ActionInputs.svelte';
+	import type { PageData } from './$types';
+	import { browser } from '$app/environment';
 
-	const {
-		match_key,
-		team_key = '1540',
-		scout_id
-	}: { match_key: string; team_key: string; scout_id: string } = $props();
+	const { data }: { data: PageData } = $props();
+
+	const scout_id = browser ? (localStorage?.getItem('scout_id') ?? '') : '';
 
 	let actions: AutoActionData[] = $state([]);
 	let timelineExtended = $state(false);
@@ -16,8 +16,8 @@
 	const match: TeamMatch = $state({
 		id: 0,
 		scout_id,
-		team_key,
-		match_key,
+		team_key: data.team_key,
+		match_key: data.match_key,
 		skill: 3,
 		notes: '',
 		broke: false,
@@ -29,7 +29,7 @@
 
 <div class="m-auto flex h-dvh max-w-md flex-col items-center gap-2 p-2">
 	<div class="flex w-full justify-between border-b-2 border-white/10 pb-2 font-semibold">
-		<span class="flex-grow">Team {team_key}</span>
+		<span class="flex-grow">Team {data.team_key}</span>
 		<span class="flex-grow text-right">{pageName}</span>
 	</div>
 
