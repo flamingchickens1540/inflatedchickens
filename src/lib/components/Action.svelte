@@ -31,13 +31,13 @@
 		{/if}
 		<button
 			class="group-first:pointer-events-none group-first:opacity-30"
-			onclick={() => shift(index, 1)}
+			onclick={() => shift(index, -1)}
 		>
 			<MoveUp />
 		</button>
 		<button
 			class="group-last:pointer-events-none group-last:opacity-30"
-			onclick={() => shift(index, -1)}
+			onclick={() => shift(index, 1)}
 		>
 			<MoveDown />
 		</button>
