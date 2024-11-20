@@ -1,28 +1,42 @@
 <script lang="ts">
 	import { ActionInputVerifier } from '$lib/ActionInputStateMachine.svelte';
-	import type { AutoActionData } from '$lib/types';
+	import type { AutoActionData, AutoHeldItems, TeleHeldItems } from '$lib/types';
 	import Action from './Action.svelte';
 
 	let {
 		actions = $bindable(),
+		held = $bindable(),
+		furthest_auto_index = $bindable(),
 		displaying = $bindable()
-	}: { actions: AutoActionData[]; displaying: boolean } = $props();
+	}: {
+		actions: AutoActionData[];
+		held: AutoHeldItems | TeleHeldItems;
+		furthest_auto_index: number;
+		displaying: boolean;
+	} = $props();
 
 	/// Determine if currying is the right solution or if we should use a binding
 	function remove(index: number) {
+		if (furthest_auto_index >= index) furthest_auto_index--;
 		actions.splice(index, 1);
 		verify();
 	}
 
-	function shift(index: number, change: number) {
-		let item = actions[index];
-		actions.splice(index, 1);
-		actions.splice(index + change, 0, item);
+	function shift(index: number, change: -1 | 1) {
+		//if (furthest_auto_index === index) furthest_auto_index += change;
+		//else if (furthest_auto_index === index + change) furthest_auto_index = index;
+
+		[actions[index], actions[index + change]] = [actions[index + change], actions[index]];
 		verify();
 	}
 
 	function verify() {
-		new ActionInputVerifier().verify_actions(actions);
+		const action_input_verifier = new ActionInputVerifier();
+		action_input_verifier.verify_actions(actions);
+		// TODO: Fix this horrible and jank solution
+		held = Object.hasOwn(held, 'bunnies')
+			? action_input_verifier.get_held_auto()
+			: action_input_verifier.get_held_tele();
 	}
 	const is_valid_timeline = $derived(actions.filter((action) => !action.ok).length === 0);
 </script>
@@ -36,7 +50,7 @@
 	}}
 >
 	<div
-		class="absolute inset-x-0 bottom-0 flex h-[50dvh] w-dvw flex-col items-center gap-3 rounded-t-lg bg-gunmetal p-3 text-white"
+		class="no-scrollbar absolute inset-x-0 bottom-0 flex h-[50dvh] w-dvw flex-col items-center gap-3 overflow-y-scroll rounded-t-lg bg-gunmetal p-3 text-white"
 		id="timeline"
 	>
 		{#each actions as _, i}
@@ -46,6 +60,9 @@
 				{remove}
 				{shift}
 			/>
+			{#if furthest_auto_index === actions.length - i - 1}
+				<hr />
+			{/if}
 		{/each}
 		{#if actions.length === 0}
 			<h3 class="m-auto">No actions yet :3</h3>
