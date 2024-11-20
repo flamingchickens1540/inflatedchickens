@@ -1,50 +1,18 @@
-import type { AutoAction, AutoActionData, AutoInputState } from '$lib/types';
+import type { AutoActionData } from '$lib/types';
 
-export class ActionInputStateMachine {
-	actionState: AutoInputState = $state('None') as AutoInputState;
+export class ActionInputVerifier {
+	private held_bunnies: number = 0;
+	private held_balloons: number = 0;
+	private held_totes: number = 0;
 
-	held_bunnies: number = 0;
-	held_balloons: number = 0;
-	held_totes: number = 0;
-
-	/// Methods for adjusting the state (checked by user)
-	intake_piece() {
-		this.actionState = this.actionState === 'None' ? 'Intake' : this.actionState;
-	}
-	score_piece() {
-		this.actionState = this.actionState === 'None' ? 'Score' : this.actionState;
-	}
-	eject_piece() {
-		this.actionState = this.actionState === 'None' ? 'Eject' : this.actionState;
-	}
-
-	score_bunny(where: 'Low' | 'ExternalTote' | 'InternalTote' | 'UncontrolledTote') {
-		this.actionState = `ScoreBunny${where}`;
-	}
-	score_balloon(where: 'Low' | 'InternalTote' | 'ExternalTote' | 'UncontrolledTote') {
-		this.actionState = `ScoreBalloon${where}`;
-	}
-
-	complete_action(success: boolean): AutoAction {
-		const action_data: AutoActionData = {
-			action: this.actionState as AutoAction,
-			success,
-			ok: true
-		};
-
-		if (this.new_action(action_data)) {
-			const ret = this.actionState.slice();
-			this.actionState = 'None';
-			return ret as AutoAction;
-		} else {
-			console.error('Illegal action, this is a bug');
-			// UB aqfter contract of state machine has been broken
-			return {} as unknown as AutoAction;
-		}
+	public verify_actions(action_data: AutoActionData[]) {
+		action_data
+			.reverse()
+			.forEach((action_data) => (action_data.ok = this.verify_new_action(action_data)));
 	}
 
 	// Takes an action and returns if it's a legal one
-	public new_action(action_data: AutoActionData): boolean {
+	verify_new_action(action_data: AutoActionData): boolean {
 		const success = action_data.success;
 		const action = action_data.action;
 		if (success) {

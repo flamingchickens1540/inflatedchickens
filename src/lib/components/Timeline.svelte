@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ActionInputStateMachine } from '$lib/ActionInputStateMachine.svelte';
+	import { ActionInputVerifier } from '$lib/ActionInputStateMachine.svelte';
 	import type { AutoActionData } from '$lib/types';
 	import Action from './Action.svelte';
 
@@ -22,10 +22,7 @@
 	}
 
 	function verify() {
-		const action_state_machine = new ActionInputStateMachine();
-		actions.forEach((action) => {
-			action.ok = action_state_machine.new_action(action);
-		});
+		new ActionInputVerifier().verify_actions(actions);
 	}
 </script>
 
