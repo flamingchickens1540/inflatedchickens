@@ -65,7 +65,7 @@
 			{/if}
 		{/each}
 		{#if actions.length === 0}
-			<h3 class="m-auto">No actions yet :3</h3>
+			<h3 class="m-auto font-heading font-bold">No actions yet :3</h3>
 		{/if}
 	</div>
 </button>
