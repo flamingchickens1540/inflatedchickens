@@ -71,7 +71,9 @@
 
 <div class="align-center flex w-full max-w-md flex-grow flex-col px-2">
 	{#if is_none_state}
-		<div class="grid flex-grow grid-cols-1 grid-rows-3 gap-2 py-2 text-2xl font-bold">
+		<div
+			class="grid flex-grow grid-cols-1 grid-rows-3 gap-2 py-2 font-heading text-2xl font-bold"
+		>
 			<button class="rounded bg-gunmetal p-2" onclick={intake_piece}>Intake</button>
 			{#if held_scorables > 0}
 				<button class="rounded bg-gunmetal p-2" onclick={score_piece}>Score</button>
@@ -81,7 +83,9 @@
 			{/if}
 		</div>
 	{:else if is_intake_state}
-		<div class="grid w-full flex-grow grid-cols-2 grid-rows-2 gap-2 py-2 text-xl font-bold">
+		<div
+			class="grid w-full flex-grow grid-cols-2 grid-rows-2 gap-2 py-2 font-heading text-xl font-bold"
+		>
 			<button class="rounded bg-gunmetal p-2" onclick={() => (actionState = 'IntakeBunny')}
 				>Bunny</button
 			>
@@ -101,7 +105,9 @@
 			onclick={() => (actionState = 'None')}>Cancel</button
 		>
 	{:else if is_score_state}
-		<div class="flex w-full flex-grow flex-col items-center gap-2 py-2 text-lg font-bold">
+		<div
+			class="flex w-full flex-grow flex-col items-center gap-2 py-2 font-heading text-lg font-bold"
+		>
 			{#if held.bunnies > 0}
 				<div class="flex w-full flex-grow flex-col items-center gap-2 text-lg">
 					<h1>Bunny</h1>
@@ -160,7 +166,7 @@
 			>
 		</div>
 	{:else if is_eject_state}
-		<div class="grid w-full flex-grow grid-flow-row gap-2 py-2 font-bold">
+		<div class="grid w-full flex-grow grid-flow-row gap-2 py-2 font-heading font-bold">
 			{#if held.bunnies > 0}
 				<button
 					class="w-full rounded bg-gunmetal p-2"
