@@ -1,6 +1,7 @@
 import { Server } from 'socket.io';
 import { type ViteDevServer } from 'vite';
 
+const sid_to_scout: Map<string, string> = new Map();
 const robotQueue: [string, 'red' | 'blue'][] = [];
 let curr_match_key: string = '';
 
@@ -13,16 +14,22 @@ const webSocketServer = {
 		io.on('connect', (socket) => {
 			if (socket.handshake.auth.token === 'celary') socket.join('admin_room');
 
-			socket.on('join_queue', (_) => {
+			socket.on('join_queue', (scout_id) => {
+				sid_to_scout.set(socket.id, scout_id);
+
 				const team_data = robotQueue.pop();
 				if (!team_data) {
+					io.to('admin_room').emit('scout_joined_queue', scout_id);
 					socket.join('scout_queue');
 					return;
 				}
 				socket.emit('time_to_scout', [curr_match_key, ...team_data]);
 			});
 
-			socket.on('leave_queue', (_) => {
+			socket.on('leave_queue', () => {
+				const scout_id = sid_to_scout.get(socket.id);
+
+				io.in('admin_room').emit('scout_left_queue', scout_id);
 				socket.leave('scout_queue');
 			});
 
@@ -37,7 +44,10 @@ const webSocketServer = {
 						const team_data = teams.pop();
 						if (!team_data) break;
 
+						const scout_id = sid_to_scout.get(sid);
+
 						socket.leave('scout_queue');
+						io.to('admin_room').emit('scout_left_queue', scout_id);
 						io.to(sid).emit('time_to_scout', [match_key, ...team_data]);
 					}
 				}
