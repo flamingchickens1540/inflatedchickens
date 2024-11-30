@@ -1,14 +1,23 @@
 <script lang="ts">
-	import { io } from 'socket.io-client';
+	import { io, Socket } from 'socket.io-client';
 
-	const socket = io({
+	let scout_queue: string[] = $state([]);
+
+	let socket: Socket = io({
 		auth: {
 			token: 'celary'
 		}
 	});
 
-	socket.on('scout_queued', (scout: string) => {
+	socket.on('scout_joined_queue', (scout: string) => {
 		scout_queue.push(scout);
+	});
+
+	socket.on('scout_left_queue', (scout: string) => {
+		const index = scout_queue.indexOf(scout);
+		if (index === -1) return;
+
+		scout_queue.splice(index, 1);
 	});
 
 	let match_key: string = $state('');
@@ -18,12 +27,19 @@
 		teams.map((team, i) => [team, colors[i]] as [string, 'red' | 'blue'])
 	);
 
-	let scout_queue: string[] = $state([]);
-
 	const queue_match = () => {
 		socket.emit('send_match', [match_key, team_color]);
 		match_key = '';
 		teams = ['', '', '', '', '', ''];
+	};
+
+	const remove_scout = (scout_id: string) => {
+		const index = scout_queue.indexOf(scout_id);
+		if (index === -1) return;
+
+		scout_queue.splice(index, 1);
+
+		socket.emit('leave_queue', scout_id);
 	};
 </script>
 
@@ -50,11 +66,13 @@
 
 		<button onclick={queue_match} class="rounded border p-2">Queue Match</button>
 	</div>
-	<div class="m-4 grid place-items-center gap-4 text-white">
-		<span>Queued Scouts</span>
-		<div class="grid grid-flow-col grid-cols-1 gap-4">
+	<div class="mt-4 grid grid-cols-1 grid-rows-10 place-items-center gap-4 text-xl">
+		<h1 class="row-span-2">Queued Scouts</h1>
+		<div class="row-span-8 grid grid-cols-1 grid-rows-8 gap-2">
 			{#each scout_queue as scout}
-				<h1 class="rounded border-white">{scout}</h1>
+				<button onclick={() => remove_scout(scout)} class="rounded border p-2 text-center">
+					{scout}
+				</button>
 			{/each}
 		</div>
 	</div>

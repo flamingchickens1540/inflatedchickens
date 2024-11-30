@@ -1,19 +1,25 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { io } from 'socket.io-client';
+	import { io, Socket } from 'socket.io-client';
+	import { onMount } from 'svelte';
+	let socket: Socket;
 
-	const socket = io();
+	socket = io();
 
 	socket.on('connect', () => {
-		socket.emit('join_queue');
+		socket.emit('join_queue', 'test_scout');
 	});
 
 	socket.on('time_to_scout', ([match_key, team_key, color]: [string, string, 'red' | 'blue']) => {
 		goto(`/scout/${match_key}-${team_key}-${color}`);
 	});
 
+	socket.on('you_left_queue', () => {
+		goto('/');
+	});
+
 	const leave = () => {
-		socket.emit('leave_queue');
+		socket.emit('leave_queue', 'test_scout');
 		goto('/');
 	};
 </script>

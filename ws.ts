@@ -26,10 +26,16 @@ const webSocketServer = {
 				socket.emit('time_to_scout', [curr_match_key, ...team_data]);
 			});
 
-			socket.on('leave_queue', () => {
-				const scout_id = sid_to_scout.get(socket.id);
-
-				io.in('admin_room').emit('scout_left_queue', scout_id);
+			socket.on('leave_queue', (scout_id: string) => {
+				const scout_sid = sid_to_scout
+					.entries()
+					.filter(([_sid, scout]) => scout === scout_id)
+					.map(([sid, _]) => sid)
+					.toArray()[0];
+				// This event exist in the cast that the scout removed itself from the queue
+				io.to('admin_room').emit('scout_left_queue', scout_id);
+				// This event exists in the case that the admin removed the scout from the queue
+				io.to(scout_sid).emit('you_left_queue');
 				socket.leave('scout_queue');
 			});
 
