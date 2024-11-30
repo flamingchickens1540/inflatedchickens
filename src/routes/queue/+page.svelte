@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { io, Socket } from 'socket.io-client';
-	import { onMount } from 'svelte';
 	let socket: Socket;
 
 	socket = io();
@@ -19,7 +18,7 @@
 	});
 
 	const leave = () => {
-		socket.emit('leave_queue', 'test_scout');
+		socket.emit('leave_scout_queue', 'test_scout');
 		goto('/');
 	};
 </script>

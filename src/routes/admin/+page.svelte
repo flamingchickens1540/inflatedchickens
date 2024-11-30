@@ -2,11 +2,23 @@
 	import { io, Socket } from 'socket.io-client';
 
 	let scout_queue: string[] = $state([]);
+	let robot_queue: string[] = $state([]);
 
 	let socket: Socket = io({
 		auth: {
 			token: 'celary'
 		}
+	});
+
+	socket.on('robot_joined_queue', (robot: string[]) => {
+		robot_queue.concat(robot);
+	});
+
+	socket.on('robot_left_queue', (robot: string) => {
+		const index = robot_queue.indexOf(robot);
+		if (index === -1) return;
+
+		robot_queue.splice(index, 1);
 	});
 
 	socket.on('scout_joined_queue', (scout: string) => {
@@ -39,7 +51,16 @@
 
 		scout_queue.splice(index, 1);
 
-		socket.emit('leave_queue', scout_id);
+		socket.emit('leave_scout_queue', scout_id);
+	};
+
+	const remove_robot = (robot: string) => {
+		const index = robot_queue.indexOf(robot);
+		if (index === -1) return;
+
+		robot_queue.splice(index, 1);
+
+		socket.emit('leave_robot_queue', robot);
 	};
 </script>
 
@@ -72,6 +93,16 @@
 			{#each scout_queue as scout}
 				<button onclick={() => remove_scout(scout)} class="rounded border p-2 text-center">
 					{scout}
+				</button>
+			{/each}
+		</div>
+	</div>
+	<div class="mt-4 grid grid-cols-1 grid-rows-10 place-items-center gap-4 text-xl">
+		<h1 class="row-span-2">Queued Robots</h1>
+		<div class="row-span-8 grid grid-cols-1 grid-rows-8 gap-2">
+			{#each robot_queue as robot}
+				<button onclick={() => remove_robot(robot)} class="rounded border p-2 text-center">
+					{robot}
 				</button>
 			{/each}
 		</div>

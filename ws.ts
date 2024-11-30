@@ -1,8 +1,9 @@
 import { Server } from 'socket.io';
 import { type ViteDevServer } from 'vite';
+const info = (s: string) => console.log(`\x1b[32m ${s} \x1b[0m`);
 
 const sid_to_scout: Map<string, string> = new Map();
-const robotQueue: [string, 'red' | 'blue'][] = [];
+const robot_queue: [string, 'red' | 'blue'][] = [];
 let curr_match_key: string = '';
 
 const webSocketServer = {
@@ -12,21 +13,25 @@ const webSocketServer = {
 		const io = new Server(server.httpServer);
 
 		io.on('connect', (socket) => {
-			if (socket.handshake.auth.token === 'celary') socket.join('admin_room');
+			if (socket.handshake.auth.token === 'celary') {
+				info('Admin Aquired');
+				socket.join('admin_room');
+			}
 
 			socket.on('join_queue', (scout_id) => {
 				sid_to_scout.set(socket.id, scout_id);
 
-				const team_data = robotQueue.pop();
+				const team_data = robot_queue.pop();
 				if (!team_data) {
 					io.to('admin_room').emit('scout_joined_queue', scout_id);
 					socket.join('scout_queue');
 					return;
 				}
+				io.to('admin_room').emit('robot_left_queue', team_data);
 				socket.emit('time_to_scout', [curr_match_key, ...team_data]);
 			});
 
-			socket.on('leave_queue', (scout_id: string) => {
+			socket.on('leave_scout_queue', (scout_id: string) => {
 				const scout_sid = sid_to_scout
 					.entries()
 					.filter(([_sid, scout]) => scout === scout_id)
@@ -36,7 +41,14 @@ const webSocketServer = {
 				io.to('admin_room').emit('scout_left_queue', scout_id);
 				// This event exists in the case that the admin removed the scout from the queue
 				io.to(scout_sid).emit('you_left_queue');
-				socket.leave('scout_queue');
+				io.sockets.sockets.get(scout_sid)?.leave('scout_queue');
+			});
+
+			socket.on('leave_robot_queue', (robot: string) => {
+				const index = robot_queue.findIndex(([id, _color]) => id === robot);
+				if (index === -1) return;
+
+				robot_queue.splice(index, 1);
 			});
 
 			socket.on('send_match', ([match_key, teams]: [string, [string, 'red' | 'blue'][]]) => {
@@ -58,7 +70,11 @@ const webSocketServer = {
 					}
 				}
 
-				robotQueue.push(...teams);
+				io.to('admin_room').emit(
+					'robot_joined_queue',
+					teams.map(([team, _color]) => team)
+				);
+				robot_queue.push(...teams);
 
 				// Update all connected sockets with new match info (for cosmetic purposes)
 				io.emit('new_match', match_key);
