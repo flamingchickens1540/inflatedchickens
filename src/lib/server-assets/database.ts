@@ -134,3 +134,7 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 		return false;
 	}
 }
+
+export async function select(matchkey : string, teamkey : string) {
+	return await db.query('SELECT * FROM TeamMatches WHERE match_key = $1 AND team_key = $2', [matchkey, teamkey])
+}
