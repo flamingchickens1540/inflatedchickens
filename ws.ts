@@ -2,7 +2,7 @@ import { Server } from 'socket.io';
 import { type ViteDevServer } from 'vite';
 const info = (s: string) => console.log(`\x1b[32m ${s} \x1b[0m`);
 
-const sid_to_scout: Map<string, string> = new Map();
+const sid_to_username: Map<string, string> = new Map();
 const robot_queue: [string, 'red' | 'blue'][] = [];
 let curr_match_key: string = '';
 
@@ -12,18 +12,34 @@ const webSocketServer = {
 		if (!server.httpServer) return;
 		const io = new Server(server.httpServer);
 
+		io.use((socket, next) => {
+			const session_id = socket.handshake.auth.session_id;
+
+			const username = socket.handshake.auth.username;
+			if (!username) {
+				return next(new Error('invalid username'));
+			}
+			if (session_id) sid_to_username.set(session_id, username);
+			// create new session
+			next();
+		});
+
 		io.on('connect', (socket) => {
 			if (socket.handshake.auth.token === 'celary') {
 				info('Admin Aquired');
 				socket.join('admin_room');
 			}
 
-			socket.on('join_queue', (scout_id) => {
-				sid_to_scout.set(socket.id, scout_id);
+			socket.emit('session', {
+				session_id: socket.id
+			});
+
+			socket.on('join_queue', () => {
+				const username = sid_to_username.get(socket.id);
 
 				const team_data = robot_queue.pop();
 				if (!team_data) {
-					io.to('admin_room').emit('scout_joined_queue', scout_id);
+					io.to('admin_room').emit('scout_joined_queue', username);
 					socket.join('scout_queue');
 					return;
 				}
@@ -32,11 +48,12 @@ const webSocketServer = {
 			});
 
 			socket.on('leave_scout_queue', (scout_id: string) => {
-				const scout_sid = sid_to_scout
+				const scout_sid = sid_to_username
 					.entries()
 					.filter(([_sid, scout]) => scout === scout_id)
 					.map(([sid, _]) => sid)
 					.toArray()[0];
+				console.log(scout_sid);
 				// This event exist in the cast that the scout removed itself from the queue
 				io.to('admin_room').emit('scout_left_queue', scout_id);
 				// This event exists in the case that the admin removed the scout from the queue
@@ -51,35 +68,38 @@ const webSocketServer = {
 				robot_queue.splice(index, 1);
 			});
 
-			socket.on('send_match', ([match_key, teams]: [string, [string, 'red' | 'blue'][]]) => {
-				if (!socket.rooms.has('admin_room')) return;
+			socket.on(
+				'send_match',
+				async ([match_key, teams]: [string, [string, 'red' | 'blue'][]]) => {
+					if (!socket.rooms.has('admin_room')) return;
 
-				const scout_queue: Set<string> | undefined = io
-					.of('/')
-					.adapter.rooms.get('scout_queue');
-				if (scout_queue) {
-					for (const sid of scout_queue.values()) {
+					const scout_queue = await io.in('scout_queue').fetchSockets();
+					for (const socket of scout_queue) {
 						const team_data = teams.pop();
 						if (!team_data) break;
 
-						const scout_id = sid_to_scout.get(sid);
+						const username = sid_to_username.get(socket.id);
+						if (!username) {
+							console.error('Scout in queue not in map');
+							continue;
+						}
 
 						socket.leave('scout_queue');
-						io.to('admin_room').emit('scout_left_queue', scout_id);
-						io.to(sid).emit('time_to_scout', [match_key, ...team_data]);
+						socket.emit('time_to_scout', [match_key, ...team_data]);
+						io.to('admin_room').emit('scout_left_queue', username);
 					}
+
+					io.to('admin_room').emit(
+						'robot_joined_queue',
+						teams.map(([team, _color]) => team)
+					);
+					robot_queue.push(...teams);
+
+					// Update all connected sockets with new match info (for cosmetic purposes)
+					io.emit('new_match', match_key);
+					curr_match_key = match_key;
 				}
-
-				io.to('admin_room').emit(
-					'robot_joined_queue',
-					teams.map(([team, _color]) => team)
-				);
-				robot_queue.push(...teams);
-
-				// Update all connected sockets with new match info (for cosmetic purposes)
-				io.emit('new_match', match_key);
-				curr_match_key = match_key;
-			});
+			);
 
 			// Event-listener sockets that were offline to sync back up with the current match key
 			socket.on('request_curr_match', () => {

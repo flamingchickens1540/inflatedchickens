@@ -1,12 +1,20 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { io, Socket } from 'socket.io-client';
+	const session_id = browser && (localStorage.getItem('session_id') ?? '');
+	const username = 'test_scout';
 	let socket: Socket;
 
-	socket = io();
+	socket = io({
+		auth: {
+			session_id,
+			username
+		}
+	});
 
 	socket.on('connect', () => {
-		socket.emit('join_queue', 'test_scout');
+		socket.emit('join_queue');
 	});
 
 	socket.on('time_to_scout', ([match_key, team_key, color]: [string, string, 'red' | 'blue']) => {
