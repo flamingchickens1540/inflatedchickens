@@ -6,6 +6,7 @@
 	import type { PageData } from './$types';
 	import { ArrowRight, ArrowLeft } from 'lucide-svelte';
 	import { browser } from '$app/environment';
+	import Postmatch from './Postmatch.svelte';
 
 	const { data }: { data: PageData } = $props();
 
@@ -20,7 +21,8 @@
 	// The furthest index in actions that was made during auto
 	let furthest_auto_index = $state(0);
 
-	let skill = $state(0);
+	let speed = $state(3);
+	let awareness = $state(3);
 	let broke = $state(false);
 	let died = $state(false);
 	let notes = $state('');
@@ -44,26 +46,29 @@
 			scout_id,
 			team_key: data.team_key,
 			match_key: data.match_key,
-			skill,
+			speed,
+			awareness,
 			broke,
 			died,
 			notes,
 			auto_actions,
 			tele_actions
 		};
+
+		console.log(match);
 	}
 </script>
 
 <div class="m-auto flex h-dvh max-w-md flex-col items-center gap-2 p-2">
 	<div class="flex w-full justify-between border-b-2 border-white/10 pb-2 font-semibold">
-		<span class="flex-shrink-0">Team {data.team_key}</span>
+		<h2 class="flex-shrink-0 font-heading font-semibold">Team {data.team_key}</h2>
 		<div class="flex gap-2">
 			<button
 				onclick={phaseShiftLeft}
 				class={gamePhase === 'Auto' ? 'pointer-events-none opacity-30' : ''}
 				><ArrowLeft /></button
 			>
-			<span class="text-right">{gamePhase}: {pageName}</span>
+			<h2 class="text-right font-heading font-semibold">{gamePhase}: {pageName}</h2>
 			<button
 				onclick={phaseShiftRight}
 				class={gamePhase === 'Post' ? 'pointer-events-none opacity-30' : ''}
@@ -75,7 +80,7 @@
 	{#if gamePhase === 'Auto'}
 		<AutoActionInputs bind:furthest_auto_index bind:held bind:actions bind:pageName />
 		<button
-			class="w-full border-t-2 border-white/10 pt-2 text-center font-semibold"
+			class="w-full border-t-2 border-white/10 pt-2 text-center font-heading font-semibold"
 			onclick={(e: Event) => {
 				e.stopPropagation();
 				timelineExtended = true;
@@ -90,7 +95,7 @@
 	{:else if gamePhase === 'Tele'}
 		<TeleActionInputs bind:held bind:actions bind:pageName />
 		<button
-			class="w-full border-t-2 border-white/10 pt-2 text-center font-semibold"
+			class="w-full border-t-2 border-white/10 pt-2 text-center font-heading font-semibold"
 			onclick={(e: Event) => {
 				e.stopPropagation();
 				timelineExtended = true;
@@ -103,7 +108,10 @@
 			bind:displaying={timelineExtended}
 		/>
 	{:else}
-		<div>Postmatch</div>
-		<button class="mt-auto w-full rounded bg-gunmetal p-2 font-bold">Submit</button>
+		<Postmatch bind:awareness bind:speed bind:broke bind:died bind:notes />
+
+		<button onclick={submit} class="mt-auto w-full rounded bg-gunmetal p-2 font-bold"
+			>Submit</button
+		>
 	{/if}
 </div>

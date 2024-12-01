@@ -2,22 +2,16 @@
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
-	let name: string = (browser && window.localStorage.getItem('name')) || '';
-	let inputname: string;
+	let inputname: string = '';
 	onMount(() => {
-		let isLoggedIn = browser != null && window.localStorage.getItem('name') != '';
+		let isLoggedIn = browser && window.localStorage.getItem('username');
 		if (isLoggedIn) {
 			goto('/homepage');
 		}
 	});
 	function login() {
-		if (inputname === '') {
-			alert('Enter your name');
-		} else {
-			browser && window.localStorage.setItem('name', inputname);
-			name = inputname;
-			goto('/homepage');
-		}
+		browser && window.localStorage.setItem('username', inputname);
+		goto('/homepage');
 	}
 </script>
 
@@ -25,16 +19,18 @@
 	<h1 class="text-text_red text-center text-5xl font-bold">hiiii :3</h1>
 	<div>
 		<input
-			class="bg-btn_grey border-text_red text-text_yellow rounded border-2 border-solid px-4 py-2"
+			class="bg-btn_grey rounded border-2 border-solid px-4 py-2 text-black"
 			type="text"
-			placeholder="Enter your name here"
+			placeholder="Please enter your name here"
 			bind:value={inputname}
 		/>
-		<button
-			class="text-text_yellow text-l bg-btn_grey border-text_red rounded border-2 border-solid px-4 py-2 text-center"
-			on:click={login}
-		>
-			Login
-		</button>
+		{#if inputname != ''}
+			<button
+				class="text-l bg-grey rounded border-2 border-solid px-4 py-2 text-center text-white"
+				on:click={login}
+			>
+				Login
+			</button>
+		{/if}
 	</div>
 </div>

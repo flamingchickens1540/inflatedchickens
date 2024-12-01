@@ -10,7 +10,7 @@
 	</h1>
 	<a
 		class="text-text_yellow text-l bg-btn_grey border-text_red rounded border-2 border-solid px-4 py-2 text-center"
-		href="/scout"
+		href="/queue"
 	>
 		Scout
 	</a>

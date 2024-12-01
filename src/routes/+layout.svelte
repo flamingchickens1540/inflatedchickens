@@ -7,6 +7,6 @@
 
 <style lang="postcss">
 	:global(body) {
-		@apply bg-eerie_black text-white;
+		@apply bg-eerie_black font-sans text-white;
 	}
 </style>

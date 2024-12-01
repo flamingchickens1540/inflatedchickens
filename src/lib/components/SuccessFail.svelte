@@ -5,7 +5,7 @@
 
 <div class="fixed inset-0 flex items-center justify-center bg-eerie_black">
 	<div
-		class="grid h-dvh max-h-[48rem] w-dvw max-w-96 grid-cols-2 grid-rows-4 gap-4 p-4 text-xl font-extrabold text-white"
+		class="grid h-dvh max-h-[48rem] w-dvw max-w-96 grid-cols-2 grid-rows-4 gap-4 p-4 font-heading text-xl font-extrabold text-white"
 	>
 		<button
 			class="row-span-3 rounded-lg bg-jungle_green shadow-lg shadow-jungle_green/50"

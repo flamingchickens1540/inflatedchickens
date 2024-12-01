@@ -21,7 +21,7 @@
 <div
 	class="grid h-full w-full grid-cols-1 grid-rows-2 place-items-center gap-4 align-middle text-4xl text-white"
 >
-	<h1 class="p-2">In Queue</h1>
+	<h1 class="p-2 font-heading font-bold">In Queue</h1>
 
 	<button class="rounded border p-4" onclick={leave}>Leave Queue</button>
 </div>
