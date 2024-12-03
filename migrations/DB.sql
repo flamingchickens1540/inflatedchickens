@@ -30,23 +30,23 @@ CREATE TYPE auto_action_data AS (
     act auto_action_type,
     success BOOLEAN
 );
+CREATE TYPE drivetrain_enum as ENUM (
+    'Swerve',
+    'Tank',
+    'Other',
+)
 
 CREATE TABLE "Users"(
     "id" UUID NOT NULL,
     "name" VARCHAR(255) NOT NULL,
-    "is_admin" BOOLEAN NOT NULL,
-    "slack_token" VARCHAR(255) NOT NULL
+    "is_admin" BOOLEAN NOT NULL
 );
 ALTER TABLE
     "Users" ADD PRIMARY KEY("id");
-CREATE TABLE "EventState"(
-    "event_key" VARCHAR(255) NOT NULL,
-    "next_match" VARCHAR(255) NULL,
-    "last_match" VARCHAR(255) NULL
+CREATE TABLE "Teams"(
+    "team_key" SMALLINT NOT NULL,
+    "nickname" VARCHAR(255) NOT NULL
 );
-ALTER TABLE
-    "EventState" ADD PRIMARY KEY("event_key");
-CREATE TABLE "Teams"("team_key" SMALLINT NOT NULL);
 ALTER TABLE
     "Teams" ADD PRIMARY KEY("team_key");
 CREATE TABLE "Matches"(
@@ -56,7 +56,7 @@ CREATE TABLE "Matches"(
 ALTER TABLE
     "Matches" ADD PRIMARY KEY("match_key");
 CREATE TABLE "TeamMatches"(
-    "team_action_id" BIGINT NOT NULL,
+    "id" BIGINT NOT NULL,
     "scout_id" VARCHAR(255) NOT NULL,
     "match_key" VARCHAR(255) NOT NULL,
     "team_key" VARCHAR(255) NOT NULL,
@@ -65,11 +65,11 @@ CREATE TABLE "TeamMatches"(
     "notes" TEXT NOT NULL,
     "broke" BOOLEAN NOT NULL,
     "died" BOOLEAN NOT NULL,
-    "tele_id" SMALLINT NOT NULL,
-    "auto_id" SMALLINT NOT NULL
+    "tele_action_id" SMALLINT NOT NULL,
+    "auto_action_id" SMALLINT NOT NULL
 );
 ALTER TABLE
-    "TeamMatches" ADD PRIMARY KEY("team_action_id");
+    "TeamMatches" ADD PRIMARY KEY("id");
 CREATE TABLE "TeleActions"(
     "id" SMALLINT NOT NULL,
     "tote_intake_success" SMALLINT NOT NULL,
@@ -90,7 +90,7 @@ CREATE TABLE "TeleActions"(
     "score_uncontrolled_failure" SMALLINT NOT NULL,
     "bunny_eject_success" SMALLINT NOT NULL,
     "bunny_eject_failure" SMALLINT NOT NULL,
-    "actions" tele_action_data[]
+    "actions" tele_action_data[] NOT NULL
 );
 ALTER TABLE
     "TeleActions" ADD PRIMARY KEY("id");
@@ -120,10 +120,49 @@ CREATE TABLE "AutoActions"(
     "bunny_tote_failure" SMALLINT NOT NULL,
     "bunny_low_success" SMALLINT NOT NULL,
     "bunny_low_failure" SMALLINT NOT NULL,
-    "actions" auto_action_data[]
+    "actions" auto_action_data[] NOT NULL
 );
 ALTER TABLE
     "AutoActions" ADD PRIMARY KEY("id");
+CREATE TABLE "AllianceMatches"(
+    "id" SMALLINT NOT NULL,
+    "scout_id" SMALLINT NOT NULL,
+    "match_key" VARCHAR(255) NOT NULL,
+    "alliance_key" VARCHAR(255) NOT NULL,
+    "one_strengths" VARCHAR(255) NOT NULL,
+    "two_strengths" VARCHAR(255) NOT NULL,
+    "three_strengths" VARCHAR(255) NOT NULL,
+    "one_weaknesses" VARCHAR(255) NOT NULL,
+    "two_weaknesses" VARCHAR(255) NOT NULL,
+    "three_weaknesses" VARCHAR(255) NOT NULL,
+    "notes" VARCHAR(255) NOT NULL,
+    "match_notes" VARCHAR(255) NOT NULL
+);
+ALTER TABLE
+    "AllianceMatches" ADD PRIMARY KEY("id");
+CREATE TABLE "TeamEvents"(
+    "id" SMALLINT NOT NULL,
+    "scout_id" SMALLINT NOT NULL,
+    "team_key" SMALLINT NOT NULL,
+    "width" SMALLINT NOT NULL,
+    "length" SMALLINT NOT NULL,
+    "height" SMALLINT NOT NULL,
+    "is_camera" BOOLEAN NOT NULL,
+    "drivetrain_enum" drivetrain_enum NOT NULL
+    "is_slippery" BOOLEAN NOT NULL,
+    "is_tote_intake" BOOLEAN NOT NULL,
+    "is_balloon_intake" BOOLEAN NOT NULL,
+    "number_bunny_autos" SMALLINT NOT NULL,
+    "polish" SMALLINT NOT NULL,
+    "robot_notes" VARCHAR(255) NOT NULL,
+    "minibot_notes" SMALLINT NOT NULL
+);
+ALTER TABLE
+    "TeamEvents" ADD PRIMARY KEY("id");
+ALTER TABLE
+    "TeamEvents" ADD CONSTRAINT "teamevents_scout_id_foreign" FOREIGN KEY("scout_id") REFERENCES "Users"("id");
+ALTER TABLE
+    "AllianceMatches" ADD CONSTRAINT "alliancematches_match_key_foreign" FOREIGN KEY("match_key") REFERENCES "Matches"("match_key");
 ALTER TABLE
     "TeamMatches" ADD CONSTRAINT "teammatches_team_key_foreign" FOREIGN KEY("team_key") REFERENCES "Teams"("team_key");
 ALTER TABLE
@@ -131,8 +170,10 @@ ALTER TABLE
 ALTER TABLE
     "TeamMatches" ADD CONSTRAINT "teammatches_scout_id_foreign" FOREIGN KEY("scout_id") REFERENCES "Users"("id");
 ALTER TABLE
-    "Matches" ADD CONSTRAINT "matches_event_key_foreign" FOREIGN KEY("event_key") REFERENCES "EventState"("event_key");
-ALTER TABLE
     "TeamMatches" ADD CONSTRAINT "teammatches_auto_id_foreign" FOREIGN KEY("auto_id") REFERENCES "AutoActions"("id");
 ALTER TABLE
+    "TeamEvents" ADD CONSTRAINT "teamevents_team_key_foreign" FOREIGN KEY("team_key") REFERENCES "Teams"("team_key");
+ALTER TABLE
     "TeamMatches" ADD CONSTRAINT "teammatches_tele_id_foreign" FOREIGN KEY("tele_id") REFERENCES "TeleActions"("id");
+ALTER TABLE
+    "AllianceMatches" ADD CONSTRAINT "alliancematches_scout_id_foreign" FOREIGN KEY("scout_id") REFERENCES "Users"("id");
