@@ -1,19 +1,24 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 /** @type {import('tailwindcss').Config} */
 export default {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
 		extend: {
+			fontFamily: {
+				sans: ['Poppins', ...defaultTheme.fontFamily.sans],
+				heading: ['Teko', ...defaultTheme.fontFamily.sans]
+			},
 			colors: {
-				navbar_black: '#1c1c1c',
-				outline_gray: '#c2c2c2',
-				cresc_green: '#00d586',
-				bg_gray: '#2c2c2c',
-				slack_purple: '#4A154B',
-				robot_blue: '#0083E6',
-				robot_red: '#ED1C24',
-				fail_red: '#EE3C42',
-				btn_grey: '#5C5C5C',
-				text_white: '#ffffff'
+				white: '#ffffff',
+				eerie_black: '#1C1C1C',
+				yolk_yellow: '#FFC145',
+				flaming_red: '#ED2C2C',
+				steel_blue: '#358188',
+				gunmetal: '#20282C',
+				chicken_orange: '#F7901E',
+				eminence: '#6C3082',
+				jungle_green: '#49A078'
 			}
 		}
 	},
