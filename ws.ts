@@ -13,14 +13,20 @@ const webSocketServer = {
 		const io = new Server(server.httpServer);
 
 		io.use((socket, next) => {
-			const session_id = socket.handshake.auth.session_id;
-
 			const username = socket.handshake.auth.username;
 			if (!username) {
 				return next(new Error('invalid username'));
 			}
-			if (session_id) sid_to_username.set(session_id, username);
-			// create new session
+
+			let old_entries = sid_to_username.entries().find(([_key, value]) => value == username);
+			if (old_entries) {
+				old_entries
+					.map(([key, _value]) => key)
+					.forEach((key) => sid_to_username.delete(key));
+			}
+
+			sid_to_username.set(socket.id, username);
+
 			next();
 		});
 
@@ -55,9 +61,9 @@ const webSocketServer = {
 					.toArray()[0];
 				console.log(scout_sid);
 				// This event exist in the cast that the scout removed itself from the queue
-				io.to('admin_room').emit('scout_left_queue', scout_id);
+				io.emit('scout_left_queue', scout_id);
 				// This event exists in the case that the admin removed the scout from the queue
-				io.to(scout_sid).emit('you_left_queue');
+				// io.to(scout_sid).emit('you_left_queue');
 				io.sockets.sockets.get(scout_sid)?.leave('scout_queue');
 			});
 

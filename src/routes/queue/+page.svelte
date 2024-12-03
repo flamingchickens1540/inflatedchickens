@@ -2,13 +2,11 @@
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { io, Socket } from 'socket.io-client';
-	const session_id = browser && (localStorage.getItem('session_id') ?? '');
 	const username = 'test_scout';
 	let socket: Socket;
 
 	socket = io({
 		auth: {
-			session_id,
 			username
 		}
 	});
@@ -21,8 +19,10 @@
 		goto(`/scout/${match_key}-${team_key}-${color}`);
 	});
 
-	socket.on('you_left_queue', () => {
-		goto('/');
+	socket.on('scout_left_queue', (scout: string) => {
+		if (scout === username) {
+			goto('/');
+		}
 	});
 
 	const leave = () => {

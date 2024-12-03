@@ -1,12 +1,15 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { io, Socket } from 'socket.io-client';
+	const session_id = browser && localStorage.getItem('session_id');
 
 	let scout_queue: string[] = $state([]);
 	let robot_queue: string[] = $state([]);
 
 	let socket: Socket = io({
 		auth: {
-			token: 'celary'
+			token: 'celary',
+			username: 'admin'
 		}
 	});
 
