@@ -105,17 +105,17 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 
 	try {
 		const tele_query = await db.query(
-			'INSERT INTO TeleActions VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)',
+			'INSERT INTO "TeleActions" VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)',
 			[teledata.id, teledata.tote_intake_success, teledata.tote_intake_failure, teledata.tote_eject_success, teledata.tote_eject_failure, teledata.balloon_intake_success, teledata.balloon_intake_failure, teledata.balloon_eject_success, teledata.balloon_eject_failure, teledata.score_low_success, teledata.score_low_failure, teledata.score_internal_success, teledata.score_internal_failure, teledata.score_external_success, teledata.score_external_failure, teledata.score_uncontrolled_success, teledata.score_uncontrolled_failure, teledata.bunny_eject_success, teledata.bunny_eject_failure, teledata.actions]
 		);
 		const tele_id = tele_query.rows[0];
 
 		const auto_query = await db.query(
-			'INSERT INTO AutoActions VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)', [autodata.id, autodata.tote_intake_success, autodata.tote_intake_failure, autodata.tote_eject_success, autodata.tote_eject_failure, autodata.balloon_intake_success, autodata.balloon_intake_failure, autodata.balloon_eject_success, autodata.balloon_eject_failure, autodata.score_low_success, autodata.score_low_failure, autodata.score_internal_success,autodata. score_internal_failure, autodata.score_external_success, autodata.score_external_failure, autodata.score_uncontrolled_success, autodata.score_uncontrolled_failure, autodata.bunny_eject_success, autodata.bunny_eject_failure, autodata.bunny_intake_success, autodata.bunny_intake_failure, autodata.bunny_internal_success, autodata.bunny_internal_failure, autodata.bunny_external_success,autodata.bunny_external_failure, autodata.bunny_uncontrolled_success, autodata.bunny_uncontrolled_failure, autodata.bunny_low_success, autodata.bunny_low_failure, autodata.actions]
+			'INSERT INTO "AutoActions" VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)', [autodata.id, autodata.tote_intake_success, autodata.tote_intake_failure, autodata.tote_eject_success, autodata.tote_eject_failure, autodata.balloon_intake_success, autodata.balloon_intake_failure, autodata.balloon_eject_success, autodata.balloon_eject_failure, autodata.score_low_success, autodata.score_low_failure, autodata.score_internal_success,autodata. score_internal_failure, autodata.score_external_success, autodata.score_external_failure, autodata.score_uncontrolled_success, autodata.score_uncontrolled_failure, autodata.bunny_eject_success, autodata.bunny_eject_failure, autodata.bunny_intake_success, autodata.bunny_intake_failure, autodata.bunny_internal_success, autodata.bunny_internal_failure, autodata.bunny_external_success,autodata.bunny_external_failure, autodata.bunny_uncontrolled_success, autodata.bunny_uncontrolled_failure, autodata.bunny_low_success, autodata.bunny_low_failure, autodata.actions]
 		);
 		const auto_id = auto_query.rows[0];
 
-		await db.query('INSERT INTO TeamMatches VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9)', [
+		await db.query('INSERT INTO "TeamMatches" VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9)', [
 			scout_id,
 			match_key,
 			team_key,
@@ -136,5 +136,5 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 }
 
 export async function select(matchkey : string, teamkey : string) {
-	return await db.query('SELECT * FROM TeamMatches WHERE match_key = $1 AND team_key = $2', [matchkey, teamkey])
+	return (await db.query('SELECT * FROM "TeamMatches" WHERE "match_key" = $1 AND "team_key" = $2', [matchkey, teamkey])).rows
 }

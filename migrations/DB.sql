@@ -147,21 +147,21 @@ CREATE TABLE "TeamEvents"(
     "robot_notes" VARCHAR(255) NOT NULL,
     "minibot_notes" SMALLINT NOT NULL
 );
-ALTER TABLE
-    "TeamEvents" ADD CONSTRAINT "teamevents_scout_id_foreign" FOREIGN KEY("scout_id") REFERENCES "Users"("id");
-ALTER TABLE
-    "AllianceMatches" ADD CONSTRAINT "alliancematches_match_key_foreign" FOREIGN KEY("match_key") REFERENCES "Matches"("match_key");
-ALTER TABLE
-    "TeamMatches" ADD CONSTRAINT "teammatches_team_key_foreign" FOREIGN KEY("team_key") REFERENCES "Teams"("team_key");
-ALTER TABLE
-    "TeamMatches" ADD CONSTRAINT "teammatches_match_key_foreign" FOREIGN KEY("match_key") REFERENCES "Matches"("match_key");
-ALTER TABLE
-    "TeamMatches" ADD CONSTRAINT "teammatches_scout_id_foreign" FOREIGN KEY("scout_id") REFERENCES "Users"("id");
-ALTER TABLE
-    "TeamMatches" ADD CONSTRAINT "teammatches_auto_id_foreign" FOREIGN KEY("auto_action_id") REFERENCES "AutoActions"("id");
-ALTER TABLE
-    "TeamEvents" ADD CONSTRAINT "teamevents_team_key_foreign" FOREIGN KEY("team_key") REFERENCES "Teams"("team_key");
-ALTER TABLE
-    "TeamMatches" ADD CONSTRAINT "teammatches_tele_id_foreign" FOREIGN KEY("tele_action_id") REFERENCES "TeleActions"("id");
-ALTER TABLE
-    "AllianceMatches" ADD CONSTRAINT "alliancematches_scout_id_foreign" FOREIGN KEY("scout_id") REFERENCES "Users"("id");
+-- ALTER TABLE
+--     "TeamEvents" ADD CONSTRAINT "teamevents_scout_id_foreign" FOREIGN KEY("scout_id") REFERENCES "Users"("id");
+-- ALTER TABLE
+--     "AllianceMatches" ADD CONSTRAINT "alliancematches_match_key_foreign" FOREIGN KEY("match_key") REFERENCES "Matches"("match_key");
+-- ALTER TABLE
+--     "TeamMatches" ADD CONSTRAINT "teammatches_team_key_foreign" FOREIGN KEY("team_key") REFERENCES "Teams"("team_key");
+-- ALTER TABLE
+--     "TeamMatches" ADD CONSTRAINT "teammatches_match_key_foreign" FOREIGN KEY("match_key") REFERENCES "Matches"("match_key");
+-- ALTER TABLE
+--     "TeamMatches" ADD CONSTRAINT "teammatches_scout_id_foreign" FOREIGN KEY("scout_id") REFERENCES "Users"("id");
+-- ALTER TABLE
+--     "TeamMatches" ADD CONSTRAINT "teammatches_auto_id_foreign" FOREIGN KEY("auto_action_id") REFERENCES "AutoActions"("id");
+-- ALTER TABLE
+--     "TeamEvents" ADD CONSTRAINT "teamevents_team_key_foreign" FOREIGN KEY("team_key") REFERENCES "Teams"("team_key");
+-- ALTER TABLE
+--     "TeamMatches" ADD CONSTRAINT "teammatches_tele_id_foreign" FOREIGN KEY("tele_action_id") REFERENCES "TeleActions"("id");
+-- ALTER TABLE
+--     "AllianceMatches" ADD CONSTRAINT "alliancematches_scout_id_foreign" FOREIGN KEY("scout_id") REFERENCES "Users"("id");
