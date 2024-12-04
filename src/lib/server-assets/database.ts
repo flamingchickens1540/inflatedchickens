@@ -8,7 +8,16 @@ import {
 	DB_PORT,
 	USE_DB
 } from '$env/static/private';
-import type { ActionsTM, AutoAction, AutoActionData, AutoActionsTM, TeamMatch, TeleAction, TeleActionData, TeleActionsTM } from '$lib/types';
+import type {
+	ActionsTM,
+	AutoAction,
+	AutoActionData,
+	AutoActionsTM,
+	TeamMatch,
+	TeleAction,
+	TeleActionData,
+	TeleActionsTM
+} from '$lib/types';
 
 // Whether or not the database is currently being used
 const use_db: boolean = USE_DB === 'true';
@@ -35,17 +44,17 @@ function countTele(val: TeleAction, success: boolean, match: TeamMatch): number 
 }
 
 // Returns the TeleActionsTM object associated to any TeamMatch by counting the occurrences of each TeleAction and then passing along the array of TeleActionDatas.
-function matchToTeleActionsTM(match : TeamMatch): TeleActionsTM {
+function matchToTeleActionsTM(match: TeamMatch): TeleActionsTM {
 	return {
-		id : match.id,
+		id: match.id,
 		tote_intake_success: countTele('IntakeTote', true, match),
 		tote_intake_failure: countTele('IntakeTote', false, match),
 		tote_eject_success: countTele('EjectTote', true, match),
 		tote_eject_failure: countTele('EjectTote', false, match),
 		balloon_intake_success: countTele('IntakeBalloon', true, match),
-		balloon_intake_failure: countTele('IntakeBalloon', false , match),
-		balloon_eject_success: countTele('EjectBalloon', true , match),
-		balloon_eject_failure: countTele('EjectBalloon', false , match),
+		balloon_intake_failure: countTele('IntakeBalloon', false, match),
+		balloon_eject_success: countTele('EjectBalloon', true, match),
+		balloon_eject_failure: countTele('EjectBalloon', false, match),
 		score_low_success: countTele('ScoreBalloonLow', true, match),
 		score_low_failure: countTele('ScoreBalloonLow', false, match),
 		score_internal_success: countTele('ScoreBalloonInternalTote', true, match),
@@ -57,21 +66,21 @@ function matchToTeleActionsTM(match : TeamMatch): TeleActionsTM {
 		bunny_eject_success: countTele('EjectBunny', false, match),
 		bunny_eject_failure: countTele('EjectBunny', false, match),
 		actions: match.tele_actions
-	}
+	};
 }
 
 // Returns the AutoActionsTM object associated to any TeamMatch by counting the occurrences of each AutoAction and then passing along the array of AutoActionDatas.
-function matchToAutoActionsTM(match : TeamMatch) : AutoActionsTM {
+function matchToAutoActionsTM(match: TeamMatch): AutoActionsTM {
 	return {
-		id : match.id,
+		id: match.id,
 		tote_intake_success: countAuto('IntakeTote', true, match),
 		tote_intake_failure: countAuto('IntakeTote', false, match),
 		tote_eject_success: countAuto('EjectTote', true, match),
 		tote_eject_failure: countAuto('EjectTote', false, match),
 		balloon_intake_success: countAuto('IntakeBalloon', true, match),
-		balloon_intake_failure: countAuto('IntakeBalloon', false , match),
-		balloon_eject_success: countAuto('EjectBalloon', true , match),
-		balloon_eject_failure: countAuto('EjectBalloon', false , match),
+		balloon_intake_failure: countAuto('IntakeBalloon', false, match),
+		balloon_eject_success: countAuto('EjectBalloon', true, match),
+		balloon_eject_failure: countAuto('EjectBalloon', false, match),
 		score_low_success: countAuto('ScoreBalloonLow', true, match),
 		score_low_failure: countAuto('ScoreBalloonLow', false, match),
 		score_internal_success: countAuto('ScoreBalloonInternalTote', true, match),
@@ -93,7 +102,7 @@ function matchToAutoActionsTM(match : TeamMatch) : AutoActionsTM {
 		bunny_low_success: countAuto('ScoreBunnyLow', true, match),
 		bunny_low_failure: countAuto('ScoreBunnyLow', false, match),
 		actions: match.auto_actions
-	}
+	};
 }
 
 export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
@@ -101,32 +110,97 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 
 	const teledata = matchToTeleActionsTM(match);
 	const autodata = matchToAutoActionsTM(match);
-	let {scout_id, match_key, team_key, skill_field_awareness, skill_quickness, notes, broke, died} = match
+	let {
+		scout_id,
+		match_key,
+		team_key,
+		skill_field_awareness,
+		skill_quickness,
+		notes,
+		broke,
+		died
+	} = match;
 
 	try {
 		const tele_query = await db.query(
 			'INSERT INTO TeleActions VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)',
-			[teledata.id, teledata.tote_intake_success, teledata.tote_intake_failure, teledata.tote_eject_success, teledata.tote_eject_failure, teledata.balloon_intake_success, teledata.balloon_intake_failure, teledata.balloon_eject_success, teledata.balloon_eject_failure, teledata.score_low_success, teledata.score_low_failure, teledata.score_internal_success, teledata.score_internal_failure, teledata.score_external_success, teledata.score_external_failure, teledata.score_uncontrolled_success, teledata.score_uncontrolled_failure, teledata.bunny_eject_success, teledata.bunny_eject_failure, teledata.actions]
+			[
+				teledata.id,
+				teledata.tote_intake_success,
+				teledata.tote_intake_failure,
+				teledata.tote_eject_success,
+				teledata.tote_eject_failure,
+				teledata.balloon_intake_success,
+				teledata.balloon_intake_failure,
+				teledata.balloon_eject_success,
+				teledata.balloon_eject_failure,
+				teledata.score_low_success,
+				teledata.score_low_failure,
+				teledata.score_internal_success,
+				teledata.score_internal_failure,
+				teledata.score_external_success,
+				teledata.score_external_failure,
+				teledata.score_uncontrolled_success,
+				teledata.score_uncontrolled_failure,
+				teledata.bunny_eject_success,
+				teledata.bunny_eject_failure,
+				teledata.actions
+			]
 		);
 		const tele_id = tele_query.rows[0];
 
 		const auto_query = await db.query(
-			'INSERT INTO AutoActions VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)', [autodata.id, autodata.tote_intake_success, autodata.tote_intake_failure, autodata.tote_eject_success, autodata.tote_eject_failure, autodata.balloon_intake_success, autodata.balloon_intake_failure, autodata.balloon_eject_success, autodata.balloon_eject_failure, autodata.score_low_success, autodata.score_low_failure, autodata.score_internal_success,autodata. score_internal_failure, autodata.score_external_success, autodata.score_external_failure, autodata.score_uncontrolled_success, autodata.score_uncontrolled_failure, autodata.bunny_eject_success, autodata.bunny_eject_failure, autodata.bunny_intake_success, autodata.bunny_intake_failure, autodata.bunny_internal_success, autodata.bunny_internal_failure, autodata.bunny_external_success,autodata.bunny_external_failure, autodata.bunny_uncontrolled_success, autodata.bunny_uncontrolled_failure, autodata.bunny_low_success, autodata.bunny_low_failure, autodata.actions]
+			'INSERT INTO AutoActions VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)',
+			[
+				autodata.id,
+				autodata.tote_intake_success,
+				autodata.tote_intake_failure,
+				autodata.tote_eject_success,
+				autodata.tote_eject_failure,
+				autodata.balloon_intake_success,
+				autodata.balloon_intake_failure,
+				autodata.balloon_eject_success,
+				autodata.balloon_eject_failure,
+				autodata.score_low_success,
+				autodata.score_low_failure,
+				autodata.score_internal_success,
+				autodata.score_internal_failure,
+				autodata.score_external_success,
+				autodata.score_external_failure,
+				autodata.score_uncontrolled_success,
+				autodata.score_uncontrolled_failure,
+				autodata.bunny_eject_success,
+				autodata.bunny_eject_failure,
+				autodata.bunny_intake_success,
+				autodata.bunny_intake_failure,
+				autodata.bunny_internal_success,
+				autodata.bunny_internal_failure,
+				autodata.bunny_external_success,
+				autodata.bunny_external_failure,
+				autodata.bunny_uncontrolled_success,
+				autodata.bunny_uncontrolled_failure,
+				autodata.bunny_low_success,
+				autodata.bunny_low_failure,
+				autodata.actions
+			]
 		);
 		const auto_id = auto_query.rows[0];
 
-		await db.query('INSERT INTO TeamMatches VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9)', [
-			scout_id,
-			match_key,
-			team_key,
-			skill_field_awareness,
-			skill_quickness,
-			notes,
-			broke,
-			died,
-			tele_id,
-			auto_id
-		]);
+		await db.query(
+			'INSERT INTO TeamMatches VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9)',
+			[
+				scout_id,
+				match_key,
+				team_key,
+				skill_field_awareness,
+				skill_quickness,
+				notes,
+				broke,
+				died,
+				tele_id,
+				auto_id
+			]
+		);
 
 		return true;
 	} catch (error) {
@@ -135,6 +209,9 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 	}
 }
 
-export async function select(matchkey : string, teamkey : string) {
-	return await db.query('SELECT * FROM TeamMatches WHERE match_key = $1 AND team_key = $2', [matchkey, teamkey])
+export async function select(matchkey: string, teamkey: string) {
+	return await db.query('SELECT * FROM TeamMatches WHERE match_key = $1 AND team_key = $2', [
+		matchkey,
+		teamkey
+	]);
 }
