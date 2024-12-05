@@ -97,6 +97,12 @@ export type BunnyAction =
 	| 'ScoreBunnyLow';
 export type AutoAction = TeleAction | BunnyAction;
 
+export type TeleHeldItems = {
+	balloons: number;
+	totes: number;
+};
+export type AutoHeldItems = TeleHeldItems & { bunnies: number };
+
 // For state machine
 export type ItemInputState = 'Intake' | 'Score' | 'Eject' | 'None';
 export type TeleInputState = TeleAction | ItemInputState;

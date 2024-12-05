@@ -38,7 +38,7 @@
 		gamePhase = gamePhase === 'Post' ? 'Tele' : gamePhase === 'Tele' ? 'Auto' : 'Auto'; // Last case should never happen
 	}
 
-	function submit() {
+	async function submit() {
 		const auto_actions = actions.slice(0, furthest_auto_index + 1);
 		const tele_actions = actions.slice(furthest_auto_index + 1) as TeleActionData[]; // TODO: Add verification function to ensure that this always works
 		const match: TeamMatch = {
@@ -46,8 +46,8 @@
 			scout_id,
 			team_key: data.team_key,
 			match_key: data.match_key,
-			speed,
-			awareness,
+			skill_quickness: speed,
+			skill_field_awareness: awareness,
 			broke,
 			died,
 			notes,
@@ -55,7 +55,15 @@
 			tele_actions
 		};
 
-		console.log(match);
+		const response = await fetch('/api/submit', {
+			method: 'POST',
+			body: JSON.stringify(match),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		console.log(response);
 	}
 </script>
 
