@@ -123,7 +123,7 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 
 	try {
 		const tele_query = await db.query(
-			'INSERT INTO TeleActions VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)',
+			'INSERT INTO "TeleActions" VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)',
 			[
 				teledata.id,
 				teledata.tote_intake_success,
@@ -150,7 +150,7 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 		const tele_id = tele_query.rows[0];
 
 		const auto_query = await db.query(
-			'INSERT INTO AutoActions VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)',
+			'INSERT INTO "AutoActions" VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30)',
 			[
 				autodata.id,
 				autodata.tote_intake_success,
@@ -187,7 +187,7 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 		const auto_id = auto_query.rows[0];
 
 		await db.query(
-			'INSERT INTO TeamMatches VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9)',
+			'INSERT INTO "TeamMatches" VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
 			[
 				scout_id,
 				match_key,
@@ -210,7 +210,7 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 }
 
 export async function select(matchkey: string, teamkey: string) {
-	return await db.query('SELECT * FROM TeamMatches WHERE match_key = $1 AND team_key = $2', [
+	return await db.query('SELECT * FROM "TeamMatches" WHERE match_key = $1 AND team_key = $2', [
 		matchkey,
 		teamkey
 	]);
