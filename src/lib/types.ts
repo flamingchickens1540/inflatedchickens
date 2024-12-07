@@ -12,20 +12,6 @@ export type User = {
 };
 
 /// Counts
-export type AutoActionsTM = ActionsTM & {
-	bunny_intake_success: number;
-	bunny_intake_failure: number;
-	bunny_tote_success: number;
-	bunny_tote_failure: number;
-	bunny_low_success: number;
-	bunny_low_failure: number;
-	actions: AutoActionData[];
-};
-
-export type TeleActionsTM = ActionsTM & {
-	actions: TeleActionData[];
-};
-
 export type ActionsTM = {
 	id: number;
 	tote_intake_success: number;
@@ -44,12 +30,27 @@ export type ActionsTM = {
 	score_other_robot_failure: number;
 };
 
+export type AutoActionsTM = ActionsTM & {
+	bunny_intake_success: number;
+	bunny_intake_failure: number;
+	bunny_tote_success: number;
+	bunny_tote_failure: number;
+	bunny_low_success: number;
+	bunny_low_failure: number;
+	actions: AutoActionData[];
+};
+
+export type TeleActionsTM = ActionsTM & {
+	actions: TeleActionData[];
+};
+
 export type TeamMatch = {
 	id: number;
 	scout_id: string;
 	match_key: string;
 	team_key: string;
-	skill: number;
+	speed: number;
+	awareness: number;
 	notes: string;
 	broke: boolean;
 	died: boolean;
@@ -57,14 +58,16 @@ export type TeamMatch = {
 	tele_actions: TeleActionData[];
 };
 
-export type AutoActionData = {
-	action: AutoAction;
-	success: boolean;
-};
-
 export type TeleActionData = {
 	action: TeleAction;
 	success: boolean;
+	ok: boolean;
+};
+
+export type AutoActionData = {
+	action: AutoAction;
+	success: boolean;
+	ok: boolean;
 };
 
 // Action Types
@@ -88,6 +91,12 @@ export type BunnyAction =
 	| 'ScoreBunnyUncontrolledTote'
 	| 'ScoreBunnyLow';
 export type AutoAction = TeleAction | BunnyAction;
+
+export type TeleHeldItems = {
+	balloons: number;
+	totes: number;
+};
+export type AutoHeldItems = TeleHeldItems & { bunnies: number };
 
 // For state machine
 export type ItemInputState = 'Intake' | 'Score' | 'Eject' | 'None';
