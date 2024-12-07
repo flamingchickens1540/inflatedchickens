@@ -132,7 +132,9 @@
 					onclick={() => remove_submission(team_match)}
 					class="rounded border p-2 text-center"
 				>
-					{team_match}
+					<div class="grid grid-cols-4 grid-rows-4">
+						{team_match.match_key}:{team_match.team_key}
+					</div>
 				</button>
 			{/each}
 		</div>

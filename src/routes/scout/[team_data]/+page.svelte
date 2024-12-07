@@ -7,6 +7,7 @@
 	import { ArrowRight, ArrowLeft } from 'lucide-svelte';
 	import { browser } from '$app/environment';
 	import Postmatch from './Postmatch.svelte';
+	import { io } from 'socket.io-client';
 
 	const { data }: { data: PageData } = $props();
 

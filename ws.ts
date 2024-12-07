@@ -117,7 +117,7 @@ const webSocketServer = {
 				if (!socket.rooms.has('admin_room')) return;
 
 				info(
-					`TeamMatch: ${team_match.match_key}$_{team_match.team_key} was removed by the admin`
+					`TeamMatch: ${team_match.match_key}_${team_match.team_key} was removed by the admin`
 				);
 				// TODO: Emit message from the db to remove team_match
 			});
