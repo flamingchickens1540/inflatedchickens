@@ -14,7 +14,7 @@
 	export let getLabelName;
 
 	/** @type {Function} [formatLabelName=d => d] - An optional formatting function. */
-	export let formatLabelName = d => d;
+	export let formatLabelName = (d) => d;
 </script>
 
 {#each labels as d}

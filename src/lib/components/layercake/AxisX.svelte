@@ -23,7 +23,7 @@
 	export let snapLabels = false;
 
 	/** @type {Function} [format=d => d] - A function that passes the current tick value and expects a nicely formatted value in return. */
-	export let format = d => d;
+	export let format = (d) => d;
 
 	/** @type {Number|Array|Function} [ticks] - If this is a number, it passes that along to the [d3Scale.ticks](https://github.com/d3/d3-scale) function. If this is an array, hardcodes the ticks to those values. If it's a function, passes along the default tick values and expects an array of tick values in return. If nothing, it uses the default ticks supplied by the D3 function. */
 	export let ticks = undefined;
@@ -49,7 +49,7 @@
 		return 'middle';
 	}
 
-	$: tickLen = tickMarks === true ? tickMarkLength ?? 6 : 0;
+	$: tickLen = tickMarks === true ? (tickMarkLength ?? 6) : 0;
 
 	$: isBandwidth = typeof $xScale.bandwidth === 'function';
 
@@ -83,8 +83,12 @@
 					y2={tickGutter + tickLen}
 				/>
 			{/if}
-			<text x={halfBand} y={tickGutter + tickLen} {dx} {dy} text-anchor={textAnchor(i, snapLabels)}
-				>{format(tick)}</text
+			<text
+				x={halfBand}
+				y={tickGutter + tickLen}
+				{dx}
+				{dy}
+				text-anchor={textAnchor(i, snapLabels)}>{format(tick)}</text
 			>
 		</g>
 	{/each}

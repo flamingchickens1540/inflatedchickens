@@ -13,7 +13,7 @@
 	const xKey = 'myX';
 	const yKey = 'myY';
 
-	data.forEach(d => {
+	data.forEach((d) => {
 		d[yKey] = +d[yKey];
 	});
 
