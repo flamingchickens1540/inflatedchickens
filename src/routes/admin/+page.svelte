@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
 	import { io, Socket } from 'socket.io-client';
-	const session_id = browser && localStorage.getItem('session_id');
 
 	let scout_queue: string[] = $state([]);
 	let robot_queue: string[] = $state([]);
@@ -13,8 +11,8 @@
 		}
 	});
 
-	socket.on('robot_joined_queue', (robot: string[]) => {
-		robot_queue.concat(robot);
+	socket.on('robot_joined_queue', (robots: string[]) => {
+		robots.forEach((robot) => robot_queue.push(robot));
 	});
 
 	socket.on('robot_left_queue', (robot: string) => {

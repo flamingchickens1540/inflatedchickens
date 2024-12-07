@@ -95,7 +95,7 @@ const webSocketServer = {
 						io.to('admin_room').emit('scout_left_queue', username);
 					}
 
-					io.to('admin_room').emit(
+					socket.emit(
 						'robot_joined_queue',
 						teams.map(([team, _color]) => team)
 					);
