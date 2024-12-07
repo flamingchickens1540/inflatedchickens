@@ -22,12 +22,12 @@
 </script>
 
 <div class="flex flex-col items-center justify-evenly h-dvh">
-        <h1 class="text-center text-text_red text-5xl font-bold">
+        <h1 class="text-center text-text_white text-5xl font-bold">
             hiiii :3 
         </h1>
         <div>
-            <input class="rounded bg-btn_grey border-solid border-2 border-text_red px-4 py-2 text-text_yellow" type="text" placeholder="Enter your name here" bind:value={inputname}>
-            <button class="text-center text-text_yellow text-l rounded bg-btn_grey px-4 py-2 border-solid border-2 border-text_red" on:click={login}>
+            <input class="rounded bg-btn_grey border-solid border-2 border-text_white px-4 py-2 text-text_white" type="text" placeholder="Enter your name here" bind:value={inputname}>
+            <button class="text-center text-text_white text-l rounded bg-btn_grey px-4 py-2 border-solid border-2 border-text_white" on:click={login}>
                 Login
             </button>
         </div>
