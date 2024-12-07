@@ -41,6 +41,7 @@
 	);
 
 	const queue_match = () => {
+		teams = teams.filter((team) => team != '');
 		socket.emit('send_match', [match_key, team_color]);
 		match_key = '';
 		teams = ['', '', '', '', '', ''];
