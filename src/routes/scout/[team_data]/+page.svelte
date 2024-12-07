@@ -6,7 +6,7 @@
 	import type { PageData } from './$types';
 	import { ArrowRight, ArrowLeft } from 'lucide-svelte';
 	import { browser } from '$app/environment';
-	import { io, Socket } from 'socket.io-client';
+	import Postmatch from './Postmatch.svelte';
 
 	const { data }: { data: PageData } = $props();
 
@@ -21,7 +21,8 @@
 	// The furthest index in actions that was made during auto
 	let furthest_auto_index = $state(0);
 
-	let skill = $state(0);
+	let speed = $state(3);
+	let awareness = $state(3);
 	let broke = $state(false);
 	let died = $state(false);
 	let notes = $state('');
@@ -51,7 +52,8 @@
 			scout_id: username,
 			team_key: data.team_key,
 			match_key: data.match_key,
-			skill,
+			speed,
+			awareness,
 			broke,
 			died,
 			notes,
@@ -60,6 +62,7 @@
 		};
 
 		socket.emit('submit_team_match', match);
+		console.log(match);
 	}
 </script>
 
@@ -112,7 +115,10 @@
 			bind:displaying={timelineExtended}
 		/>
 	{:else}
-		<div>Postmatch</div>
-		<button class="mt-auto w-full rounded bg-gunmetal p-2 font-bold">Submit</button>
+		<Postmatch bind:awareness bind:speed bind:broke bind:died bind:notes />
+
+		<button onclick={submit} class="mt-auto w-full rounded bg-gunmetal p-2 font-bold"
+			>Submit</button
+		>
 	{/if}
 </div>
