@@ -1,8 +1,10 @@
 <script lang="ts">
+	import type { TeamMatch } from '$lib/types';
 	import { io, Socket } from 'socket.io-client';
 
 	let scout_queue: string[] = $state([]);
 	let robot_queue: string[] = $state([]);
+	let submitted_team_matches: TeamMatch[] = $state([]);
 
 	let socket: Socket = io({
 		auth: {
@@ -31,6 +33,10 @@
 		if (index === -1) return;
 
 		scout_queue.splice(index, 1);
+	});
+
+	socket.on('new_team_match', (team_match: TeamMatch) => {
+		submitted_team_matches.push(team_match);
 	});
 
 	let match_key: string = $state('');
@@ -63,6 +69,15 @@
 		robot_queue.splice(index, 1);
 
 		socket.emit('leave_robot_queue', robot);
+	};
+
+	const remove_submission = (team_match: TeamMatch) => {
+		const index = submitted_team_matches.indexOf(team_match);
+		if (index === -1) return;
+
+		submitted_team_matches.splice(index, 1);
+
+		socket.emit('remove_team_match', team_match);
 	};
 </script>
 
@@ -105,6 +120,19 @@
 			{#each robot_queue as robot}
 				<button onclick={() => remove_robot(robot)} class="rounded border p-2 text-center">
 					{robot}
+				</button>
+			{/each}
+		</div>
+	</div>
+	<div class="mt-4 grid grid-cols-1 grid-rows-10 place-items-center gap-4 text-xl">
+		<h1 class="row-span-2">Team-Match Submissions</h1>
+		<div class="row-span-8 grid grid-cols-1 grid-rows-8 gap-2">
+			{#each submitted_team_matches as team_match}
+				<button
+					onclick={() => remove_submission(team_match)}
+					class="rounded border p-2 text-center"
+				>
+					{team_match}
 				</button>
 			{/each}
 		</div>

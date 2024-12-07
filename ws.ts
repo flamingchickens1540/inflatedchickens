@@ -1,3 +1,4 @@
+import type { TeamMatch } from '$lib/types';
 import { Server } from 'socket.io';
 import { type ViteDevServer } from 'vite';
 const info = (s: string) => console.log(`\x1b[32m ${s} \x1b[0m`);
@@ -110,6 +111,20 @@ const webSocketServer = {
 			// Event-listener sockets that were offline to sync back up with the current match key
 			socket.on('request_curr_match', () => {
 				socket.emit('new_match', curr_match_key);
+			});
+
+			socket.on('remove_team_match', (team_match: TeamMatch) => {
+				if (!socket.rooms.has('admin_room')) return;
+
+				info(
+					`TeamMatch: ${team_match.match_key}$_{team_match.team_key} was removed by the admin`
+				);
+				// TODO: Emit message from the db to remove team_match
+			});
+
+			socket.on('submit_team_match', (team_match: TeamMatch) => {
+				console.log('log match');
+				io.to('admin_room').emit('new_team_match', team_match);
 			});
 		});
 	}
