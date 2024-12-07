@@ -32,6 +32,7 @@
 		"vite": "^5.4.11"
 	},
 	"dependencies": {
+		"layercake": "^8.4.2",
 		"lucide-svelte": "^0.460.1",
 		"socket.io": "^4.8.1",
 		"socket.io-client": "^4.8.1"
