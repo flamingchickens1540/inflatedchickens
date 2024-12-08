@@ -1,12 +1,13 @@
 <script lang="ts">
 	import type { TeamMatch } from '$lib/types';
 	import { io, Socket } from 'socket.io-client';
+	import { PUBLIC_WS_ENDPOINT } from '$env/static/public';
 
 	let scout_queue: string[] = $state([]);
 	let robot_queue: string[] = $state([]);
 	let submitted_team_matches: TeamMatch[] = $state([]);
 
-	let socket: Socket = io({
+	let socket: Socket = io(PUBLIC_WS_ENDPOINT, {
 		auth: {
 			token: 'celary',
 			username: 'admin'

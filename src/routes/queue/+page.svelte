@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { io, Socket } from 'socket.io-client';
+	import { PUBLIC_WS_ENDPOINT } from '$env/static/public';
 	const username = 'test_scout';
 	let socket: Socket;
 
-	socket = io({
+	socket = io(PUBLIC_WS_ENDPOINT, {
 		auth: {
 			username
 		}

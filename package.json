@@ -5,6 +5,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
+		"prod": "bun install && bun run build && node server.js && node ./build/index.js",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -32,8 +33,14 @@
 		"vite": "^5.4.11"
 	},
 	"dependencies": {
+		"@sveltejs/adapter-node": "^5.2.9",
+		"@types/node": "^22.10.1",
+		"dotenv": "^16.4.7",
+		"express": "^4.21.2",
+		"http": "^0.0.1-security",
 		"lucide-svelte": "^0.460.1",
 		"socket.io": "^4.8.1",
-		"socket.io-client": "^4.8.1"
+		"socket.io-client": "^4.8.1",
+		"svelte-adapter-bun": "^0.5.2"
 	}
 }
