@@ -1,8 +1,15 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
-	import { io } from 'socket.io-client';
+	import { io, Socket } from 'socket.io-client';
+	const username = 'test_scout';
+	let socket: Socket;
 
-	const socket = io();
+	socket = io({
+		auth: {
+			username
+		}
+	});
 
 	socket.on('connect', () => {
 		socket.emit('join_queue');
@@ -12,8 +19,14 @@
 		goto(`/scout/${match_key}-${team_key}-${color}`);
 	});
 
+	socket.on('scout_left_queue', (scout: string) => {
+		if (scout === username) {
+			goto('/');
+		}
+	});
+
 	const leave = () => {
-		socket.emit('leave_queue');
+		socket.emit('leave_scout_queue', 'test_scout');
 		goto('/');
 	};
 </script>
