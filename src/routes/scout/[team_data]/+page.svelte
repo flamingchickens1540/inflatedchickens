@@ -8,6 +8,7 @@
 	import { browser } from '$app/environment';
 	import Postmatch from './Postmatch.svelte';
 	import { io } from 'socket.io-client';
+	import { goto } from '$app/navigation';
 
 	const { data }: { data: PageData } = $props();
 
@@ -63,7 +64,7 @@
 		};
 
 		socket.emit('submit_team_match', match);
-		console.log(match);
+		goto('/');
 	}
 </script>
 
