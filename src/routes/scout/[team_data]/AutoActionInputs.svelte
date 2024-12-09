@@ -1,14 +1,17 @@
 <script lang="ts">
+	import { ActionInputVerifier } from '$lib/ActionInputStateMachine.svelte';
 	import SuccessFail from '$lib/components/SuccessFail.svelte';
 	import type { AutoAction, AutoInputState, AutoActionData, AutoHeldItems } from '$lib/types';
 
 	let {
 		actions = $bindable(),
+		timeline_extended = $bindable(),
 		held = $bindable(),
 		furthest_auto_index = $bindable(),
 		pageName = $bindable()
 	}: {
 		actions: AutoActionData[];
+		timeline_extended: boolean;
 		held: AutoHeldItems;
 		furthest_auto_index: number;
 		pageName: string;
@@ -54,9 +57,26 @@
 			success: success,
 			ok: true
 		};
-		actions.push(action);
+		actions.splice(furthest_auto_index, 0, action);
 		furthest_auto_index++;
+
+		/// It's possible for a scout to go back and perform an action in auto that isn't valid, this prevents mistakes
+		/// Ideally, the auto state would be preserved and influence the tele state, but not the other way around
+		/// So while validation goes one way now, it really should go the other
+		verify();
+		let ok = true;
+		actions.forEach((action) => (ok &&= action.ok));
+		timeline_extended = !ok;
+
 		actionState = 'None';
+	}
+	function verify() {
+		const action_input_verifier = new ActionInputVerifier();
+		action_input_verifier.verify_actions(actions);
+		// TODO: Fix this horrible and jank solution
+		held = Object.hasOwn(held, 'bunnies')
+			? (action_input_verifier.get_held_auto() as AutoHeldItems)
+			: (action_input_verifier.get_held_tele() as AutoHeldItems);
 	}
 
 	const is_none_state: boolean = $derived(actionState === 'None');
