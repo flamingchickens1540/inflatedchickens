@@ -1,17 +1,22 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { onMount } from 'svelte';
-	let name: string = (browser && window.localStorage.getItem('name')) || '';
+	let username: string = (browser && window.localStorage.getItem('username')) || '';
 </script>
 
 <div class="flex h-dvh flex-col items-center justify-evenly">
-	<h1 class="text-text_red text-center text-5xl font-bold">
-		Welcome <br /><span class="text-text_yellow">{name}</span>
+	<h1 class="text-center text-5xl font-bold">
+		Welcome, <br /><span class="text-yellow-400">{username}</span>
 	</h1>
 	<a
-		class="text-text_yellow text-l bg-btn_grey border-text_red rounded border-2 border-solid px-4 py-2 text-center"
+		class="w-9/12 rounded-full border-4 border-solid p-4 pb-16 pt-16 text-center text-2xl"
 		href="/queue"
 	>
 		Scout
+	</a>
+	<a
+		class="w-9/12 rounded-full border-4 border-solid p-4 pb-16 pt-16 text-center text-2xl"
+		href="/manual_scout"
+	>
+		Manual Scout
 	</a>
 </div>

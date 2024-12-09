@@ -29,7 +29,7 @@
 	let died = $state(false);
 	let notes = $state('');
 
-	let timelineExtended = $state(false);
+	let timeline_extended = $state(false);
 	let gamePhase = $state('Auto') as 'Auto' | 'Tele' | 'Post';
 	let pageName = $state('');
 
@@ -87,19 +87,25 @@
 	</div>
 
 	{#if gamePhase === 'Auto'}
-		<AutoActionInputs bind:furthest_auto_index bind:held bind:actions bind:pageName />
+		<AutoActionInputs
+			bind:furthest_auto_index
+			bind:held
+			bind:actions
+			bind:pageName
+			bind:timeline_extended
+		/>
 		<button
 			class="w-full border-t-2 border-white/10 pt-2 text-center font-heading font-semibold"
 			onclick={(e: Event) => {
 				e.stopPropagation();
-				timelineExtended = true;
+				timeline_extended = true;
 			}}>Show Timeline</button
 		>
 		<Timeline
 			bind:furthest_auto_index
 			bind:held
 			bind:actions
-			bind:displaying={timelineExtended}
+			bind:displaying={timeline_extended}
 		/>
 	{:else if gamePhase === 'Tele'}
 		<TeleActionInputs bind:held bind:actions bind:pageName />
@@ -107,14 +113,14 @@
 			class="w-full border-t-2 border-white/10 pt-2 text-center font-heading font-semibold"
 			onclick={(e: Event) => {
 				e.stopPropagation();
-				timelineExtended = true;
+				timeline_extended = true;
 			}}>Show Timeline</button
 		>
 		<Timeline
 			bind:furthest_auto_index
 			bind:held
 			bind:actions
-			bind:displaying={timelineExtended}
+			bind:displaying={timeline_extended}
 		/>
 	{:else}
 		<Postmatch bind:awareness bind:speed bind:broke bind:died bind:notes />
