@@ -3,23 +3,25 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	let inputname: string = '';
+
 	onMount(() => {
-		let isLoggedIn = browser && window.localStorage.getItem('username');
+		const isLoggedIn = browser && window.localStorage.getItem('username');
 		if (isLoggedIn) {
 			goto('/homepage');
 		}
 	});
+
 	function login() {
 		browser && window.localStorage.setItem('username', inputname);
 		goto('/homepage');
 	}
 </script>
 
-<div class="flex h-dvh flex-col items-center justify-evenly">
-	<h1 class="text-text_red text-center text-5xl font-bold">hiiii :3</h1>
-	<div>
+<div class="m-4 grid grid-cols-1 place-items-center gap-4">
+	<h1 class="text-center text-5xl font-bold">Inflated Chickens :3</h1>
+	<div class="mt-16 grid w-9/12 grid-flow-col grid-cols-1 grid-rows-2 gap-4">
 		<input
-			class="bg-btn_grey rounded border-2 border-solid px-4 py-2 text-black"
+			class="rounded border-2 border-solid px-4 py-2 text-black"
 			type="text"
 			placeholder="Please enter your name here"
 			bind:value={inputname}
