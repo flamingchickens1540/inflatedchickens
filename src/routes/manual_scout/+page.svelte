@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { ArrowLeft } from 'lucide-svelte';
+	import { ArrowLeft } from 'lucide-svelte';
 	import { goto } from '$app/navigation';
 
 	let match_key: string = '';
@@ -21,7 +21,7 @@
 </script>
 
 <div class="flex min-h-dvh flex-col gap-2 p-4 text-xl">
-    <a href="/homepage" class="flex items-center w-fit text-lg"><ArrowLeft size={24} />Homepage</a>
+	<a href="/homepage" class="flex w-fit items-center text-lg"><ArrowLeft size={24} />Homepage</a>
 	<span class="flex items-center">Match Key</span>
 	<input
 		class="col-span-2 rounded bg-gunmetal p-4"
