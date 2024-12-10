@@ -31,10 +31,10 @@
 	};
 </script>
 
-<div class="grid h-full w-full grid-cols-1 grid-rows-2 place-items-center gap-4 align-middle">
+<div class="grid min-h-dvh grid-cols-1 grid-rows-2 place-items-center gap-4 align-middle">
 	<h1 class="p-2 font-heading text-5xl font-bold text-yellow-400">In Queue</h1>
 
-	<button class="w-9/12 rounded-full border-4 p-8 pb-16 pt-16 text-2xl text-white" onclick={leave}
+		<button class="rounded bg-gunmetal p-4 text-center text-2xl" onclick={leave}
 		>Leave Queue</button
 	>
 </div>
