@@ -16,13 +16,13 @@ import type {
 	TeamMatch,
 	TeleAction,
 	TeleActionData,
-	TeleActionsTM,
+	TeleActionsTM
 } from '$lib/types';
 
 // Whether or not the database is currently being used
 const use_db: boolean = USE_DB === 'true';
 
-console.log(Number.parseInt(DB_PORT))
+console.log(Number.parseInt(DB_PORT));
 
 const db = new Client({
 	user: DB_USER,
@@ -108,12 +108,20 @@ function matchToAutoActionsTM(match: TeamMatch): AutoActionsTM {
 }
 
 // Black magic string sorcery to turn a string of actions into an sql-suitable form
-function convertTele(arr : TeleActionData[]) : string {
-	return "ARRAY[" + arr.map((a) => 'ROW(\'' + a.action + '\', ' + a.success + ')').join(', ') + "]::tele_action_data[]"
+function convertTele(arr: TeleActionData[]): string {
+	return (
+		'ARRAY[' +
+		arr.map((a) => "ROW('" + a.action + "', " + a.success + ')').join(', ') +
+		']::tele_action_data[]'
+	);
 }
 
-function convertAuto(arr : AutoActionData[]) : string {
-	return "ARRAY[" + arr.map((a) => 'ROW(\'' + a.action + '\', ' + a.success + ')').join(', ') + "]::auto_action_data[]"
+function convertAuto(arr: AutoActionData[]): string {
+	return (
+		'ARRAY[' +
+		arr.map((a) => "ROW('" + a.action + "', " + a.success + ')').join(', ') +
+		']::auto_action_data[]'
+	);
 }
 
 export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
@@ -121,20 +129,13 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 
 	const teledata = matchToTeleActionsTM(match);
 	const autodata = matchToAutoActionsTM(match);
-	let {
-		scout_id,
-		match_key,
-		team_key,
-		awareness,
-		quickness,
-		notes,
-		broke,
-		died
-	} = match;
+	let { scout_id, match_key, team_key, awareness, quickness, notes, broke, died } = match;
 
 	try {
 		const tele_query = await db.query(
-			'INSERT INTO "TeleActions" VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, ' + convertTele(teledata.actions) + ") RETURNING *",
+			'INSERT INTO "TeleActions" VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, ' +
+				convertTele(teledata.actions) +
+				') RETURNING *',
 			[
 				teledata.tote_intake_success,
 				teledata.tote_intake_failure,
@@ -153,13 +154,15 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 				teledata.score_uncontrolled_success,
 				teledata.score_uncontrolled_failure,
 				teledata.bunny_eject_success,
-				teledata.bunny_eject_failure,
+				teledata.bunny_eject_failure
 			]
 		);
 		const tele_id = tele_query.rows[0].id;
-		
+
 		const auto_query = await db.query(
-			'INSERT INTO "AutoActions" VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, ' + convertAuto(autodata.actions) + ') RETURNING *',
+			'INSERT INTO "AutoActions" VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, ' +
+				convertAuto(autodata.actions) +
+				') RETURNING *',
 			[
 				autodata.tote_intake_success,
 				autodata.tote_intake_failure,
@@ -188,7 +191,7 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 				autodata.bunny_uncontrolled_success,
 				autodata.bunny_uncontrolled_failure,
 				autodata.bunny_low_success,
-				autodata.bunny_low_failure,
+				autodata.bunny_low_failure
 			]
 		);
 		const auto_id = auto_query.rows[0].id;
@@ -217,9 +220,9 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 }
 
 export async function select(matchkey: string, teamkey: string) {
-	let response = await db.query('SELECT * FROM "TeamMatches" WHERE "match_key" = $1 AND "team_key" = $2', [
-		matchkey,
-		teamkey
-	]);
+	let response = await db.query(
+		'SELECT * FROM "TeamMatches" WHERE "match_key" = $1 AND "team_key" = $2',
+		[matchkey, teamkey]
+	);
 	return response.rows;
 }

@@ -69,7 +69,7 @@ export type TeamMatch = {
 export type AutoActionData = {
 	action: AutoAction;
 	success: boolean;
-	ok: boolean
+	ok: boolean;
 };
 
 export type TeleActionData = {
