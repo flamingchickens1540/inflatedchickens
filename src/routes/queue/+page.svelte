@@ -1,8 +1,15 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
-	import { io } from 'socket.io-client';
+	import { io, Socket } from 'socket.io-client';
+	const username = 'test_scout';
+	let socket: Socket;
 
-	const socket = io();
+	socket = io({
+		auth: {
+			username
+		}
+	});
 
 	socket.on('connect', () => {
 		socket.emit('join_queue');
@@ -12,16 +19,22 @@
 		goto(`/scout/${match_key}-${team_key}-${color}`);
 	});
 
+	socket.on('scout_left_queue', (scout: string) => {
+		if (scout === username) {
+			goto('/');
+		}
+	});
+
 	const leave = () => {
-		socket.emit('leave_queue');
+		socket.emit('leave_scout_queue', 'test_scout');
 		goto('/');
 	};
 </script>
 
-<div
-	class="grid h-full w-full grid-cols-1 grid-rows-2 place-items-center gap-4 align-middle text-4xl text-white"
->
-	<h1 class="p-2 font-heading font-bold">In Queue</h1>
+<div class="grid h-full w-full grid-cols-1 grid-rows-2 place-items-center gap-4 align-middle">
+	<h1 class="p-2 font-heading text-5xl font-bold text-yellow-400">In Queue</h1>
 
-	<button class="rounded border p-4" onclick={leave}>Leave Queue</button>
+	<button class="w-9/12 rounded-full border-4 p-8 pb-16 pt-16 text-2xl text-white" onclick={leave}
+		>Leave Queue</button
+	>
 </div>
