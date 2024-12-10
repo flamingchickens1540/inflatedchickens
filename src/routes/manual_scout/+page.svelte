@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ArrowLeft } from 'lucide-svelte';
 	import { goto } from '$app/navigation';
 
 	let match_key: string = '';
@@ -11,39 +12,40 @@
 			alert('Invalid color, please select red or blue');
 			return;
 		}
+		if (match_key === '' || team_key === '') {
+			alert('Please input a match and team key');
+			return;
+		}
 		goto(`/scout/${match_key}-${team_key}-${color}`);
 	}
 </script>
 
-<div class="grid grid-cols-1 grid-rows-4 gap-4 pr-4 pt-4 text-center text-xl">
-	<div class="grid grid-cols-3">
-		<span class="col-span-1 flex items-center justify-center">Match Key</span>
-		<input
-			class="col-span-2 rounded p-4 text-black"
-			bind:value={match_key}
-			type="text"
-			placeholder="2024orbb_qm1"
-		/>
-	</div>
+<div class="flex min-h-dvh flex-col gap-2 p-4 text-xl">
+	<a href="/homepage" class="flex w-fit items-center text-lg"><ArrowLeft size={24} />Homepage</a>
+	<span class="flex items-center">Match Key</span>
+	<input
+		class="col-span-2 rounded bg-gunmetal p-4"
+		bind:value={match_key}
+		type="text"
+		placeholder="2024orbb_qm1"
+	/>
 
-	<div class="grid grid-cols-3">
-		<span class="col-span-1 flex items-center justify-center">Team Key</span>
-		<input
-			class="col-span-2 rounded p-4 text-black"
-			bind:value={team_key}
-			type="text"
-			placeholder="1540"
-		/>
-	</div>
-	<div class="grid grid-cols-3">
-		<span class="col-span-1 flex items-center justify-center">Color</span>
-		<input
-			class="col-span-2 rounded p-4 text-black"
-			bind:value={color}
-			type="text"
-			placeholder="Red"
-		/>
-	</div>
+	<span class="flex items-center">Team Key</span>
+	<input
+		class="col-span-2 rounded bg-gunmetal p-4"
+		bind:value={team_key}
+		type="text"
+		placeholder="1540"
+	/>
 
-	<button class="ml-4 rounded border p-4" onclick={scout}>Scout</button>
+	<span class="flex items-center">Color</span>
+	<select name="color" bind:value={color} class="col-span-2 block rounded bg-gunmetal p-4">
+		<option selected value="">Select a color</option>
+		<option value="blue">Blue</option>
+		<option value="red">Red</option>
+	</select>
+
+	<div class="flex-grow"></div>
+
+	<button class="rounded bg-gunmetal px-4 py-2" onclick={scout}>Scout</button>
 </div>

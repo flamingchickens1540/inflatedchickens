@@ -14,55 +14,44 @@
 	} = $props();
 </script>
 
-<div class="flex h-dvh flex-col p-3 align-top">
-	<div class="mb-3 flex w-full rounded border-2 border-solid p-4">
-		<h1 class="text-3xl">Post Match</h1>
-	</div>
-	<div class="mb-3 flex w-full content-start rounded border-2 border-solid p-4">
-		<label class="w-full text-3xl"
-			>Driver Skill
-			<div class="flex w-full justify-items-stretch text-base">
-				<div class="w-1/2 p-2 text-center">
-					Quickness: {speed}
-					<input type="range" min="0" max="5" step="1" bind:value={speed} />
-				</div>
-				<div class="w-1/2 p-2 text-center">
-					Field awareness: {awareness}
-					<input type="range" min="0" max="5" step="1" bind:value={awareness} />
-				</div>
+<div class="flex w-full flex-col gap-2 accent-yolk_yellow">
+	<h1 class="text-center font-heading text-2xl">Post Match</h1>
+	<div class="rounded-lg bg-gunmetal p-1">
+		<h2 class="mb-1 font-heading text-2xl">Driver Skill</h2>
+		<div
+			class="flex w-full flex-wrap items-center justify-center rounded-lg bg-eerie_black text-lg"
+		>
+			<div class="flex flex-col p-1 text-center">
+				Quickness: {speed}
+				<input class="w-36" type="range" min="0" max="5" step="1" bind:value={speed} />
 			</div>
-		</label>
+			<div class="flex flex-col p-1 text-center">
+				Field awareness: {awareness}
+				<input class="w-36" type="range" min="0" max="5" step="1" bind:value={awareness} />
+			</div>
+		</div>
 	</div>
-	<div class="mb-3 flex w-full content-start rounded border-2 border-solid p-4">
-		<label class="w-full text-3xl"
-			>Robot
-			<div
-				class="mb-2 mt-2 flex w-full justify-items-stretch rounded border-2 border-solid text-base"
+	<div class="rounded-lg bg-gunmetal p-1">
+		<h2 class="mb-1 font-heading text-2xl">Robot</h2>
+		<div class="flex flex-col gap-2 rounded bg-eerie_black p-2">
+			<label
+				><input type="checkbox" name="robotbroke" bind:checked={broke} /><span class="px-1"
+					>Broken?</span
+				></label
 			>
-				<label class="w-1/2 p-2 text-left"
-					><input
-						type="checkbox"
-						name="robotbroke"
-						class="mr-2"
-						bind:checked={broke}
-					/>Broken?</label
-				>
-			</div>
-			<div class="flex w-full justify-items-stretch rounded border-2 border-solid text-base">
-				<label class="w-1/2 p-2 text-left"
-					><input type="checkbox" name="robotdied" class="mr-2" bind:checked={died} />Died
-					on Field?</label
-				>
-			</div>
-		</label>
+			<label
+				><input type="checkbox" name="robotdied" bind:checked={died} /><span class="px-1"
+					>Died on Field?</span
+				></label
+			>
+		</div>
 	</div>
-	<div class="mb-3 flex w-full content-start rounded border-2 border-solid p-4">
-		<label class="w-full text-3xl"
-			>Notes
-			<textarea
-				class="mt-2 w-full rounded border-2 border-solid p-4 text-base text-black"
-				bind:value={notes}
-			></textarea>
-		</label>
-	</div>
+	<label class="w-full rounded-lg bg-gunmetal p-1"
+		><h3 class="mb-1 font-heading text-2xl">Notes</h3>
+		<textarea
+			class="min-h-36 w-full rounded bg-eerie_black p-1"
+			bind:value={notes}
+			placeholder="Please add notes"
+		></textarea>
+	</label>
 </div>
