@@ -23,14 +23,16 @@
 	// The furthest index in actions that was made during auto
 	let furthest_auto_index = $state(0);
 
-	let speed = $state(3);
-	let awareness = $state(3);
-	let broke = $state(false);
-	let died = $state(false);
-	let notes = $state('');
+	let speed: number = $state(3);
+	let awareness: number = $state(3);
+	let broke: boolean = $state(false);
+	let died: boolean = $state(false);
+	let notes: string = $state('');
+
+	let prematch = $state(false);
 
 	let timeline_extended = $state(false);
-	let gamePhase = $state('Auto') as 'Auto' | 'Tele' | 'Post';
+	let gamePhase = $state('Prematch') as 'Prematch' | 'Auto' | 'Tele' | 'Post';
 	let pageName = $state('');
 
 	function phaseShiftRight() {
@@ -86,7 +88,9 @@
 		</div>
 	</div>
 
-	{#if gamePhase === 'Auto'}
+	{#if gamePhase === 'Prematch'}
+		<button class="h-9/12 w-9/12 border">Preload?</button>
+	{:else if gamePhase === 'Auto'}
 		<AutoActionInputs
 			bind:furthest_auto_index
 			bind:held

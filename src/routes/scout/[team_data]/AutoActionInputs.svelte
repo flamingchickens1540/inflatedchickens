@@ -117,7 +117,7 @@
 			>
 			<button
 				class="rounded bg-gunmetal p-2"
-				onclick={() => (actionState = 'IntakeBalloonCoral')}>Ballon: Coral</button
+				onclick={() => (actionState = 'IntakeBalloonCoral')}>Balloon: Coral</button
 			>
 		</div>
 		<button
@@ -156,7 +156,7 @@
 			{/if}
 			{#if held.balloons > 0}
 				<div class="flex w-full flex-grow flex-col items-center gap-2 py-2 text-lg">
-					<h1>Ballon</h1>
+					<h1>Balloon</h1>
 					<div class="grid w-full flex-grow grid-cols-2 grid-rows-2 gap-2">
 						<button class="rounded bg-gunmetal p-2" onclick={() => score_balloon('Low')}
 							>Low Zone</button
@@ -186,7 +186,7 @@
 			>
 		</div>
 	{:else if is_eject_state}
-		<div class="grid w-full flex-grow grid-flow-row gap-2 py-2 font-heading font-bold">
+		<div class="grid w-full flex-grow grid-flow-row gap-2 py-2 font-heading text-lg font-bold">
 			{#if held.bunnies > 0}
 				<button
 					class="w-full rounded bg-gunmetal p-2"
@@ -196,7 +196,7 @@
 			{#if held.balloons > 0}
 				<button
 					class="w-full rounded bg-gunmetal p-2"
-					onclick={() => (actionState = 'EjectBalloon')}>Ballon</button
+					onclick={() => (actionState = 'EjectBalloon')}>Balloon</button
 				>
 			{/if}
 			{#if held.totes > 0}
