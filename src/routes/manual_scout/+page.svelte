@@ -11,6 +11,10 @@
 			alert('Invalid color, please select red or blue');
 			return;
 		}
+		if (match_key === '' || team_key === '') {
+			alert('Please input a match and team key');
+			return;
+		}
 		goto(`/scout/${match_key}-${team_key}-${color}`);
 	}
 </script>
