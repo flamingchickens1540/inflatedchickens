@@ -9,7 +9,6 @@ import {
 	USE_DB
 } from '$env/static/private';
 import type {
-	ActionsTM,
 	AutoAction,
 	AutoActionData,
 	AutoActionsTM,
@@ -135,7 +134,7 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 		const tele_query = await db.query(
 			'INSERT INTO "TeleActions" VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, ' +
 				convertTele(teledata.actions) +
-				') RETURNING *',
+				') RETURNING id',
 			[
 				teledata.tote_intake_success,
 				teledata.tote_intake_failure,
@@ -162,7 +161,7 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 		const auto_query = await db.query(
 			'INSERT INTO "AutoActions" VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, ' +
 				convertAuto(autodata.actions) +
-				') RETURNING *',
+				') RETURNING id',
 			[
 				autodata.tote_intake_success,
 				autodata.tote_intake_failure,
