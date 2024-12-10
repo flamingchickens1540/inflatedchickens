@@ -16,7 +16,7 @@ CREATE TYPE auto_action_type as ENUM (
     'ScoreYourHeldTote', 
     'ScoreOtherHeldTote', 
     'ScoreExternalTote', 
-    'ScoreLowBalloon'
+    'ScoreLowBalloon',
 
     'IntakeBunny',
 	'ScoreBunnyTote',
@@ -55,12 +55,12 @@ ALTER TABLE
     "Matches" ADD PRIMARY KEY("match_key");
 CREATE TABLE "TeamMatches"(
     "id" SERIAL PRIMARY KEY,
-    "scout_id" SMALLINT NOT NULL,
+    "scout_id" VARCHAR(255) NOT NULL,
     "match_key" VARCHAR(255) NOT NULL,
     "team_key" VARCHAR(255) NOT NULL,
     "skill_field_awareness" SMALLINT NOT NULL,
     "skill_quickness" SMALLINT NOT NULL,
-    "notes" TEXT NOT NULL,
+    "notes" VARCHAR(255) NOT NULL,
     "broke" BOOLEAN NOT NULL,
     "died" BOOLEAN NOT NULL,
     "tele_action_id" SMALLINT NOT NULL,
@@ -86,7 +86,7 @@ CREATE TABLE "TeleActions"(
     "score_uncontrolled_failure" SMALLINT NOT NULL,
     "bunny_eject_success" SMALLINT NOT NULL,
     "bunny_eject_failure" SMALLINT NOT NULL,
-    "actions" tele_action_data[] NOT NULL
+    "actions" tele_action_data[]
 );
 CREATE TABLE "AutoActions"(
     "id" SERIAL PRIMARY KEY,
@@ -110,15 +110,19 @@ CREATE TABLE "AutoActions"(
     "bunny_intake_failure" SMALLINT NOT NULL,
     "bunny_eject_success" SMALLINT NOT NULL,
     "bunny_eject_failure" SMALLINT NOT NULL,
-    "bunny_tote_success" SMALLINT NOT NULL,
-    "bunny_tote_failure" SMALLINT NOT NULL,
+    "bunny_internal_success" SMALLINT NOT NULL,
+    "bunny_internal_failure" SMALLINT NOT NULL,
+    "bunny_external_success" SMALLINT NOT NULL,
+    "bunny_external_failure" SMALLINT NOT NULL,
+    "bunny_uncontrolled_success" SMALLINT NOT NULL,
+    "bunny_uncontrolled_failure" SMALLINT NOT NULL,
     "bunny_low_success" SMALLINT NOT NULL,
     "bunny_low_failure" SMALLINT NOT NULL,
-    "actions" auto_action_data[] NOT NULL
+    "actions" auto_action_data[]
 );
 CREATE TABLE "AllianceMatches"(
     "id" SERIAL PRIMARY KEY,
-    "scout_id" SMALLINT NOT NULL,
+    "scout_id" VARCHAR(255) NOT NULL,
     "match_key" VARCHAR(255) NOT NULL,
     "alliance_key" VARCHAR(255) NOT NULL,
     "one_strengths" VARCHAR(255) NOT NULL,
@@ -132,7 +136,7 @@ CREATE TABLE "AllianceMatches"(
 );
 CREATE TABLE "TeamEvents"(
     "id" SERIAL PRIMARY KEY,
-    "scout_id" SMALLINT NOT NULL,
+    "scout_id" VARCHAR(255) NOT NULL,
     "team_key" VARCHAR(255) NOT NULL,
     "width" SMALLINT NOT NULL,
     "length" SMALLINT NOT NULL,
@@ -145,7 +149,7 @@ CREATE TABLE "TeamEvents"(
     "number_bunny_autos" SMALLINT NOT NULL,
     "polish" SMALLINT NOT NULL,
     "robot_notes" VARCHAR(255) NOT NULL,
-    "minibot_notes" SMALLINT NOT NULL
+    "minibot_notes" VARCHAR(255) NOT NULL
 );
 -- ALTER TABLE
 --     "TeamEvents" ADD CONSTRAINT "teamevents_scout_id_foreign" FOREIGN KEY("scout_id") REFERENCES "Users"("id");

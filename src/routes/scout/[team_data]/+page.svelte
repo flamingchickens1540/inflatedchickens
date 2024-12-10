@@ -21,7 +21,7 @@
 	// The furthest index in actions that was made during auto
 	let furthest_auto_index = $state(0);
 
-	let speed = $state(3);
+	let quickness = $state(3);
 	let awareness = $state(3);
 	let broke = $state(false);
 	let died = $state(false);
@@ -46,8 +46,8 @@
 			scout_id,
 			team_key: data.team_key,
 			match_key: data.match_key,
-			skill_quickness: speed,
-			skill_field_awareness: awareness,
+			quickness,
+			awareness,
 			broke,
 			died,
 			notes,
@@ -116,7 +116,7 @@
 			bind:displaying={timelineExtended}
 		/>
 	{:else}
-		<Postmatch bind:awareness bind:speed bind:broke bind:died bind:notes />
+		<Postmatch bind:awareness bind:quickness bind:broke bind:died bind:notes />
 
 		<button onclick={submit} class="mt-auto w-full rounded bg-gunmetal p-2 font-bold"
 			>Submit</button

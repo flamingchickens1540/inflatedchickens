@@ -57,8 +57,8 @@ export type TeamMatch = {
 	scout_id: string;
 	match_key: string;
 	team_key: string;
-	skill_field_awareness: number;
-	skill_quickness: number;
+	quickness: number;
+	awareness: number;
 	notes: string;
 	broke: boolean;
 	died: boolean;
@@ -69,11 +69,13 @@ export type TeamMatch = {
 export type AutoActionData = {
 	action: AutoAction;
 	success: boolean;
+	ok: boolean
 };
 
 export type TeleActionData = {
 	action: TeleAction;
 	success: boolean;
+	ok: boolean;
 };
 
 // Action Types

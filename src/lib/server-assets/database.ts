@@ -16,17 +16,19 @@ import type {
 	TeamMatch,
 	TeleAction,
 	TeleActionData,
-	TeleActionsTM
+	TeleActionsTM,
 } from '$lib/types';
 
 // Whether or not the database is currently being used
 const use_db: boolean = USE_DB === 'true';
 
+console.log(Number.parseInt(DB_PORT))
+
 const db = new Client({
 	user: DB_USER,
 	password: DB_PASSWORD,
 	host: DB_HOST,
-	port: DB_PORT,
+	port: Number.parseInt(DB_PORT),
 	database: POSTGRES_DATABASE
 });
 await db.connect();
@@ -105,6 +107,15 @@ function matchToAutoActionsTM(match: TeamMatch): AutoActionsTM {
 	};
 }
 
+// Black magic string sorcery to turn a string of actions into an sql-suitable form
+function convertTele(arr : TeleActionData[]) : string {
+	return "ARRAY[" + arr.map((a) => 'ROW(\'' + a.action + '\', ' + a.success + ')').join(', ') + "]::tele_action_data[]"
+}
+
+function convertAuto(arr : AutoActionData[]) : string {
+	return "ARRAY[" + arr.map((a) => 'ROW(\'' + a.action + '\', ' + a.success + ')').join(', ') + "]::auto_action_data[]"
+}
+
 export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 	if (!use_db) return true;
 
@@ -114,8 +125,8 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 		scout_id,
 		match_key,
 		team_key,
-		skill_field_awareness,
-		skill_quickness,
+		awareness,
+		quickness,
 		notes,
 		broke,
 		died
@@ -123,9 +134,8 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 
 	try {
 		const tele_query = await db.query(
-			'INSERT INTO "TeleActions" VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)',
+			'INSERT INTO "TeleActions" VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, ' + convertTele(teledata.actions) + ") RETURNING *",
 			[
-				teledata.id,
 				teledata.tote_intake_success,
 				teledata.tote_intake_failure,
 				teledata.tote_eject_success,
@@ -144,15 +154,13 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 				teledata.score_uncontrolled_failure,
 				teledata.bunny_eject_success,
 				teledata.bunny_eject_failure,
-				teledata.actions
 			]
 		);
-		const tele_id = tele_query.rows[0];
-
+		const tele_id = tele_query.rows[0].id;
+		
 		const auto_query = await db.query(
-			'INSERT INTO "AutoActions" VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30)',
+			'INSERT INTO "AutoActions" VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, ' + convertAuto(autodata.actions) + ') RETURNING *',
 			[
-				autodata.id,
 				autodata.tote_intake_success,
 				autodata.tote_intake_failure,
 				autodata.tote_eject_success,
@@ -169,10 +177,10 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 				autodata.score_external_failure,
 				autodata.score_uncontrolled_success,
 				autodata.score_uncontrolled_failure,
-				autodata.bunny_eject_success,
-				autodata.bunny_eject_failure,
 				autodata.bunny_intake_success,
 				autodata.bunny_intake_failure,
+				autodata.bunny_eject_success,
+				autodata.bunny_eject_failure,
 				autodata.bunny_internal_success,
 				autodata.bunny_internal_failure,
 				autodata.bunny_external_success,
@@ -181,10 +189,9 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 				autodata.bunny_uncontrolled_failure,
 				autodata.bunny_low_success,
 				autodata.bunny_low_failure,
-				autodata.actions
 			]
 		);
-		const auto_id = auto_query.rows[0];
+		const auto_id = auto_query.rows[0].id;
 
 		await db.query(
 			'INSERT INTO "TeamMatches" VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
@@ -192,8 +199,8 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 				scout_id,
 				match_key,
 				team_key,
-				skill_field_awareness,
-				skill_quickness,
+				awareness,
+				quickness,
 				notes,
 				broke,
 				died,
@@ -210,8 +217,9 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 }
 
 export async function select(matchkey: string, teamkey: string) {
-	return await db.query('SELECT * FROM "TeamMatches" WHERE match_key = $1 AND team_key = $2', [
+	let response = await db.query('SELECT * FROM "TeamMatches" WHERE "match_key" = $1 AND "team_key" = $2', [
 		matchkey,
 		teamkey
 	]);
+	return response.rows;
 }

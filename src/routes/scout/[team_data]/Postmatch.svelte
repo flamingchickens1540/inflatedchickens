@@ -1,12 +1,12 @@
 <script lang="ts">
 	let {
-		speed = $bindable(),
+		quickness = $bindable(),
 		awareness = $bindable(),
 		broke = $bindable(),
 		died = $bindable(),
 		notes = $bindable()
 	}: {
-		speed: number;
+		quickness: number;
 		awareness: number;
 		broke: boolean;
 		died: boolean;
@@ -23,8 +23,8 @@
 			>Driver Skill
 			<div class="flex w-full justify-items-stretch text-base">
 				<div class="w-1/2 p-2 text-center">
-					Quickness: {speed}
-					<input type="range" min="0" max="5" step="1" bind:value={speed} />
+					Quickness: {quickness}
+					<input type="range" min="0" max="5" step="1" bind:value={quickness} />
 				</div>
 				<div class="w-1/2 p-2 text-center">
 					Field awareness: {awareness}
