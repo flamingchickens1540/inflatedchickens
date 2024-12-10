@@ -33,6 +33,7 @@
 		class="col-span-2 rounded bg-gunmetal p-4"
 		bind:value={team_key}
 		type="text"
+		inputmode="numeric"
 		placeholder="1540"
 	/>
 
