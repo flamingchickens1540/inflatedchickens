@@ -42,7 +42,9 @@
 </script>
 
 <button
-	class="fixed inset-0 transition-all will-change-transform {displaying ? 'backdrop-blur' : 'translate-y-full'}"
+	class="fixed inset-0 transition-all will-change-transform {displaying
+		? 'backdrop-blur'
+		: 'translate-y-full'}"
 	onclick={(e: Event) => {
 		if (e.target === e.currentTarget && is_valid_timeline) {
 			displaying = false;
