@@ -7,10 +7,12 @@
 	import { ArrowRight, ArrowLeft } from 'lucide-svelte';
 	import { browser } from '$app/environment';
 	import Postmatch from './Postmatch.svelte';
+	import { io } from 'socket.io-client';
+	import { goto } from '$app/navigation';
 
 	const { data }: { data: PageData } = $props();
 
-	const scout_id = browser ? (localStorage?.getItem('scout_id') ?? '') : '';
+	const username = browser ? (localStorage?.getItem('username') ?? '') : '';
 
 	let actions: AutoActionData[] = $state([]);
 	let held: AutoHeldItems = $state({
@@ -27,7 +29,7 @@
 	let died = $state(false);
 	let notes = $state('');
 
-	let timelineExtended = $state(false);
+	let timeline_extended = $state(false);
 	let gamePhase = $state('Auto') as 'Auto' | 'Tele' | 'Post';
 	let pageName = $state('');
 
@@ -38,12 +40,18 @@
 		gamePhase = gamePhase === 'Post' ? 'Tele' : gamePhase === 'Tele' ? 'Auto' : 'Auto'; // Last case should never happen
 	}
 
+	const socket = io({
+		auth: {
+			username
+		}
+	});
+
 	async function submit() {
 		const auto_actions = actions.slice(0, furthest_auto_index + 1);
 		const tele_actions = actions.slice(furthest_auto_index + 1) as TeleActionData[]; // TODO: Add verification function to ensure that this always works
 		const match: TeamMatch = {
 			id: 0,
-			scout_id,
+			scout_id: username,
 			team_key: data.team_key,
 			match_key: data.match_key,
 			quickness,
@@ -64,6 +72,8 @@
 		});
 
 		console.log(response);
+		socket.emit('submit_team_match', match);
+		goto('/');
 	}
 </script>
 
@@ -86,19 +96,25 @@
 	</div>
 
 	{#if gamePhase === 'Auto'}
-		<AutoActionInputs bind:furthest_auto_index bind:held bind:actions bind:pageName />
+		<AutoActionInputs
+			bind:furthest_auto_index
+			bind:held
+			bind:actions
+			bind:pageName
+			bind:timeline_extended
+		/>
 		<button
 			class="w-full border-t-2 border-white/10 pt-2 text-center font-heading font-semibold"
 			onclick={(e: Event) => {
 				e.stopPropagation();
-				timelineExtended = true;
+				timeline_extended = true;
 			}}>Show Timeline</button
 		>
 		<Timeline
 			bind:furthest_auto_index
 			bind:held
 			bind:actions
-			bind:displaying={timelineExtended}
+			bind:displaying={timeline_extended}
 		/>
 	{:else if gamePhase === 'Tele'}
 		<TeleActionInputs bind:held bind:actions bind:pageName />
@@ -106,14 +122,14 @@
 			class="w-full border-t-2 border-white/10 pt-2 text-center font-heading font-semibold"
 			onclick={(e: Event) => {
 				e.stopPropagation();
-				timelineExtended = true;
+				timeline_extended = true;
 			}}>Show Timeline</button
 		>
 		<Timeline
 			bind:furthest_auto_index
 			bind:held
 			bind:actions
-			bind:displaying={timelineExtended}
+			bind:displaying={timeline_extended}
 		/>
 	{:else}
 		<Postmatch bind:awareness bind:quickness bind:broke bind:died bind:notes />
