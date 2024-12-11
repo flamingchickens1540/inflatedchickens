@@ -23,7 +23,7 @@
 	// The furthest index in actions that was made during auto
 	let furthest_auto_index = $state(0);
 
-	let speed = $state(3);
+	let quickness = $state(3);
 	let awareness = $state(3);
 	let broke = $state(false);
 	let died = $state(false);
@@ -46,7 +46,7 @@
 		}
 	});
 
-	function submit() {
+	async function submit() {
 		const auto_actions = actions.slice(0, furthest_auto_index + 1);
 		const tele_actions = actions.slice(furthest_auto_index + 1) as TeleActionData[]; // TODO: Add verification function to ensure that this always works
 		const match: TeamMatch = {
@@ -54,7 +54,7 @@
 			scout_id: username,
 			team_key: data.team_key,
 			match_key: data.match_key,
-			speed,
+			quickness,
 			awareness,
 			broke,
 			died,
@@ -63,6 +63,15 @@
 			tele_actions
 		};
 
+		const response = await fetch('/api/submit', {
+			method: 'POST',
+			body: JSON.stringify(match),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		console.log(response);
 		socket.emit('submit_team_match', match);
 		goto('/');
 	}
@@ -123,7 +132,7 @@
 			bind:displaying={timeline_extended}
 		/>
 	{:else}
-		<Postmatch bind:awareness bind:speed bind:broke bind:died bind:notes />
+		<Postmatch bind:awareness bind:quickness bind:broke bind:died bind:notes />
 
 		<button onclick={submit} class="mt-auto w-full rounded bg-gunmetal p-2 font-bold"
 			>Submit</button
