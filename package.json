@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
-		"dev": "vite dev",
+		"dev": "vite dev --port 3020",
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -35,14 +35,12 @@
 	},
 	"dependencies": {
 		"autoprefixer": "^10.4.20",
-		"mysql2": "^3.11.4",
+		"lucide-svelte": "^0.460.1",
 		"pg": "^8.13.1",
-		"postgresql": "^0.0.1",
+		"socket.io": "^4.8.1",
+		"socket.io-client": "^4.8.1",
 		"tailwindcss": "^3.4.14",
 		"typescript-eslint": "^8.14.0",
-		"vite": "^5.4.11",
-		"lucide-svelte": "^0.460.1",
-		"socket.io": "^4.8.1",
-		"socket.io-client": "^4.8.1"
+		"vite": "^5.4.11"
 	}
 }
