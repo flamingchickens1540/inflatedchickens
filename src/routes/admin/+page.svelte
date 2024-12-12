@@ -2,9 +2,14 @@
 	import type { TeamMatch } from '$lib/types';
 	import { io, Socket } from 'socket.io-client';
 
+	type SubmittedMatch = {
+		status: number;
+		team_match_key: string;
+	};
+
 	let scout_queue: string[] = $state([]);
 	let robot_queue: string[] = $state([]);
-	let submitted_team_matches: TeamMatch[] = $state([]);
+	let submitted_team_matches: SubmittedMatch[] = $state([]);
 
 	let socket: Socket = io({
 		auth: {
@@ -36,7 +41,16 @@
 	});
 
 	socket.on('new_team_match', (team_match: TeamMatch) => {
-		submitted_team_matches.push(team_match);
+		submitted_team_matches.push({
+			status: 200,
+			team_match_key: `${team_match.match_key}:${team_match.team_key}`
+		});
+	});
+	socket.on('failed_team_match', ([team_match, response]: [TeamMatch, Response]) => {
+		submitted_team_matches.push({
+			status: response.status,
+			team_match_key: `${team_match.match_key}:${team_match.team_key}`
+		});
 	});
 
 	let match_key: string = $state('');
@@ -71,7 +85,7 @@
 		socket.emit('leave_robot_queue', robot);
 	};
 
-	const remove_submission = (team_match: TeamMatch) => {
+	const remove_submission = (team_match: SubmittedMatch) => {
 		const index = submitted_team_matches.indexOf(team_match);
 		if (index === -1) return;
 
@@ -133,7 +147,7 @@
 					class="rounded border p-2 text-center"
 				>
 					<div class="grid grid-cols-4 grid-rows-4">
-						{team_match.match_key}:{team_match.team_key}
+						{team_match.team_match_key}
 					</div>
 				</button>
 			{/each}

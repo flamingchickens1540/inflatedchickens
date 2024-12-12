@@ -19,7 +19,13 @@ const webSocketServer = {
 				return next(new Error('invalid username'));
 			}
 
-			let old_entries = sid_to_username.entries().find(([_key, value]) => value == username);
+			if (!sid_to_username) {
+				console.log('SID TO USERNAME UNINIT');
+			}
+			// erroring in prod
+			let old_entries = Object.entries(sid_to_username).find(
+				([_key, value]) => value === username
+			);
 			if (old_entries) {
 				old_entries
 					.map(([key, _value]) => key)
@@ -80,6 +86,10 @@ const webSocketServer = {
 				async ([match_key, teams]: [string, [string, 'red' | 'blue'][]]) => {
 					if (!socket.rooms.has('admin_room')) return;
 
+					// TODO: New TeamMatch in DB request here
+
+					info(`${match_key}: ${teams}`);
+
 					const scout_queue = await io.in('scout_queue').fetchSockets();
 					for (const socket of scout_queue) {
 						const team_data = teams.pop();
@@ -117,15 +127,21 @@ const webSocketServer = {
 				if (!socket.rooms.has('admin_room')) return;
 
 				info(
-					`TeamMatch: ${team_match.match_key}_${team_match.team_key} was removed by the admin`
+					`New TeamMatch: ${team_match.match_key}_${team_match.team_key} was removed by the admin`
 				);
 				// TODO: Emit message from the db to remove team_match
 			});
 
 			socket.on('submit_team_match', (team_match: TeamMatch) => {
-				console.log('log match');
 				io.to('admin_room').emit('new_team_match', team_match);
 			});
+
+			socket.on(
+				'failed_submit_team_match',
+				([team_match, response]: [TeamMatch, Response]) => {
+					io.to('admin_room').emit('failed_team_match', [team_match, response]);
+				}
+			);
 		});
 	}
 };
