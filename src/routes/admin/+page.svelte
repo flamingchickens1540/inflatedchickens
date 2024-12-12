@@ -59,7 +59,7 @@
 		});
 
 		match_key = '';
-		teams = ['', '', '', '', '', ''];		
+		teams = ['', '', '', '', '', ''];
 	};
 
 	const remove_scout = (scout_id: string) => {
