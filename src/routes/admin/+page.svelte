@@ -74,6 +74,7 @@
 
 		match_key = '';
 		teams = ['', '', '', '', '', ''];
+		robot_queue = [];
 	};
 
 	const remove_scout = (scout_id: string) => {

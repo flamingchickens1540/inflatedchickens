@@ -4,7 +4,7 @@ import { type ViteDevServer } from 'vite';
 const info = (s: string) => console.log(`\x1b[32m ${s} \x1b[0m`);
 
 const sid_to_username: Map<string, string> = new Map();
-const robot_queue: [string, 'red' | 'blue'][] = [];
+let robot_queue: [string, 'red' | 'blue'][] = [];
 let curr_match_key: string = '';
 
 const webSocketServer = {
@@ -56,16 +56,14 @@ const webSocketServer = {
 					socket.join('scout_queue');
 					return;
 				}
-				io.to('admin_room').emit('robot_left_queue', team_data);
+				io.to('admin_room').emit('robot_left_queue', team_data[0]);
 				socket.emit('time_to_scout', [curr_match_key, ...team_data]);
 			});
 
 			socket.on('leave_scout_queue', (scout_id: string) => {
-				const scout_sid = sid_to_username
-					.entries()
+				const scout_sid = Object.entries(sid_to_username)
 					.filter(([_sid, scout]) => scout === scout_id)
-					.map(([sid, _]) => sid)
-					.toArray()[0];
+					.map(([sid, _]) => sid)[0];
 				console.log(scout_sid);
 				// This event exist in the cast that the scout removed itself from the queue
 				io.emit('scout_left_queue', scout_id);
@@ -90,7 +88,8 @@ const webSocketServer = {
 
 					info(`${match_key}: ${teams}`);
 
-					const scout_queue = await io.in('scout_queue').fetchSockets();
+					robot_queue = [];
+					const scout_queue = (await io.in('scout_queue').fetchSockets()).reverse();
 					for (const socket of scout_queue) {
 						const team_data = teams.pop();
 						if (!team_data) break;
