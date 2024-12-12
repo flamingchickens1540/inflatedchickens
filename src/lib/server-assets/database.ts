@@ -18,6 +18,9 @@ import type {
 	TeleActionsTM
 } from '$lib/types';
 
+// Const b/c of obvious reasons
+const event_key = "orbb2024";
+
 // Whether or not the database is currently being used
 const use_db: boolean = USE_DB === 'true';
 
@@ -218,10 +221,43 @@ export async function insertTeamMatch(match: TeamMatch): Promise<boolean> {
 	}
 }
 
+export async function insertUser(name : string) : Promise<boolean> {
+	if (!use_db) return true;
+
+	try {
+		await db.query('INSERT INTO "Users" VALUES (DEFAULT, $1)', [name]);
+
+		return true;
+	} catch (error){
+		console.error(error);
+		return false;
+	}
+}
+
 export async function select(matchkey: string, teamkey: string) {
+	if (!use_db) return null;
+
 	let response = await db.query(
 		'SELECT * FROM "TeamMatches" WHERE "match_key" = $1 AND "team_key" = $2',
 		[matchkey, teamkey]
 	);
 	return response.rows;
+}
+
+export async function insertMatch(match_key : string) : Promise<boolean> {
+	if (!use_db) return true;
+
+	try {
+		await db.query('INSERT INTO "Matches" VALUES ($1, $2)', 
+			[
+				match_key,
+				event_key
+			]
+		);
+
+		return true;
+	} catch (error) {
+		console.error(error);
+		return false;
+	}
 }

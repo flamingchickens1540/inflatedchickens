@@ -39,7 +39,6 @@ CREATE TYPE drivetrain_enum as ENUM (
 CREATE TABLE "Users"(
     "id" SERIAL PRIMARY KEY,
     "name" VARCHAR(255) NOT NULL,
-    "is_admin" BOOLEAN NOT NULL
 );
 CREATE TABLE "Teams"(
     "team_key" VARCHAR(255) NOT NULL,
