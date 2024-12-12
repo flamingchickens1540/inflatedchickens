@@ -60,9 +60,18 @@
 		teams.map((team, i) => [team, colors[i]] as [string, 'red' | 'blue'])
 	);
 
-	const queue_match = () => {
+	const queue_match = async () => {
 		teams = teams.filter((team) => team != '');
 		socket.emit('send_match', [match_key, team_color]);
+
+		await fetch('/api/newmatch', {
+			method: 'POST',
+			body: JSON.stringify(match_key),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
 		match_key = '';
 		teams = ['', '', '', '', '', ''];
 	};
