@@ -41,6 +41,10 @@ export class ActionInputVerifier {
 			else if (action.includes('EjectBalloon')) this.held_balloons--;
 			else if (action.includes('EjectBunny')) this.held_bunnies--;
 			else if (action.includes('EjectTote')) this.held_totes--;
+		} else {
+			if (action.includes('EjectBalloon') && this.held_balloons <= 0) return false;
+			else if (action.includes('EjectBunny') && this.held_bunnies <= 0) return false;
+			else if (action.includes('EjectTote') && this.held_totes <= 0) return false;
 		}
 		if (action.includes('ScoreBalloon')) this.held_balloons--;
 		else if (action.includes('ScoreBunny')) this.held_bunnies--;
