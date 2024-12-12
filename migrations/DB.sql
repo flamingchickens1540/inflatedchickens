@@ -18,7 +18,7 @@ CREATE TYPE auto_action_type as ENUM (
 	'ScoreBalloonLow',
 	'EjectBalloon',
 	'EjectBunny',
-	'EjectTote'
+	'EjectTote',
 
     'IntakeBunny',
 	'ScoreBunnyInternalTote',
