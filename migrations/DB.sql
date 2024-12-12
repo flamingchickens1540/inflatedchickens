@@ -1,26 +1,30 @@
 CREATE TYPE tele_action_type AS ENUM (
-    'IntakeTote', 
-    'IntakeBalloon', 
-    'TakeBalloonFromCoral', 
-    
-    'ScoreYourHeldTote', 
-    'ScoreOtherHeldTote', 
-    'ScoreExternalTote', 
-    'ScoreLowBalloon'
+    'IntakeTote',
+	'IntakeBalloon',
+	'ScoreBalloonInternalTote',
+	'ScoreBalloonExternalTote',
+	'ScoreBalloonUncontrolledTote',
+	'ScoreBalloonLow',
+	'EjectBalloon',
+	'EjectBunny',
+	'EjectTote'
 );
 CREATE TYPE auto_action_type as ENUM (
-    'IntakeTote', 
-    'IntakeBalloon', 
-    'TakeBalloonFromCoral', 
-    
-    'ScoreYourHeldTote', 
-    'ScoreOtherHeldTote', 
-    'ScoreExternalTote', 
-    'ScoreLowBalloon',
+    'IntakeTote',
+	'IntakeBalloon',
+	'ScoreBalloonInternalTote',
+	'ScoreBalloonExternalTote',
+	'ScoreBalloonUncontrolledTote',
+	'ScoreBalloonLow',
+	'EjectBalloon',
+	'EjectBunny',
+	'EjectTote'
 
     'IntakeBunny',
-	'ScoreBunnyTote',
-	'ScoreBunnyLowZone'
+	'ScoreBunnyInternalTote',
+	'ScoreBunnyExternalTote',
+	'ScoreBunnyUncontrolledTote',
+	'ScoreBunnyLow'
 );
 CREATE TYPE tele_action_data AS (
     act tele_action_type,
