@@ -32,6 +32,8 @@ export class ActionInputVerifier {
 	verify_new_action(action_data: AutoActionData): boolean {
 		const success = action_data.success;
 		const action = action_data.action;
+		console.log(action);
+		if (action.includes('InternalTote') && this.held_totes === 0) return false;
 		if (success) {
 			if (action.includes('IntakeBalloon')) this.held_balloons++;
 			else if (action.includes('IntakeBunny')) this.held_bunnies++;

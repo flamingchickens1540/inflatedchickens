@@ -7,16 +7,10 @@
 	<h1 class="text-center text-5xl font-bold">
 		Welcome, <br /><span class="text-yellow-400">{username}</span>
 	</h1>
-	<a
-		class="w-9/12 rounded-full border-4 border-solid p-4 pb-16 pt-16 text-center text-2xl"
-		href="/queue"
-	>
-		Scout
-	</a>
-	<a
-		class="w-9/12 rounded-full border-4 border-solid p-4 pb-16 pt-16 text-center text-2xl"
-		href="/manual_scout"
-	>
-		Manual Scout
-	</a>
+	<div class="flex flex-col gap-4">
+		<a class="w-full rounded bg-gunmetal p-4 text-center text-2xl" href="/queue"> Scout </a>
+		<a class="w-full rounded bg-gunmetal p-4 text-center text-2xl" href="/manual_scout">
+			Manual Scout
+		</a>
+	</div>
 </div>

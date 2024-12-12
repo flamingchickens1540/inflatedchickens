@@ -63,7 +63,7 @@
 			tele_actions
 		};
 
-		await fetch('/api/submit', {
+		const response = await fetch('/api/submit', {
 			method: 'POST',
 			body: JSON.stringify(match),
 			headers: {
@@ -71,7 +71,14 @@
 			}
 		});
 
-		socket.emit('submit_team_match', match);
+		if (!response.ok) {
+			console.log('Failed to submit match');
+			socket.emit('failed_submit_team_match', [match, response]);
+		} else {
+			console.log(response);
+			socket.emit('submit_team_match', match);
+		}
+
 		goto('/');
 	}
 </script>

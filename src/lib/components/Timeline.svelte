@@ -23,9 +23,6 @@
 	}
 
 	function shift(index: number, change: -1 | 1) {
-		//if (furthest_auto_index === index) furthest_auto_index += change;
-		//else if (furthest_auto_index === index + change) furthest_auto_index = index;
-
 		[actions[index], actions[index + change]] = [actions[index + change], actions[index]];
 		verify();
 	}
@@ -33,16 +30,19 @@
 	function verify() {
 		const action_input_verifier = new ActionInputVerifier();
 		action_input_verifier.verify_actions(actions);
+		console.log(actions);
 		// TODO: Fix this horrible and jank solution
 		held = Object.hasOwn(held, 'bunnies')
 			? action_input_verifier.get_held_auto()
 			: action_input_verifier.get_held_tele();
 	}
-	const is_valid_timeline = $derived(actions.filter((action) => !action.ok).length === 0);
+	const is_valid_timeline: boolean = $derived(!actions.find((action) => !action.ok));
 </script>
 
 <button
-	class="fixed inset-0 transition-all {displaying ? 'backdrop-blur' : 'translate-y-full'}"
+	class="fixed inset-0 transition-all will-change-transform {displaying
+		? 'backdrop-blur'
+		: 'translate-y-full'}"
 	onclick={(e: Event) => {
 		if (e.target === e.currentTarget && is_valid_timeline) {
 			displaying = false;
