@@ -1,4 +1,9 @@
 {
+  inputs = {
+    nixpkgs.url = "nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
+  };
+
   outputs = {
     self,
     nixpkgs,
@@ -14,6 +19,7 @@
       devShells.default = pkgs.mkShell {
         buildInputs = with pkgs; [
           bun
+          nodePackages.prettier
         ];
       };
     });

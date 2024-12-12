@@ -26,13 +26,12 @@
 			placeholder="Please enter your name here"
 			bind:value={inputname}
 		/>
-		{#if inputname != ''}
-			<button
-				class="text-l bg-grey rounded border-2 border-solid px-4 py-2 text-center text-white"
-				on:click={login}
-			>
-				Login
-			</button>
-		{/if}
+		<button
+			class="text-l rounded bg-gunmetal px-4 py-2 text-center
+            {inputname === '' ? 'pointer-events-none text-white/50' : ''}"
+			on:click={login}
+		>
+			Login
+		</button>
 	</div>
 </div>

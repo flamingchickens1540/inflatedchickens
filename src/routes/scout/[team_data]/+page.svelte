@@ -23,16 +23,14 @@
 	// The furthest index in actions that was made during auto
 	let furthest_auto_index = $state(0);
 
-	let speed: number = $state(3);
-	let awareness: number = $state(3);
-	let broke: boolean = $state(false);
-	let died: boolean = $state(false);
-	let notes: string = $state('');
-
-	let prematch = $state(false);
+	let quickness = $state(3);
+	let awareness = $state(3);
+	let broke = $state(false);
+	let died = $state(false);
+	let notes = $state('');
 
 	let timeline_extended = $state(false);
-	let gamePhase = $state('Prematch') as 'Prematch' | 'Auto' | 'Tele' | 'Post';
+	let gamePhase = $state('Auto') as 'Auto' | 'Tele' | 'Post';
 	let pageName = $state('');
 
 	function phaseShiftRight() {
@@ -48,7 +46,7 @@
 		}
 	});
 
-	function submit() {
+	async function submit() {
 		const auto_actions = actions.slice(0, furthest_auto_index + 1);
 		const tele_actions = actions.slice(furthest_auto_index + 1) as TeleActionData[]; // TODO: Add verification function to ensure that this always works
 		const match: TeamMatch = {
@@ -56,7 +54,7 @@
 			scout_id: username,
 			team_key: data.team_key,
 			match_key: data.match_key,
-			speed,
+			quickness,
 			awareness,
 			broke,
 			died,
@@ -65,7 +63,22 @@
 			tele_actions
 		};
 
-		socket.emit('submit_team_match', match);
+		const response = await fetch('/api/submit', {
+			method: 'POST',
+			body: JSON.stringify(match),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (!response.ok) {
+			console.log('Failed to submit match');
+			socket.emit('failed_submit_team_match', [match, response]);
+		} else {
+			console.log(response);
+			socket.emit('submit_team_match', match);
+		}
+
 		goto('/');
 	}
 </script>
@@ -88,9 +101,7 @@
 		</div>
 	</div>
 
-	{#if gamePhase === 'Prematch'}
-		<button class="h-9/12 w-9/12 border">Preload?</button>
-	{:else if gamePhase === 'Auto'}
+	{#if gamePhase === 'Auto'}
 		<AutoActionInputs
 			bind:furthest_auto_index
 			bind:held
@@ -127,7 +138,7 @@
 			bind:displaying={timeline_extended}
 		/>
 	{:else}
-		<Postmatch bind:awareness bind:speed bind:broke bind:died bind:notes />
+		<Postmatch bind:awareness bind:quickness bind:broke bind:died bind:notes />
 
 		<button onclick={submit} class="mt-auto w-full rounded bg-gunmetal p-2 font-bold"
 			>Submit</button
