@@ -103,6 +103,10 @@
 
 		socket.emit('remove_team_match', team_match);
 	};
+
+	const clear_robots = () => {
+		robot_queue.forEach(remove_robot);
+	};
 </script>
 
 <div class="grid grid-cols-2 grid-rows-2 gap-6">
@@ -139,7 +143,12 @@
 		</div>
 	</div>
 	<div class="mt-4 grid grid-cols-1 grid-rows-10 place-items-center gap-4 text-xl">
-		<h1 class="row-span-2">Queued Robots</h1>
+		<div class="row-span-2 grid grid-cols-2 grid-rows-1">
+			<h1>Queued Robots</h1>
+			<button class="rounded border p-2 text-center" onclick={clear_robots}
+				>Clear Robots</button
+			>
+		</div>
 		<div class="row-span-8 grid grid-cols-1 grid-rows-8 gap-2">
 			{#each robot_queue as robot}
 				<button onclick={() => remove_robot(robot)} class="rounded border p-2 text-center">
