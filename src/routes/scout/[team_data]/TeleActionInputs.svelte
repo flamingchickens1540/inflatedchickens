@@ -68,12 +68,18 @@
 			class="grid flex-grow grid-cols-1 grid-rows-3 gap-2 py-2 font-heading text-2xl font-bold"
 		>
 			<button class="rounded bg-eminence p-2" onclick={intake_piece}>Intake</button>
-			{#if held.balloons > 0}
-				<button class="rounded bg-eminence p-2" onclick={score_piece}>Score</button>
-			{/if}
-			{#if held_ejectables > 0}
-				<button class="rounded bg-eminence p-2" onclick={eject_piece}>Eject</button>
-			{/if}
+			<button
+				class="rounded bg-eminence p-2 {held.balloons > 0
+					? ''
+					: 'pointer-events-none opacity-30'}"
+				onclick={score_piece}>Score</button
+			>
+			<button
+				class="rounded bg-eminence p-2 {held_ejectables > 0
+					? ''
+					: 'pointer-events-none opacity-30'}"
+				onclick={eject_piece}>Eject</button
+			>
 		</div>
 	{:else if is_intake_state}
 		<div
@@ -86,9 +92,8 @@
 			<button class="rounded bg-eminence p-2" onclick={() => (actionState = 'IntakeBalloon')}
 				>Balloon: Ground</button
 			>
-			<button
-				class="rounded bg-eminence p-2"
-				onclick={() => (actionState = 'IntakeBalloonCoral')}>Ballon: Coral</button
+			<button class="rounded bg-eminence p-2" onclick={() => (actionState = 'IntakeBalloon')}
+				>Balloon: Coral</button
 			>
 		</div>
 		<button
@@ -100,7 +105,7 @@
 			class="flex w-full flex-grow flex-col items-center gap-2 py-2 font-heading text-lg font-bold"
 		>
 			<div class="flex w-full flex-grow flex-col items-center gap-2 py-2 text-lg">
-				<h1>Ballon</h1>
+				<h1>Balloon</h1>
 				<div class="grid w-full flex-grow grid-cols-2 grid-rows-2 gap-2">
 					<button class="rounded bg-eminence p-2" onclick={() => score_balloon('Low')}
 						>Low Zone</button
@@ -109,14 +114,14 @@
 						class="rounded bg-eminence p-2"
 						onclick={() => score_balloon('UncontrolledTote')}>Uncontrolled Tote</button
 					>
-					{#if held.totes > 0}
-						<button
-							class="rounded bg-eminence p-2"
-							onclick={() => score_balloon('InternalTote')}>Internal Held Tote</button
-						>
-					{/if}
 					<button
-						class="rounded bg-eminence p-2 {held.totes <= 0 ? 'col-span-2' : ''}"
+						class="rounded bg-eminence p-2 {held.totes > 0
+							? ''
+							: 'pointer-events-none opacity-30'}"
+						onclick={() => score_balloon('InternalTote')}>Internal Held Tote</button
+					>
+					<button
+						class="rounded bg-eminence p-2"
 						onclick={() => score_balloon('ExternalTote')}
 						>External Held Tote
 					</button>
@@ -127,19 +132,19 @@
 			>
 		</div>
 	{:else if is_eject_state}
-		<div class="grid w-full flex-grow grid-flow-row gap-2 py-2 font-heading font-bold">
-			{#if held.balloons > 0}
-				<button
-					class="w-full rounded bg-eminence p-2"
-					onclick={() => (actionState = 'EjectBalloon')}>Ballon</button
-				>
-			{/if}
-			{#if held.totes > 0}
-				<button
-					class="w-full rounded bg-eminence p-2"
-					onclick={() => (actionState = 'EjectTote')}>Tote</button
-				>
-			{/if}
+		<div class="grid w-full flex-grow grid-flow-row gap-2 py-2 font-heading text-lg font-bold">
+			<button
+				class="w-full rounded bg-eminence p-2 {held.balloons > 0
+					? ''
+					: 'pointer-events-none opacity-30'}"
+				onclick={() => (actionState = 'EjectBalloon')}>Balloon</button
+			>
+			<button
+				class="w-full rounded bg-eminence p-2 {held.totes > 0
+					? ''
+					: 'pointer-events-none opacity-30'}"
+				onclick={() => (actionState = 'EjectTote')}>Tote</button
+			>
 		</div>
 		<button class="w-full rounded bg-eminence p-2" onclick={() => (actionState = 'None')}
 			>Cancel</button
