@@ -111,16 +111,14 @@
 	const queue_match = async () => {
 		teams = teams.filter((team) => team != '');
 		robot_queue = [];
-		teams
-			.toReversed()
-			.forEach((team_key, i) =>
-				team_matches.value.push({
-					status: 'pending',
-					team_match_key: `${match_key} ${team_key}`,
-					color: team_color[i][1],
-					timeline: null
-				})
-			);
+		teams.toReversed().forEach((team_key, i) =>
+			team_matches.value.push({
+				status: 'pending',
+				team_match_key: `${match_key} ${team_key}`,
+				color: team_color[i][1],
+				timeline: null
+			})
+		);
 		socket.emit('send_match', [match_key, team_color]);
 
 		await fetch('/api/newmatch', {
