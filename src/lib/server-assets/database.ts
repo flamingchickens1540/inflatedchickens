@@ -24,8 +24,6 @@ const event_key = 'orbb2024';
 // Whether or not the database is currently being used
 const use_db: boolean = USE_DB === 'true';
 
-console.log(Number.parseInt(DB_PORT));
-
 const db = new Client({
 	user: DB_USER,
 	password: DB_PASSWORD,
@@ -232,6 +230,19 @@ export async function insertUser(name: string): Promise<boolean> {
 		console.error(error);
 		return false;
 	}
+}
+
+export async function delete_team_match(
+	match_key: string,
+	team_key: string
+): Promise<number | null> {
+	if (!use_db) return null;
+
+	const response = await db.query(
+		'DELETE FROM "TeamMatches" WHERE "match_key" = $1 AND "team_key" = $2',
+		[match_key, team_key]
+	);
+	return response.rowCount;
 }
 
 export async function select(matchkey: string, teamkey: string) {

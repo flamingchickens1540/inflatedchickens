@@ -2,10 +2,9 @@
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { io, Socket } from 'socket.io-client';
-	const username = 'test_scout';
-	let socket: Socket;
 
-	socket = io({
+	const username = browser && localStorage.getItem('username');
+	let socket: Socket = io({
 		auth: {
 			username
 		}
@@ -26,7 +25,7 @@
 	});
 
 	const leave = () => {
-		socket.emit('leave_scout_queue', 'test_scout');
+		socket.emit('leave_scout_queue', username);
 		goto('/');
 	};
 </script>

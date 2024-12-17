@@ -4,7 +4,7 @@ import { type ViteDevServer } from 'vite';
 const info = (s: string) => console.log(`\x1b[32m ${s} \x1b[0m`);
 
 const sid_to_username: Map<string, string> = new Map();
-const robot_queue: [string, 'red' | 'blue'][] = [];
+let robot_queue: [string, 'red' | 'blue'][] = [];
 let curr_match_key: string = '';
 
 const webSocketServer = {
@@ -19,9 +19,6 @@ const webSocketServer = {
 				return next(new Error('invalid username'));
 			}
 
-			if (!sid_to_username) {
-				console.log('SID TO USERNAME UNINIT');
-			}
 			// erroring in prod
 			let old_entries = Object.entries(sid_to_username).find(
 				([_key, value]) => value === username
@@ -43,10 +40,6 @@ const webSocketServer = {
 				socket.join('admin_room');
 			}
 
-			socket.emit('session', {
-				session_id: socket.id
-			});
-
 			socket.on('join_queue', () => {
 				const username = sid_to_username.get(socket.id);
 
@@ -61,12 +54,9 @@ const webSocketServer = {
 			});
 
 			socket.on('leave_scout_queue', (scout_id: string) => {
-				const scout_sid = sid_to_username
-					.entries()
+				const scout_sid = Object.entries(sid_to_username)
 					.filter(([_sid, scout]) => scout === scout_id)
-					.map(([sid, _]) => sid)
-					.toArray()[0];
-				console.log(scout_sid);
+					.map(([sid, _]) => sid)[0];
 				// This event exist in the cast that the scout removed itself from the queue
 				io.emit('scout_left_queue', scout_id);
 				// This event exists in the case that the admin removed the scout from the queue
@@ -74,8 +64,14 @@ const webSocketServer = {
 				io.sockets.sockets.get(scout_sid)?.leave('scout_queue');
 			});
 
-			socket.on('leave_robot_queue', (robot: string) => {
-				const index = robot_queue.findIndex(([id, _color]) => id === robot);
+			socket.on('leave_robot_queue', (robot: [string, 'red' | 'blue']) => {
+				const robotsEqual = (
+					robot1: [string, 'red' | 'blue'],
+					robot2: [string, 'red' | 'blue']
+				): boolean => {
+					return robot1[0] === robot2[0] && robot1[1] === robot2[1];
+				};
+				const index = robot_queue.findIndex((robot_t) => robotsEqual(robot_t, robot));
 				if (index === -1) return;
 
 				robot_queue.splice(index, 1);
@@ -89,8 +85,9 @@ const webSocketServer = {
 					// TODO: New TeamMatch in DB request here
 
 					info(`${match_key}: ${teams}`);
+					robot_queue = [];
 
-					const scout_queue = await io.in('scout_queue').fetchSockets();
+					const scout_queue = (await io.in('scout_queue').fetchSockets()).reverse();
 					for (const socket of scout_queue) {
 						const team_data = teams.pop();
 						if (!team_data) break;
@@ -106,10 +103,7 @@ const webSocketServer = {
 						io.to('admin_room').emit('scout_left_queue', username);
 					}
 
-					socket.emit(
-						'robot_joined_queue',
-						teams.map(([team, _color]) => team)
-					);
+					io.to('admin_room').emit('robot_joined_queue', teams);
 					robot_queue.push(...teams);
 
 					// Update all connected sockets with new match info (for cosmetic purposes)
@@ -119,29 +113,38 @@ const webSocketServer = {
 			);
 
 			// Event-listener sockets that were offline to sync back up with the current match key
-			socket.on('request_curr_match', () => {
-				socket.emit('new_match', curr_match_key);
+			socket.on('get_curr_match', (callback) => {
+				callback({
+					curr_match_key
+				});
 			});
 
-			socket.on('remove_team_match', (team_match: TeamMatch) => {
-				if (!socket.rooms.has('admin_room')) return;
-
-				info(
-					`New TeamMatch: ${team_match.match_key}_${team_match.team_key} was removed by the admin`
-				);
-				// TODO: Emit message from the db to remove team_match
+			socket.on('get_robot_queue', (callback) => {
+				callback({
+					robots: robot_queue ?? []
+				});
 			});
+
+			socket.on('get_scout_queue', async (callback) => {
+				callback({
+					scouts: ((await io.in('scout_queue').fetchSockets()) ?? []).reverse()
+				});
+			});
+
+			// For these two, the team match has already been sent or removed by the client sending a request to the server
 
 			socket.on('submit_team_match', (team_match: TeamMatch) => {
 				io.to('admin_room').emit('new_team_match', team_match);
 			});
 
-			socket.on(
-				'failed_submit_team_match',
-				([team_match, response]: [TeamMatch, Response]) => {
-					io.to('admin_room').emit('failed_team_match', [team_match, response]);
-				}
-			);
+			socket.on('failed_submit_team_match', (team_match: TeamMatch) => {
+				io.to('admin_room').emit('failed_team_match', team_match);
+			});
+
+			socket.on('disconnect', (_reason) => {
+				const scout_id = sid_to_username.get(socket.id);
+				io.to('admin_room').emit('scout_left_queue', scout_id);
+			});
 		});
 	}
 };

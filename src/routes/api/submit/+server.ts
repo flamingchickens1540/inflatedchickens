@@ -5,5 +5,5 @@ import { insertTeamMatch, insertUser } from '$lib/server-assets/database';
 
 export const POST: RequestHandler = async ({ request }) => {
 	const match: TeamMatch = await request.json();
-	return json((await insertTeamMatch(match)) && (await insertUser(match.scout_id)));
+	return json({ ok: (await insertTeamMatch(match)) && (await insertUser(match.scout_id)) });
 };

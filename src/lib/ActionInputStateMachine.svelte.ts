@@ -19,6 +19,10 @@ export class ActionInputVerifier {
 		};
 	}
 
+	public actions_are_ok(action_data: AutoActionData[]): boolean {
+		return action_data.every((action) => action.ok);
+	}
+
 	public verify_actions(action_data: AutoActionData[]) {
 		action_data.forEach((action) => {
 			action.ok = this.verify_new_action(action);
@@ -32,15 +36,20 @@ export class ActionInputVerifier {
 	verify_new_action(action_data: AutoActionData): boolean {
 		const success = action_data.success;
 		const action = action_data.action;
-		console.log(action);
 		if (action.includes('InternalTote') && this.held_totes === 0) return false;
 		if (success) {
 			if (action.includes('IntakeBalloon')) this.held_balloons++;
 			else if (action.includes('IntakeBunny')) this.held_bunnies++;
 			else if (action.includes('IntakeTote')) this.held_totes++;
+			else if (action.includes('PreloadBunny')) this.held_bunnies++;
+			else if (action.includes('PreloadBalloon')) this.held_balloons++;
 			else if (action.includes('EjectBalloon')) this.held_balloons--;
 			else if (action.includes('EjectBunny')) this.held_bunnies--;
 			else if (action.includes('EjectTote')) this.held_totes--;
+		} else {
+			if (action.includes('EjectBunny') && this.held_bunnies === 0) return false;
+			else if (action.includes('EjectBalloon') && this.held_balloons === 0) return false;
+			else if (action.includes('EjectTote') && this.held_totes === 0) return false;
 		}
 		if (action.includes('ScoreBalloon')) this.held_balloons--;
 		else if (action.includes('ScoreBunny')) this.held_bunnies--;

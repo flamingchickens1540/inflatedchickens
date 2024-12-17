@@ -3,5 +3,10 @@ import { defineConfig } from 'vite';
 import webSocketServer from './ws.js';
 
 export default defineConfig({
-	plugins: [sveltekit(), webSocketServer]
+	plugins: [sveltekit(), webSocketServer],
+	server: {
+		fs: {
+			allow: ['./']
+		}
+	}
 });

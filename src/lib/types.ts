@@ -97,7 +97,9 @@ export type BunnyAction =
 	| 'ScoreBunnyExternalTote'
 	| 'ScoreBunnyUncontrolledTote'
 	| 'ScoreBunnyLow';
-export type AutoAction = TeleAction | BunnyAction;
+
+export type PreAction = 'PreloadBunny' | 'PreloadBalloon';
+export type AutoAction = TeleAction | BunnyAction | PreAction;
 
 export type TeleHeldItems = {
 	balloons: number;
